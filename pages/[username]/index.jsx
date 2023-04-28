@@ -28,7 +28,7 @@ export async function getStaticProps(context) {
   
     const userData = await db
       .collection("users")
-      .find({ login: searchRoute })
+      .find({ email: searchRoute })
       .sort({ metacritic: -1 })
       .toArray();
   
@@ -69,7 +69,7 @@ export async function getStaticProps(context) {
       .toArray();
   
     const paths = searchUsers.map((userPath) => ({
-      params: { userName: userPath.login },
+      params: { userName: userPath.email },
     }));
   
     return { paths, fallback: 'blocking' };

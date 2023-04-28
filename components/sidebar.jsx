@@ -1,14 +1,26 @@
-import { useSession, getSession } from 'next-auth/react';
 import Link from 'next/link';
 import { BsFillLightningFill } from 'react-icons/bs';
 import { FaSearch, FaPlus } from 'react-icons/fa';
 import { TbListSearch } from "react-icons/tb";
 import {useEffect, useState } from 'react';
-// import clientPromise from './lib/mongodb';
+
+import { useSession, signIn, signOut } from 'next-auth/react'
+import { useRouter } from 'next/router';
+
 
 export default function Sidebar(){
 
     const { data: session} = useSession()
+
+    const { push, asPath } = useRouter()
+
+	const handleSignOut = async () => {
+		const data = await signOut({ redirect: false, callbackUrl: '/some' })
+
+		push(data.url)
+	}
+
+
     // Dashboard
     // Resources
     // FindAlly
@@ -20,18 +32,18 @@ export default function Sidebar(){
        <>
          {session && (
           
-           <div class="fixed h-screen w-fit flex bg-gray-200">
+           <div className="fixed h-screen w-fit flex bg-gray-200">
             
            
              <aside
-               class="flex flex-col items-center bg-white text-gray-700 shadow h-full px-2 pb-2">
+               className="flex flex-col items-center bg-white text-gray-700 shadow h-full px-2 pb-2">
                
            
-               <div class="h-16 flex items-center w-full hover:bg-gray-200 rounded-xl">
+               <div className="h-16 flex items-center w-full hover:bg-gray-200 rounded-xl">
                 
-                 <a class="h-6 w-6 mx-auto" href="">
+                 <a className="h-6 w-6 mx-auto" href="">
                    <img
-                     class="h-6 w-6 mx-auto"
+                     className="h-6 w-6 mx-auto"
                      src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Svelte_Logo.svg/512px-Svelte_Logo.svg.png"
                      alt="svelte logo" />
                  </a>
@@ -39,13 +51,13 @@ export default function Sidebar(){
            
                <ul>
                  
-                 <li class="hover:bg-blue-200 rounded-xl">
+                 <li className="hover:bg-blue-200 rounded-xl">
                    <a
                      href="\"
-                     class="h-16 px-2 flex flex-col justify-center items-center w-full
-                     focus:text-orange-500">
+                     className="h-16 px-2 flex flex-col justify-center items-center w-full
+                     focus:text-gray-700">
                      <svg
-                       class="h-5 w-5"
+                       className="h-5 w-5"
                        xmlns="http://www.w3.org/2000/svg"
                        width="24"
                        height="24"
@@ -67,13 +79,13 @@ export default function Sidebar(){
                    </a>
                  </li>
            
-                 <li class="hover:bg-purple-200 rounded-xl">
+                 <li className="hover:bg-purple-200 rounded-xl">
                    <a
                      href="/resources"
-                     class="h-16 px-2 flex flex-col justify-center items-center w-full
-                     focus:text-orange-500">
+                     className="h-16 px-2 flex flex-col justify-center items-center w-full
+                     focus:text-gray-700">
                      <svg
-                       class="h-5 w-5"
+                       className="h-5 w-5"
                        xmlns="http://www.w3.org/2000/svg"
                        width="24"
                        height="24"
@@ -90,14 +102,14 @@ export default function Sidebar(){
                    </a>
                  </li>
            
-                 <li class="hover:bg-emerald-200 rounded-xl">
+                 <li className="hover:bg-emerald-200 rounded-xl">
                    <a
                      href="/explore"
-                     class="h-16 px-2 flex flex-col justify-center items-center w-full
-                     focus:text-orange-500">
+                     className="h-16 px-2 flex flex-col justify-center items-center w-full
+                     focus:text-gray-700">
            
                      <svg
-                       class="h-5 w-5"
+                       className="h-5 w-5"
                        xmlns="http://www.w3.org/2000/svg"
                        width="24"
                        height="24"
@@ -116,13 +128,13 @@ export default function Sidebar(){
                    </a>
                  </li>
            
-                 <li class="hover:bg-amber-200 rounded-xl">
+                 <li className="hover:bg-amber-200 rounded-xl">
                    <a
                      href="/study"
-                     class="h-16 px-2 flex flex-col justify-center items-center w-full
-                     focus:text-orange-500">
+                     className="h-16 px-2 flex flex-col justify-center items-center w-full
+                     focus:text-gray-700">
                      <svg
-                       class="h-5 w-5"
+                       className="h-5 w-5"
                        xmlns="http://www.w3.org/2000/svg"
                        width="24"
                        height="24"
@@ -142,13 +154,13 @@ export default function Sidebar(){
                    </a>
                  </li>
            
-                 {/* <li class="hover:bg-blue-400 rounded-xl">
+                 {/* <li className="hover:bg-blue-400 rounded-xl">
                    <a
                      href="."
-                     class="h-16 px-2 flex justify-center items-center w-full
+                     className="h-16 px-2 flex justify-center items-center w-full
                      focus:text-orange-500">
                      <svg
-                       class="h-5 w-5"
+                       className="h-5 w-5"
                        xmlns="http://www.w3.org/2000/svg"
                        width="24"
                        height="24"
@@ -181,13 +193,13 @@ export default function Sidebar(){
 
                  </li> */}
            
-                 {/* <li class="hover:bg-blue-400 rounded-xl">
+                 {/* <li className="hover:bg-blue-400 rounded-xl">
                    <a
                      href="."
-                     class="h-16 px-2 flex justify-center items-center w-full
+                     className="h-16 px-2 flex justify-center items-center w-full
                      focus:text-orange-500">
                      <svg
-                       class="h-5 w-5"
+                       className="h-5 w-5"
                        xmlns="http://www.w3.org/2000/svg"
                        width="24"
                        height="24"
@@ -206,24 +218,23 @@ export default function Sidebar(){
            
                </ul>
            
-               <div class="mt-auto h-32 flex flex-col items-center w-full">
+               <div className="mt-auto h-32 flex flex-col items-center w-full">
           
-               <div class="hover:bg-red-200 rounded-xl w-full">
+               <div className="hover:bg-red-200 rounded-xl w-full">
                    <a
-                     href="."
-                     class="h-16 px-2 flex flex-col justify-center items-center 
-                     focus:text-orange-500">
+                     href={session?.user?.email}
+                     className="h-16 px-2 flex flex-col justify-center items-center 
+                     focus:text-gray-700">
                      <img src={session?.user?.image} className='rounded-full w-8 h-8' alt='' />
                      <p className='text-xs font-semibold'>Profile</p>
                    </a>
                  </div>
-                 <div class="hover:bg-gray-200 rounded-xl w-full">
-                   <a
-                     href="."
-                     class="h-16 px-2 flex flex-col justify-center items-center 
-                     focus:text-orange-500">
+                 <div className="hover:bg-gray-200 rounded-xl w-full">
+                   <a onClick={handleSignOut} href='.'
+                     className="h-16 px-2 flex flex-col justify-center items-center 
+                     focus:text-gray-700">
                      <svg
-                        class="h-5 w-5 text-red-700"
+                        className="h-5 w-5 text-red-700"
                         xmlns="http://www.w3.org/2000/svg"
                         width="24"
                         height="24"

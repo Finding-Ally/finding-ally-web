@@ -1,8 +1,8 @@
 import NextAuth from 'next-auth'
-import GithubProvider from 'next-auth/providers/github'
-import TwitterProvider from 'next-auth/providers/twitter'
+// import GithubProvider from 'next-auth/providers/github'
+// import TwitterProvider from 'next-auth/providers/twitter'
 import GoogleProvider from 'next-auth/providers/google'
-import EmailProvider from 'next-auth/providers/email'
+// import EmailProvider from 'next-auth/providers/email'
 import { MongoDBAdapter } from '@next-auth/mongodb-adapter'
 
 import clientPromise from '../../../database/connectDB'
@@ -11,7 +11,7 @@ export default NextAuth({
 
 	adapter: MongoDBAdapter(clientPromise),
 
-	
+
 	providers: [
 		// GithubProvider({
 		// 	clientId: process.env.GITHUB_ID,
@@ -39,19 +39,42 @@ export default NextAuth({
 	],
 	callbacks: {
 		async session({ session, token }) {
-		  // Extract the login part from the user's email
-		  const login = session.user.email.split("@")[0];
-	  
-		  // Add the login field to the user object in the session
-		  session.user = {
-			...session.user,
-			login,
-		  };
-	  
-		  return session;
+			// Extract the login part from the user's email
+			const login = session.user.email.split("@")[0];
+
+			// Add the login field to the user object in the session
+			session.user = {
+				...session.user,
+				login,
+			};
+
+			return session;
 		},
-	  },
-	
+
+		async signIn({ user }) {
+			// Extract the login part from the user's email
+			const login = user.email.split("@")[0];
+
+			// Add the login field to the user object
+			user = {
+				...user,
+				login,
+			};
+
+			return user;
+		},
+
+		async jwt({ session, user }) {
+			if (user) {
+				// Add the login field to the token
+				token.login = user.email.split("@")[0];
+			}
+
+			return token;
+		},
+		
+	},
+
 	pages: {
 		signIn: '/signin',
 	},
