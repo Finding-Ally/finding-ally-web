@@ -8,6 +8,10 @@ import { MongoDBAdapter } from '@next-auth/mongodb-adapter'
 import clientPromise from '../../../database/connectDB'
 
 export default NextAuth({
+
+	adapter: MongoDBAdapter(clientPromise),
+
+	
 	providers: [
 		// GithubProvider({
 		// 	clientId: process.env.GITHUB_ID,
@@ -33,6 +37,21 @@ export default NextAuth({
 		// 	from: process.env.EMAIL_FROM,
 		// }),
 	],
+	callbacks: {
+		async session({ session, token }) {
+		  // Extract the login part from the user's email
+		  const login = session.user.email.split("@")[0];
+	  
+		  // Add the login field to the user object in the session
+		  session.user = {
+			...session.user,
+			login,
+		  };
+	  
+		  return session;
+		},
+	  },
+	
 	pages: {
 		signIn: '/signin',
 	},
