@@ -1,7 +1,10 @@
 export default function Selfcare(){
     return (
-        <div>
-            <h1>This is Selfcare</h1>
-        </div>
+        <div className="w-full pl-[91px] h-screen pb-24 overflow-auto text-gray-700 bg-gradient-to-tr from-blue-200 via-indigo-200 to-pink-200">
+        <div className='w-full bg-gray-200'>
+<div class="px-10 py-3">
+    <h1 class="text-2xl font-bold">Self-Study Section</h1>
+</div></div>
+    </div>
     )
 }

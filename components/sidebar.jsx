@@ -15,7 +15,7 @@ export default function Sidebar(){
     const { push, asPath } = useRouter()
 
 	const handleSignOut = async () => {
-		const data = await signOut({ redirect: false, callbackUrl: '/some' })
+		const data = await signOut({ redirect: false, callbackUrl: '/join' })
 
 		push(data.url)
 	}
@@ -41,19 +41,19 @@ export default function Sidebar(){
            
                <div className="h-16 flex items-center w-full hover:bg-gray-200 rounded-xl">
                 
-                 <a className="h-6 w-6 mx-auto" href="">
+                 <Link className="h-6 w-6 mx-auto" href="">
                    <img
                      className="h-6 w-6 mx-auto"
                      src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Svelte_Logo.svg/512px-Svelte_Logo.svg.png"
                      alt="svelte logo" />
-                 </a>
+                 </Link>
                </div>
            
                <ul>
                  
                  <li className="hover:bg-blue-200 rounded-xl">
-                   <a
-                     href="\"
+                   <Link
+                     href="/"
                      className="h-16 px-2 flex flex-col justify-center items-center w-full
                      focus:text-gray-700">
                      <svg
@@ -76,11 +76,11 @@ export default function Sidebar(){
                      </svg>
            
                    <p className='text-xs font-semibold'>Dashboard</p>
-                   </a>
+                   </Link>
                  </li>
            
                  <li className="hover:bg-purple-200 rounded-xl">
-                   <a
+                   <Link
                      href="/resources"
                      className="h-16 px-2 flex flex-col justify-center items-center w-full
                      focus:text-gray-700">
@@ -99,11 +99,11 @@ export default function Sidebar(){
                          d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
                      </svg>
                      <p className='text-xs font-semibold'>Resources</p>
-                   </a>
+                   </Link>
                  </li>
            
                  <li className="hover:bg-emerald-200 rounded-xl">
-                   <a
+                   <Link
                      href="/explore"
                      className="h-16 px-2 flex flex-col justify-center items-center w-full
                      focus:text-gray-700">
@@ -125,11 +125,11 @@ export default function Sidebar(){
                          0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
                      </svg>
                      <p className='text-xs font-semibold'>FindAlly</p>
-                   </a>
+                   </Link>
                  </li>
            
                  <li className="hover:bg-amber-200 rounded-xl">
-                   <a
+                   <Link
                      href="/study"
                      className="h-16 px-2 flex flex-col justify-center items-center w-full
                      focus:text-gray-700">
@@ -151,7 +151,7 @@ export default function Sidebar(){
                          2-1.61L23 6H6"></path>
                      </svg>
                      <p className='text-xs font-semibold'>Self Study</p>
-                   </a>
+                   </Link>
                  </li>
            
                  {/* <li className="hover:bg-blue-400 rounded-xl">
@@ -221,13 +221,13 @@ export default function Sidebar(){
                <div className="mt-auto h-32 flex flex-col items-center w-full">
           
                <div className="hover:bg-red-200 rounded-xl w-full">
-                   <a
+                   <Link
                      href={session?.user?.email}
                      className="h-16 px-2 flex flex-col justify-center items-center 
                      focus:text-gray-700">
                      <img src={session?.user?.image} className='rounded-full w-8 h-8' alt='' />
                      <p className='text-xs font-semibold'>Profile</p>
-                   </a>
+                   </Link>
                  </div>
                  <div className="hover:bg-gray-200 rounded-xl w-full">
                    <a onClick={handleSignOut} href='.'
