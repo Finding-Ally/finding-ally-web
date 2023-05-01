@@ -250,14 +250,17 @@ export default function Profile({ userDetails }) {
               <div className="md:card h-fit w-full mt-20 rounded-2xl mx-auto bg-white md:pb-10 pb-0  shadow ">
                 <div className="relative">
                   <img
-                    className="w-32 mx-auto rounded-full border-2 border-gray-200 "
+                    className="w-32 mx-auto rounded-full mt-8 border-2 border-gray-200 "
                     src={userDetails[0]?.image}
                     alt=""
                   />
-                  <div className="absolute bottom-2 left-44 p-1.5 bg-green-500 hover:border-2 cursor-pointer rounded-full w-fit h-fit"></div>
+                  {/* <div className="absolute bottom-2 left-44 p-1.5 bg-green-500 hover:border-2 cursor-pointer rounded-full w-fit h-fit"></div> */}
                 </div>
                 <div className="text-center mt-2 text-xl font-medium ">
-                  {userDetails[0]?.name || userDetails[0]?.login}
+                  {userDetails[0]?.name}
+                </div>
+                <div className="text-center mt-2 text-sm font-medium ">
+                  {userDetails[0]?.email}
                 </div>
               </div>
             </div>
