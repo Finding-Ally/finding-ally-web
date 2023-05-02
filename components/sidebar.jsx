@@ -13,7 +13,7 @@ export default function Sidebar() {
   const { push, asPath } = useRouter();
 
   const handleSignOut = async () => {
-    const data = await signOut({ redirect: false, callbackUrl: "/signin" });
+    const data = await signOut({ redirect: false, callbackUrl: "/join" });
 
     push(data.url);
   };
@@ -223,8 +223,8 @@ export default function Sidebar() {
                      focus:text-gray-700"
                 >
                   <img
-                    src={session?.user?.image}
-                    className="rounded-full w-8 h-8"
+                    src={`https://robohash.org/${session?.user?.name}}`}
+                    className="rounded-full w-9 h-9 bg-gray-300"
                     alt=""
                   />
                   <p className="text-xs font-semibold">Profile</p>
@@ -233,7 +233,7 @@ export default function Sidebar() {
               <div className="hover:bg-gray-200 rounded-xl w-full">
                 <Link
                   onClick={handleSignOut}
-                  href="/signin"
+                  href="/join"
                   className="h-16 px-2 flex flex-col justify-center items-center 
                      focus:text-gray-700"
                 >

@@ -26,7 +26,7 @@ const Signin = () => {
   
   return (
     <>
-          <div className="flex flex-col place-content-center justify-center place-items-center w-full overflow-x-hidden text-gray-700 bg-gradient-to-tr from-blue-200 via-indigo-200 to-pink-200">
+          <div className="flex flex-col place-content-center justify-center place-items-center w-full overflow-x-hidden text-gray-700 bg-gradient-to-tr from-blue-200 via-indigo-300 to-pink-200">
           <Header />
       <Hero />
       <Features />
