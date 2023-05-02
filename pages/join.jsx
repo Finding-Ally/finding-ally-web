@@ -26,13 +26,13 @@ const Signin = () => {
   
   return (
     <>
-          <div className="flex flex-col place-content-center justify-center place-items-center w-full overflow-x-hidden text-gray-700 bg-gradient-to-tr from-blue-200 via-indigo-300 to-pink-200">
+          <div className="flex flex-col place-content-center justify-center place-items-center w-full overflow-x-hidden text-gray-700 bg-gradient-to-tr to-blue-200 via-indigo-400 via-40% from-pink-300">
           <Header />
       <Hero />
       <Features />
       <FeaturesBlocks />
       <Testimonials />
-      <Newsletter />
+      {/* <Newsletter /> */}
       {/* <div>
         <button
           className="bg-white hover:bg-gray-200 border-2 border-gray-300 rounded-md shadow-md p-2 m-2"
@@ -44,6 +44,7 @@ const Signin = () => {
           Continue with google
         </button>
       </div> */}
+      <br /><br /><br />
       <Footer />
     </div>
     </>
