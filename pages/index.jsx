@@ -3,11 +3,13 @@ import { useRouter } from "next/router";
 // import { Heading, Button, Grid } from '@chakra-ui/react'
 import { useSession, signIn, signOut } from "next-auth/react";
 import Calendar from "@/components/calendar";
-
+import {useDate} from "@/hooks/useDate";
 // const inter = Inter({ subsets: ['latin'] })
 
 export default function Home() {
   const { data: session } = useSession();
+
+  const { date, time, wish } = useDate(); // custom hook
 
   const { push, asPath } = useRouter();
 
@@ -39,8 +41,9 @@ export default function Home() {
     <div class="flex flex-col w-full pl-[91px] pb-24 h-screen overflow-auto text-gray-700 bg-gradient-to-tr from-blue-200 via-indigo-200 to-pink-200">
       <div className="w-full bg-yellow-100">
         <div className="h-fit w-fit rounded-xl bg-white py-1 pl-4 pr-8 shadow ml-4 my-2">
-          <div className="text-lg font-bold ">Thusday, Apr 13</div>
-          <div className="text-sm font-medium ">02:33 pm</div>
+          <div className="text-lg font-bold ">{date}</div>
+          {/* {wish} */}
+          <div className="text-sm font-medium ">{time}</div>
         </div>
         <div className="h-full">
           <p className="text-center text-xl -mt-12 mb-6">

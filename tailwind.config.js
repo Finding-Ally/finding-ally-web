@@ -2,7 +2,7 @@
 module.exports = {
   
   mode: 'jit',
-  darkMode: 'media', // or 'media' or 'class'
+  darkMode: 'false', // or 'media' or 'class'
 
   
   content: [
