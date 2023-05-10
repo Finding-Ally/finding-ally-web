@@ -1,4 +1,4 @@
-import Link from "next/link";
+// import a from "next/link";
 import { BsFillLightningFill } from "react-icons/bs";
 import { FaSearch, FaPlus } from "react-icons/fa";
 import { TbListSearch } from "react-icons/tb";
@@ -31,19 +31,19 @@ export default function Sidebar() {
         <div className="fixed h-screen w-fit flex bg-gray-200">
           <aside className="flex flex-col items-center bg-white text-gray-700 shadow h-full px-2 pb-2">
             <div className="h-16 flex items-center w-full hover:bg-gray-200 rounded-xl">
-              <Link className="h-6 w-6 mx-auto" href="">
+              <a className="h-6 w-6 mx-auto" href="">
                 <img
                   className="h-6 w-6 mx-auto"
                   src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Svelte_Logo.svg/512px-Svelte_Logo.svg.png"
                   alt="svelte logo"
                 />
-              </Link>
+              </a>
             </div>
 
             <ul>
               <li className="hover:bg-blue-200 rounded-xl">
-                <Link
-                  href="/"
+                <a
+                  href="\"
                   className="h-16 px-2 flex flex-col justify-center items-center w-full
                      focus:text-gray-700"
                 >
@@ -68,12 +68,12 @@ export default function Sidebar() {
                   </svg>
 
                   <p className="text-xs font-semibold">Dashboard</p>
-                </Link>
+                </a>
               </li>
 
               <li className="hover:bg-purple-200 rounded-xl">
-                <Link
-                  href="/resources"
+                <a
+                  href="resources"
                   className="h-16 px-2 flex flex-col justify-center items-center w-full
                      focus:text-gray-700"
                 >
@@ -92,12 +92,12 @@ export default function Sidebar() {
                     <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
                   </svg>
                   <p className="text-xs font-semibold">Resources</p>
-                </Link>
+                </a>
               </li>
 
               <li className="hover:bg-emerald-200 rounded-xl">
-                <Link
-                  href="/explore"
+                <a
+                  href="explore"
                   className="h-16 px-2 flex flex-col justify-center items-center w-full
                      focus:text-gray-700"
                 >
@@ -120,12 +120,12 @@ export default function Sidebar() {
                     ></path>
                   </svg>
                   <p className="text-xs font-semibold">FindAlly</p>
-                </Link>
+                </a>
               </li>
 
               <li className="hover:bg-amber-200 rounded-xl">
-                <Link
-                  href="/study"
+                <a
+                  href="study"
                   className="h-16 px-2 flex flex-col justify-center items-center w-full
                      focus:text-gray-700"
                 >
@@ -149,7 +149,7 @@ export default function Sidebar() {
                     ></path>
                   </svg>
                   <p className="text-xs font-semibold">Self Study</p>
-                </Link>
+                </a>
               </li>
 
               {/* <li className="hover:bg-blue-400 rounded-xl">
@@ -217,7 +217,7 @@ export default function Sidebar() {
 
             <div className="mt-auto h-32 flex flex-col items-center w-full">
               <div className="hover:bg-red-200 rounded-xl w-full">
-                <Link
+                <a
                   href={session?.user?.email}
                   className="h-16 px-2 flex flex-col justify-center items-center 
                      focus:text-gray-700"
@@ -228,12 +228,12 @@ export default function Sidebar() {
                     alt=""
                   />
                   <p className="text-xs font-semibold">Profile</p>
-                </Link>
+                </a>
               </div>
               <div className="hover:bg-gray-200 rounded-xl w-full">
-                <Link
+                <a
                   onClick={handleSignOut}
-                  href="/join"
+                  href="join"
                   className="h-16 px-2 flex flex-col justify-center items-center 
                      focus:text-gray-700"
                 >
@@ -254,7 +254,7 @@ export default function Sidebar() {
                     <line x1="21" y1="12" x2="9" y2="12"></line>
                   </svg>
                   <p className="text-xs font-semibold">Logout</p>
-                </Link>
+                </a>
               </div>
             </div>
           </aside>

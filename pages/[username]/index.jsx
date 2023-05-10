@@ -251,7 +251,7 @@ export default function Profile({ userDetails }) {
                 <div className="relative">
                   <img
                     className="w-32 mx-auto rounded-full mt-8 border-2 border-gray-200 bg-gray-300"
-                    src={`https://robohash.org/${session?.user?.name}}`}
+                    src={`https://robohash.org/${userDetails?.email}}`}
                     alt=""
                   />
                   {/* <div className="absolute bottom-2 left-44 p-1.5 bg-green-500 hover:border-2 cursor-pointer rounded-full w-fit h-fit"></div> */}
