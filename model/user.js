@@ -6,7 +6,7 @@ const userSchema = new Schema({
     login: String,
     avatar_url: String,
     bio: String,
-    techStack: Array,
+    target: Array,
     email: String,
     trophies: Number,
     isOnline: Boolean,
