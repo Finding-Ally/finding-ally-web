@@ -12,8 +12,102 @@ import { FcParallelTasks } from "react-icons/fc";
 import { FcWorkflow } from "react-icons/fc";
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { useReducer } from "react";
+
+import { useQuery, useMutation, useQueryClient } from "react-query";
+
+import { toast } from "react-toastify";
+import LoadingScreen from "@/components/animations/loadingScreen";
+import { getUser, getUsers, updateUser } from "../../lib/helper";
+
+const formReducer = (state, event) => {
+  return {
+    ...state,
+    [event.target.name]: event.target.value,
+  };
+};
 
 export default function Profile({ userDetails }) {
+
+
+  useEffect(() => {
+    const $modalElement = document.querySelector("#authentication-modal");
+
+    const modalOptions = {
+      placement: "bottom-right",
+      backdrop: "dynamic",
+      backdropClasses:
+        "bg-gray-700 bg-opacity-50 dark:bg-opacity-80 fixed inset-0 z-40",
+      closable: true,
+      onHide: () => {
+        console.log("modal is hidden");
+      },
+      onShow: () => {
+        console.log("modal is shown");
+      },
+      onToggle: () => {
+        console.log("modal has been toggled");
+      },
+    };
+
+    const modal = new Modal($modalElement, modalOptions);
+
+    // modal.show();
+  }, []);
+
+
+  
+  useEffect(() => {
+    const $modalElement = document.querySelector("#authentication-modal");
+
+    const modalOptions = {
+      placement: "bottom-right",
+      backdrop: "dynamic",
+      backdropClasses:
+        "bg-gray-700 bg-opacity-50 dark:bg-opacity-80 fixed inset-0 z-40",
+      closable: true,
+      onHide: () => {
+        console.log("modal is hidden");
+      },
+      onShow: () => {
+        console.log("modal is shown");
+      },
+      onToggle: () => {
+        console.log("modal has been toggled");
+      },
+    };
+
+    const modal = new Modal($modalElement, modalOptions);
+
+    // modal.show();
+  }, []);
+
+
+  const { data: session } = useSession();
+
+  const [userName, setuserName] = useState();
+  const [userLogo, setuserLogo] = useState();
+  //  from  form file
+  const [formData, setFormData] = useReducer(formReducer, {});
+  // const formId = useSelector((state) => state.app.client.formId)
+
+  console.log(session);
+
+  // const userId = session?.user?.id;
+  const userId = "645111b866682caf52a4cca5";
+
+  const queryClient = useQueryClient();
+  const { isLoading, isError, data, error } = useQuery(["users", userId], () =>
+    getUser(userId)
+  );
+  const UpdateMutation = useMutation((newData) => updateUser(userId, newData), {
+    onSuccess: async (data) => {
+      // queryClient.setQueryData('users', (old) => [data])
+      queryClient.prefetchQuery("users", getUsers);
+    },
+  });
+
+
   useEffect(() => {
     const tabElements = [
       {
@@ -55,23 +149,104 @@ export default function Profile({ userDetails }) {
      * options: optional
      */
     const tabs = new Tabs(tabElements, options);
-    // const tabs = new Tabs(tabElements);
-
-    // open tab item based on id
     tabs.show("clubs");
   }, []);
 
-  const { data: session } = useSession();
-  console.log(session);
-  // console.log(session?.user?.id);
+  // if (isLoading) return <div>
+  //   <ul
+  //                     className="flex flex-wrap -mb-px text-sm font-medium text-center"
+  //                     id="myTab"
+  //                     data-tabs-toggle="#myTabContent"
+  //                     role="tablist"
+  //                   >
+  //                     <li className="mr-2" role="presentation">
+  //                       <button
+  //                         className="flex flex-row p-3 rounded-lg"
+  //                         id="clubs-tab"
+  //                         data-tabs-target="#clubs"
+  //                         type="button"
+  //                         role="tab"
+  //                         aria-controls="clubs"
+  //                         aria-selected="false"
+  //                       >
+  //                         Portfolio
+  //                       </button>
+  //                     </li>
+  //                     <li className="mr-2" role="presentation">
+  //                       <button
+  //                         className="flex flex-row p-3 rounded-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
+  //                         id="repositories-tab"
+  //                         data-tabs-target="#repositories"
+  //                         type="button"
+  //                         role="tab"
+  //                         aria-controls="repositories"
+  //                         aria-selected="false"
+  //                       >
+                         
+  //                         Reports
+  //                       </button>
+  //                     </li>
+  //                   </ul>
+  //   <LoadingScreen />
+  //   </div>;
+  // if (isError) return <div>Error : {error}</div>;
 
-  // console.log(userDetails)
+  if (data){
+    console.log(data)
+    let { name, email, age, gender, notifications, bio, goals, availibility, interests, major, language } =
+    data;
+  }
+
+  const handleSubmit = async (e) => {
+    document.getElementById("save-btn").disabled = true;
+    document.getElementById("save-btn").textContent = "Saving...";
+    e.preventDefault();
+    console.log("buttton");
+    // let userName = `${formData.firstname ?? firstname} ${formData.lastname ?? lastname}`;
+    let updated = Object.assign({}, data, formData);
+    await UpdateMutation.mutate(updated);
+    document.getElementById("save-btn").disabled = false;
+    document.getElementById("save-btn").textContent = "Saved";
+    toast.success("Changes saved", {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "dark",
+    });
+  };
+
+  const updateUserName = (e) => {
+    setuserName(e.target.value.trim());
+    // replace(/\s/g, "-"));
+    formData.name = e.target.value.trim();
+  };
+
+  const handleImageUpload = async (e) => {
+    const file = e.target.files[0];
+    console.log(file);
+    const base64 = await converToBase64(file);
+    formData.image = base64;
+    setuserLogo(base64);
+    // console.log(base64);
+    // data.logo = base64;
+    // event.target.value.trim().replace(/\s/g, "-")
+  };
+
+
+
+
+
+
   return (
     <>
-      <div className="w-full pl-[91px] h-screen pb-24 overflow-auto text-gray-700 bg-gradient-to-tr from-blue-200 via-indigo-200 to-pink-200">
+      <div className="w-full pl-[91px] h-screen pb-24 overflow-auto text-gray-700 bg-gradient-to-r from-indigo-300 from-10% via-sky-300 via-30% to-emerald-300 to-90%">
         <div className="w-full bg-gray-200">
           <div class="px-10 py-3">
-            <h1 class="text-2xl font-bold">
+            <h1 class="md:text-xl text-lg font-bold">
               Good morning, {session?.user?.name}
             </h1>
           </div>
@@ -211,6 +386,8 @@ export default function Profile({ userDetails }) {
                       </li> */}
                     </ul>
                   </div>
+
+        
                   <div id="myTabContent" className="mt-5">
                     <div
                       className="hidden "
@@ -247,10 +424,10 @@ export default function Profile({ userDetails }) {
                   </div>
                 </div>
               </div>
-              <div className="md:card h-fit w-full mt-20 rounded-2xl mx-auto bg-white md:pb-10 pb-0  shadow ">
+              <div className="md:card h-fit w-full mt-20 rounded-2xl mx-auto backdrop-blur-md bg-white/60 md:pb-10 pb-0  shadow ">
                 <div className="relative">
                   <img
-                    className="w-32 mx-auto rounded-full mt-8 border-2 border-gray-200 bg-gray-300"
+                    className="w-32 mx-auto rounded-full mt-8 border-2 border-gray-400 bg-gray-200"
                     src={`https://robohash.org/${userDetails?.email}}`}
                     alt=""
                   />
@@ -259,9 +436,233 @@ export default function Profile({ userDetails }) {
                 <div className="text-center mt-2 text-xl font-medium ">
                   {userDetails[0]?.name}
                 </div>
-                <div className="text-center mt-2 text-sm font-medium ">
+                {/* <div className="text-center text-sm font-medium ">
                   @{userDetails[0]?.email.split("@")[0]}
+                </div> */}
+                <div className="text-center text-sm font-bold ">
+                  Pune, India
                 </div>
+                
+                <button
+                  data-modal-target="authentication-modal"
+                  data-modal-toggle="authentication-modal"
+                  type="button"
+                  class="inline-flex items-center justify-center ml-20 mb-2 my-4 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-green-400 to-blue-600 group-hover:from-green-400 group-hover:to-blue-600 hover:text-white"
+                >
+                  <span class="relative px-3 py-2 transition-all duration-75  bg-green-400 font-bold rounded-md group-hover:bg-opacity-0">
+                    Edit Portfolio
+                  </span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          id="authentication-modal"
+          tabindex="-1"
+          aria-hidden="true"
+          class="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full"
+        >
+          <div class="relative w-full max-w-3xl max-h-full">
+            <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+              <button
+                type="button"
+                class="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-800 dark:hover:text-white"
+                data-modal-hide="authentication-modal"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="w-5 h-5"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                    clip-rule="evenodd"
+                  ></path>
+                </svg>
+                <span class="sr-only">Close modal</span>
+              </button>
+              <div class="px-6 py-6 lg:px-8">
+                <h3 class="mb-4 text-xl font-medium text-gray-900 dark:text-white">
+                  Let&apos;s create your Portfolio
+                </h3>
+                <form class="space-y-6" action="#">
+                  <div>
+                    <label
+                      for="countries"
+                      class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    >
+                      Your Major
+                    </label>
+                    <select
+                      id="countries"
+                      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    >
+                      <option selected>Choose one field</option>
+                      <option value="US">Computer Science</option>
+                      <option value="CA">IIT-JEE</option>
+                      <option value="FR">GATE</option>
+                      <option value="DE">UPSC-MPSC</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label
+                      for="first_name"
+                      class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    >
+                      Study Interests
+                    </label>
+                    <input
+                      type="text"
+                      id="first_name"
+                      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                      placeholder="add topics here"
+                      required
+                    />
+                  </div>
+
+                  <div>
+                    <label
+                      for="numberinput"
+                      class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    >
+                      Age
+                    </label>
+                    <input
+                      type="number"
+                      id="numberinput"
+                      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                      placeholder="add topics here"
+                      required
+                    />
+                  </div>
+
+                  <div>
+                    <label
+                      for="password"
+                      class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    >
+                      Gender
+                    </label>
+                    <div className="grid grid-cols-3 gap-4">
+                      <div class="flex items-center pl-4 border border-gray-200 rounded dark:border-gray-700">
+                        <input
+                          defaultChecked
+                          id="bordered-radio-4"
+                          type="radio"
+                          value=""
+                          name="bordered-radio"
+                          class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                        />
+                        <label
+                          for="bordered-radio-4"
+                          class="w-full py-4 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                        >
+                          Male
+                        </label>
+                      </div>
+                      <div class="flex items-center pl-4 border border-gray-200 rounded dark:border-gray-700">
+                        <input
+                          id="bordered-radio-5"
+                          type="radio"
+                          value=""
+                          name="bordered-radio"
+                          class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                        />
+                        <label
+                          for="bordered-radio-5"
+                          class="w-full py-4 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                        >
+                          Female
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div>
+                    <label
+                      for="message"
+                      class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    >
+                      About Me
+                    </label>
+                    <textarea
+                      id="message"
+                      rows="4"
+                      class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                      placeholder="Write your thoughts here..."
+                    ></textarea>
+                  </div>
+
+                  <div>
+                    <label
+                      for="password"
+                      class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    >
+                      Preferred Language?
+                    </label>
+                    <div className="grid grid-cols-3 gap-4">
+                      <div class="flex items-center pl-4 border border-gray-200 rounded dark:border-gray-700">
+                        <input
+                          id="bordered-radio-1"
+                          type="radio"
+                          value=""
+                          name="bordered-radio"
+                          class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                        />
+                        <label
+                          for="bordered-radio-1"
+                          class="w-full py-4 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                        >
+                          English
+                        </label>
+                      </div>
+                      <div class="flex items-center pl-4 border border-gray-200 rounded dark:border-gray-700">
+                        <input
+                          defaultChecked
+                          id="bordered-radio-2"
+                          type="radio"
+                          value=""
+                          name="bordered-radio"
+                          class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                        />
+                        <label
+                          for="bordered-radio-2"
+                          class="w-full py-4 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                        >
+                          Hindi
+                        </label>
+                      </div>
+                      <div class="flex items-center pl-4 border border-gray-200 rounded dark:border-gray-700">
+                        <input
+                          id="bordered-radio-3"
+                          type="radio"
+                          value=""
+                          name="bordered-radio"
+                          class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                        />
+                        <label
+                          for="bordered-radio-3"
+                          class="w-full py-4 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                        >
+                          Other
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                  <button
+                    onClick={handleSubmit}
+                    id="save-btn"
+                    type="submit"
+                    class="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                  >
+                    Create My Portfolio
+                  </button>
+                </form>
               </div>
             </div>
           </div>

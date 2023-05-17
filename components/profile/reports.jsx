@@ -7,7 +7,7 @@ export default function Reports() {
   
   return (
     <>
-    <div className="w-full h-96 rounded-2xl bg-pink-300 p-4">
+    <div className="w-full h-screen rounded-2xl backdrop-blur-md bg-white/50 p-4">
     <div className="bg-gray-800 text-gray-500 rounded shadow-xl py-5 px-5 w-full sm:w-2/3 md:w-1/2 lg:w-1/3" x-data="{cardOpen:false,cardData:cardData()}" x-init="$watch('cardOpen', value => value?(cardData.countUp($refs.total,0,11602,null,0.8),cardData.sessions.forEach((el,i) => cardData.countUp($refs[`device${i}`],0,cardData.sessions[i].size,null,1.6))):null);setTimeout(()=>{cardOpen=true},100)">
         <div className="flex w-full">
             <h3 className="text-lg font-semibold leading-tight flex-1">TOTAL SESSIONS</h3>

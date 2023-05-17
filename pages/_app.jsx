@@ -3,15 +3,32 @@ import { SessionProvider } from "next-auth/react"
 import Sidebar from '@/components/sidebar'
 import Footer from '@/components/footer'
 
+
+import { QueryClientProvider, QueryClient } from 'react-query'; 
+import { store } from '../redux/store';
+import { Provider } from 'react-redux';
+
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css'
+
+
 export default function App({
   Component,
   pageProps: { session, ...pageProps },
 }) {
+
+  const queryClient = new QueryClient();
+
+
   return (
+    <QueryClientProvider client={queryClient}>
+      <Provider store={store}>
     <SessionProvider session={session}>
       <Sidebar/>
       <Component {...pageProps} />
       {/* <Footer/> */}
     </SessionProvider>
+    </Provider>
+    </QueryClientProvider>
   )
 }
