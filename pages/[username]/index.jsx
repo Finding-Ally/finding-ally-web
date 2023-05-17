@@ -86,7 +86,13 @@ export default function Profile({ userDetails }) {
   const { data: session } = useSession();
 
   const [userName, setuserName] = useState();
-  const [userLogo, setuserLogo] = useState();
+  const [userImage, setuserImage] = useState();
+  const [subjectMajor, setsubjectMajor] = useState();
+  const [studyInterests, setstudyInterests] = useState();
+  const [userAge, setuserAge] = useState();
+  const [userGender, setuserGender] = useState();
+  const [userBio, setuserBio] = useState();
+  const [language, setLanguage] = useState();
   //  from  form file
   const [formData, setFormData] = useReducer(formReducer, {});
   // const formId = useSelector((state) => state.app.client.formId)
@@ -136,7 +142,7 @@ export default function Profile({ userDetails }) {
     const options = {
       defaultTabId: "repositories",
       activeClasses:
-        "text-blue-600 bg-gray-800 hover:bg-gray-700 hover:text-blue-600 dark:text-gray-100 dark:hover:text-gray-200 border-blue-600 dark:border-blue-500",
+        "text-gray-200 bg-gray-800 hover:bg-gray-700 hover:text-gray-200 dark:text-gray-100 dark:hover:text-gray-200 border-blue-600 dark:border-blue-500",
       inactiveClasses:
         "text-gray-700 bg-white hover:bg-gray-100 hover:text-gray-600 dark:text-gray-700 border-gray-100 hover:border-gray-300 dark:border-gray-700 dark:hover:text-gray-900",
       onShow: () => {
@@ -192,7 +198,6 @@ export default function Profile({ userDetails }) {
   // if (isError) return <div>Error : {error}</div>;
 
   if (data){
-    console.log(data)
     let { name, email, age, gender, notifications, bio, goals, availibility, interests, major, language } =
     data;
   }
@@ -221,8 +226,48 @@ export default function Profile({ userDetails }) {
 
   const updateUserName = (e) => {
     setuserName(e.target.value.trim());
-    // replace(/\s/g, "-"));
     formData.name = e.target.value.trim();
+  };
+
+
+  const updateBio = (e) => {
+    setuserBio(e.target.value.trim());
+    formData.bio = e.target.value.trim();
+  };
+
+  const updateGoals = (e) => {
+    setuserGoals(e.target.value.trim());
+    formData.goals = e.target.value.trim();
+  };
+
+  const updateAvailibility = (e) => {
+    setuserAvailibility(e.target.value.trim());
+    formData.availibility = e.target.value.trim();
+  };
+
+  const updateInterests = (e) => {
+    setstudyInterests(e.target.value.trim());
+    formData.interests = e.target.value.trim();
+  };
+
+  const updateMajor = (e) => {
+    setsubjectMajor(e.target.value.trim());
+    formData.major = e.target.value.trim();
+  };
+
+  const updateLanguage = (e) => {
+    setLanguage(e.target.value.trim());
+    formData.language = e.target.value.trim();
+  };
+
+  const updateAge = (e) => {
+    setuserAge(e.target.value.trim());
+    formData.age = e.target.value.trim();
+  };
+
+  const updateGender = (e) => {
+    setuserGender(e.target.value.trim());
+    formData.gender = e.target.value.trim();
   };
 
   const handleImageUpload = async (e) => {
@@ -230,7 +275,7 @@ export default function Profile({ userDetails }) {
     console.log(file);
     const base64 = await converToBase64(file);
     formData.image = base64;
-    setuserLogo(base64);
+    setuserImage(base64);
     // console.log(base64);
     // data.logo = base64;
     // event.target.value.trim().replace(/\s/g, "-")
@@ -244,7 +289,7 @@ export default function Profile({ userDetails }) {
   return (
     <>
       <div className="w-full pl-[91px] h-screen pb-24 overflow-auto text-gray-700 bg-gradient-to-r from-indigo-300 from-10% via-sky-300 via-30% to-emerald-300 to-90%">
-        <div className="w-full bg-gray-200">
+        <div className="w-full backdrop-blur-md bg-white/50 ml-2">
           <div class="px-10 py-3">
             <h1 class="md:text-xl text-lg font-bold">
               Good morning, {session?.user?.name}
@@ -442,14 +487,27 @@ export default function Profile({ userDetails }) {
                 <div className="text-center text-sm font-bold ">
                   Pune, India
                 </div>
-                
+                {/* {
+                  userDetails[0]?.email == session?.user?.email && (
+                    <button
+                  data-modal-target="authentication-modal"
+                  data-modal-toggle="authentication-modal"
+                  type="button"
+                  class="inline-flex items-center justify-center ml-20 mb-2 my-4 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group "
+                >
+                  <span class="relative px-3 py-2 transition-all duration-300  bg-gradient-to-br from-green-400 to-blue-400 group-hover:from-green-400 group-hover:to-blue-400 hover:from-green-500 hover:to-blue-400  font-bold rounded-md group-hover:bg-opacity-0 text-black hover:text-white">
+                    Edit Portfolio
+                  </span>
+                </button>
+                  )
+                } */}
                 <button
                   data-modal-target="authentication-modal"
                   data-modal-toggle="authentication-modal"
                   type="button"
-                  class="inline-flex items-center justify-center ml-20 mb-2 my-4 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-green-400 to-blue-600 group-hover:from-green-400 group-hover:to-blue-600 hover:text-white"
+                  class="inline-flex items-center justify-center ml-20 mb-2 my-4 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group "
                 >
-                  <span class="relative px-3 py-2 transition-all duration-75  bg-green-400 font-bold rounded-md group-hover:bg-opacity-0">
+                  <span class="relative px-3 py-2 transition-all duration-300  bg-gradient-to-br from-green-400 to-blue-400 group-hover:from-green-400 group-hover:to-blue-400 hover:from-green-500 hover:to-blue-400  font-bold rounded-md group-hover:bg-opacity-0 text-black hover:text-white">
                     Edit Portfolio
                   </span>
                 </button>
@@ -500,12 +558,13 @@ export default function Profile({ userDetails }) {
                     <select
                       id="countries"
                       class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                      onChange={updateMajor}
                     >
                       <option selected>Choose one field</option>
-                      <option value="US">Computer Science</option>
-                      <option value="CA">IIT-JEE</option>
-                      <option value="FR">GATE</option>
-                      <option value="DE">UPSC-MPSC</option>
+                      <option value="Computer-Science">Computer Science</option>
+                      <option value="IIT-JEE">IIT-JEE</option>
+                      <option value="GATE">GATE</option>
+                      <option value="UPSC-MPSC">UPSC-MPSC</option>
                     </select>
                   </div>
 
@@ -521,6 +580,7 @@ export default function Profile({ userDetails }) {
                       id="first_name"
                       class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                       placeholder="add topics here"
+                      onChange={updateInterests}
                       required
                     />
                   </div>
@@ -537,6 +597,7 @@ export default function Profile({ userDetails }) {
                       id="numberinput"
                       class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                       placeholder="add topics here"
+                      onChange={updateAge}
                       required
                     />
                   </div>
@@ -554,9 +615,9 @@ export default function Profile({ userDetails }) {
                           defaultChecked
                           id="bordered-radio-4"
                           type="radio"
-                          value=""
-                          name="bordered-radio"
+                          name="bordered-radio-1"
                           class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                          onChange={updateGender}
                         />
                         <label
                           for="bordered-radio-4"
@@ -570,7 +631,7 @@ export default function Profile({ userDetails }) {
                           id="bordered-radio-5"
                           type="radio"
                           value=""
-                          name="bordered-radio"
+                          name="bordered-radio-1"
                           class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                         />
                         <label
@@ -595,6 +656,8 @@ export default function Profile({ userDetails }) {
                       rows="4"
                       class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                       placeholder="Write your thoughts here..."
+                      // defaultValue={bio}
+                      onChange={updateBio}
                     ></textarea>
                   </div>
 
@@ -610,9 +673,10 @@ export default function Profile({ userDetails }) {
                         <input
                           id="bordered-radio-1"
                           type="radio"
-                          value=""
+                          value="English"
                           name="bordered-radio"
                           class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                          onChange={updateLanguage}
                         />
                         <label
                           for="bordered-radio-1"
@@ -626,9 +690,10 @@ export default function Profile({ userDetails }) {
                           defaultChecked
                           id="bordered-radio-2"
                           type="radio"
-                          value=""
+                          value="Hindi"
                           name="bordered-radio"
                           class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                          onChange={updateLanguage}
                         />
                         <label
                           for="bordered-radio-2"
@@ -641,9 +706,10 @@ export default function Profile({ userDetails }) {
                         <input
                           id="bordered-radio-3"
                           type="radio"
-                          value=""
+                          value="other"
                           name="bordered-radio"
                           class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                          onChange={updateLanguage}
                         />
                         <label
                           for="bordered-radio-3"

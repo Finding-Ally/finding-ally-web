@@ -10,7 +10,7 @@ export default function Portfolio() {
     <div className="w-full min-h-screen rounded-2xl backdrop-blur-md bg-white/50 p-4">
       
 
-      <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
         <div className="grid rounded-2xl ">
           <div className="flex bg-gray-800 p-4 rounded-t-2xl text-start justify-center place-content-center place-items-center">
             <img
@@ -60,7 +60,7 @@ export default function Portfolio() {
           </p>
         </div>
 
-        <div className="grid rounded-2xl ">
+        {/* <div className="grid rounded-2xl ">
           <div className="flex bg-gray-800 p-4 rounded-t-2xl text-start justify-center place-content-center place-items-center">
             <img
               src="https://i.pinimg.com/originals/17/67/2d/17672dbb9f37d2e3272297b9d1cdacb5.jpg"
@@ -75,7 +75,7 @@ export default function Portfolio() {
             {" "}
             Age: 22 Female
           </p>
-        </div>
+        </div> */}
 
         <div className="grid rounded-2xl ">
           <div className="flex bg-gray-800 p-4 rounded-t-2xl text-start justify-center place-content-center place-items-center">
