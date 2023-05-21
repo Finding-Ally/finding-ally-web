@@ -1,6 +1,6 @@
 import { Schema, models, model } from "mongoose";
 
-const projectSchema = new Schema({
+const roomSchema = new Schema({
     id: String,
     name: String,
     adminUser: Object,
@@ -23,6 +23,6 @@ const projectSchema = new Schema({
    
 });
 
-const Projects = models.project || model('project', projectSchema)
+const Rooms = models?.room || model('room', roomSchema)
 
-export default Projects;
+export default Rooms;

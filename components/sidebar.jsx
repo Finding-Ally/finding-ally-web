@@ -29,8 +29,8 @@ export default function Sidebar() {
     <>
       {session && (
         <div className="fixed h-screen w-fit flex bg-gray-200">
-          <aside className="flex flex-col items-center bg-white text-gray-700 shadow h-full px-2 pb-2">
-            <div className="h-16 flex items-center w-full hover:bg-gray-200 rounded-xl">
+          <aside className="flex flex-col items-center bg-white text-gray-700 shadow h-full px-1 pb-2">
+            <div className="h-14 flex items-center w-full hover:bg-gray-200 rounded-xl">
               <a className="h-6 w-6 mx-auto" href="">
                 <img
                   className="h-6 w-6 mx-auto"
@@ -44,7 +44,7 @@ export default function Sidebar() {
               <li className="hover:bg-blue-200 rounded-xl">
                 <a
                   href="\"
-                  className="h-16 px-2 flex flex-col justify-center items-center w-full
+                  className="h-14 px-2 flex flex-col justify-center items-center w-full
                      focus:text-gray-700"
                 >
                   <svg
@@ -74,7 +74,7 @@ export default function Sidebar() {
               <li className="hover:bg-purple-200 rounded-xl">
                 <a
                   href="resources"
-                  className="h-16 px-2 flex flex-col justify-center items-center w-full
+                  className="h-14 px-2 flex flex-col justify-center items-center w-full
                      focus:text-gray-700"
                 >
                   <svg
@@ -98,7 +98,7 @@ export default function Sidebar() {
               <li className="hover:bg-emerald-200 rounded-xl">
                 <a
                   href="explore"
-                  className="h-16 px-2 flex flex-col justify-center items-center w-full
+                  className="h-14 px-2 flex flex-col justify-center items-center w-full
                      focus:text-gray-700"
                 >
                   <svg
@@ -126,7 +126,7 @@ export default function Sidebar() {
               <li className="hover:bg-amber-200 rounded-xl">
                 <a
                   href="study"
-                  className="h-16 px-2 flex flex-col justify-center items-center w-full
+                  className="h-14 px-2 flex flex-col justify-center items-center w-full
                      focus:text-gray-700"
                 >
                   <svg
@@ -155,7 +155,7 @@ export default function Sidebar() {
               {/* <li className="hover:bg-blue-400 rounded-xl">
                    <a
                      href="."
-                     className="h-16 px-2 flex justify-center items-center w-full
+                     className="h-14 px-2 flex justify-center items-center w-full
                      focus:text-orange-500">
                      <svg
                        className="h-5 w-5"
@@ -194,7 +194,7 @@ export default function Sidebar() {
               {/* <li className="hover:bg-blue-400 rounded-xl">
                    <a
                      href="."
-                     className="h-16 px-2 flex justify-center items-center w-full
+                     className="h-14 px-2 flex justify-center items-center w-full
                      focus:text-orange-500">
                      <svg
                        className="h-5 w-5"
@@ -219,11 +219,11 @@ export default function Sidebar() {
               <div className="hover:bg-red-200 rounded-xl w-full">
                 <a
                   href={session?.user?.email}
-                  className="h-16 px-2 flex flex-col justify-center items-center 
+                  className="h-14 px-2 flex flex-col justify-center items-center 
                      focus:text-gray-700"
                 >
                   <img
-                    src={`https://robohash.org/${session?.user?.name}}`}
+                    src={`https://robohash.org/${session?.user?.email}}`}
                     className="rounded-full w-9 h-9 bg-gray-300"
                     alt=""
                   />
@@ -234,7 +234,7 @@ export default function Sidebar() {
                 <a
                   onClick={handleSignOut}
                   href="join"
-                  className="h-16 px-2 flex flex-col justify-center items-center 
+                  className="h-14 px-2 flex flex-col justify-center items-center 
                      focus:text-gray-700"
                 >
                   <svg

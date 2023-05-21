@@ -1,6 +1,24 @@
 import { Modal } from "flowbite";
 import { ModalOptions, ModalInterface } from "flowbite";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { useSession } from "next-auth/react";
+import { useReducer } from "react";
+
+import { useQuery, useMutation, useQueryClient } from "react-query";
+
+import { toast } from "react-toastify";
+import LoadingScreen from "@/components/animations/loadingScreen";
+import { getRooms, getRoom, updateRoom } from "../database/controllerRoom";
+
+
+const formReducer = (state, event) => {
+  return {
+    ...state,
+    [event.target.name]: event.target.value,
+  };
+};
+
+
 
 export default function Explore() {
   useEffect(() => {
@@ -29,7 +47,171 @@ export default function Explore() {
   }, []);
 
 
+
+  const { data: session } = useSession();
+
+  const [userName, setuserName] = useState();
+  const [userImage, setuserImage] = useState();
+  const [course, setCourse] = useState();
+  const [studyInterests, setstudyInterests] = useState();
+  const [userAge, setuserAge] = useState();
+  const [userGender, setuserGender] = useState();
+  const [userBio, setuserBio] = useState();
+  const [language, setLanguage] = useState();
+  //  from  form file
+  const [formData, setFormData] = useReducer(formReducer, {});
+  // const formId = useSelector((state) => state.app.client.formId)
+
+  console.log(session);
+
+  // const userId = session?.user?.id;
+  const roomId = "645111b866682caf52a4cca5";
+
+  const queryClient = useQueryClient();
+  const { isLoading, isError, data, error } = useQuery(["rooms", roomId], () =>
+  getRoom(roomId)
+  );
+  const UpdateMutation = useMutation((newData) => updateRoom(roomId, newData), {
+    onSuccess: async (data) => {
+      // queryClient.setQueryData('users', (old) => [data])
+      queryClient.prefetchQuery("rooms", getRooms);
+    },
+  });
+
+
+
+  // "user_id": "harshita_dsa"
+  // "gender": "Female",
+  // "matched": 0,
+  // "matchId": "",
+  // "age": 20,
+  // "phase": 1 ,  //beginner:1 , mid:2, advanced:3
+  // "group_or_duo": 1,
+  // "course": "Computer Science",
+  // "preparingFor": "CAT",
+  // "studyHabits": {
+  //   "groupOrSolo": "Group",
+  //   "preferredStudyHours": 4,
+  //   "preferredStudyEnvironment": "Coffee Shop"
+  // },
+  // "location": {
+  //   "city": "Pune",
+  //   "state": "Maharashtra",
+  //   "pincode": "400101",
+  //   "country": "India"
+  // },
+  // "interests": [
+  //   "Photography",
+  //   "Gardening"
+  // ],
+  // "availability": {
+  //   "weekday": [{
+  //     "days": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+  //     "Morning": true,
+  //     "Evening": false
+  //   }
+  //   ],
+  //   "weekend": [{
+  //     "days": ["Saturday", "Sunday"],
+  //     "Morning": true,
+  //     "Night": true
+  //   }]
+  // },
+  // "language": "English",
+  // "personalityTraits": [
+  //   "Shy"
+  // ],
+  // "occupation": "Sophomore"
+
+
+
+  if (data){
+    let { name, email, admin, isMatched, gender, notifications, preparingFor, course, availibility, phase, group_or_duo, language } =
+    data;
+  }
+
   
+
+  const handleSubmit = async (e) => {
+    document.getElementById("save-btn").disabled = true;
+    document.getElementById("save-btn").textContent = "Saving...";
+    e.preventDefault();
+    console.log("buttton");
+    // let userName = `${formData.firstname ?? firstname} ${formData.lastname ?? lastname}`;
+    let updated = Object.assign({}, data, formData);
+    await UpdateMutation.mutate(updated);
+    document.getElementById("save-btn").disabled = false;
+    document.getElementById("save-btn").textContent = "Saved";
+    toast.success("Changes saved", {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "dark",
+    });
+  };
+
+  const updateUserName = (e) => {
+    setuserName(e.target.value.trim());
+    formData.name = e.target.value.trim();
+  };
+
+
+  const updateBio = (e) => {
+    setuserBio(e.target.value.trim());
+    formData.bio = e.target.value.trim();
+  };
+
+  const updateCourse = (e) => {
+    setCourse(e.target.value.trim());
+    formData.target = e.target.value.trim();
+  };
+
+  const updateAvailibility = (e) => {
+    setuserAvailibility(e.target.value.trim());
+    formData.availibility = e.target.value.trim();
+  };
+
+  const updateInterests = (e) => {
+    setstudyInterests(e.target.value.trim());
+    formData.interests = e.target.value.trim();
+  };
+
+  const updateMajor = (e) => {
+    setsubjectMajor(e.target.value.trim());
+    formData.major = e.target.value.trim();
+  };
+
+  const updateLanguage = (e) => {
+    setLanguage(e.target.value.trim());
+    formData.language = e.target.value.trim();
+  };
+
+  const updateAge = (e) => {
+    setuserAge(e.target.value.trim());
+    formData.age = e.target.value.trim();
+  };
+
+  const updateGender = (e) => {
+    setuserGender(e.target.value.trim());
+    formData.gender = e.target.value.trim();
+  };
+
+  const handleImageUpload = async (e) => {
+    const file = e.target.files[0];
+    console.log(file);
+    const base64 = await converToBase64(file);
+    formData.image = base64;
+    setuserImage(base64);
+    // console.log(base64);
+    // data.logo = base64;
+    // event.target.value.trim().replace(/\s/g, "-")
+  };
+
+
   return (
     <div className="w-full pl-[91px] h-fit pb-10 overflow-auto text-gray-700 bg-gradient-to-r from-indigo-300 from-10% via-sky-300 via-30% to-emerald-300 to-90%">
       <div className="w-full bg-gray-900">
@@ -85,12 +267,12 @@ export default function Explore() {
                   <form class="space-y-6" action="#">
                     <div>
                     <label for="countries" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Select an option</label>
-                    <select id="countries" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    <select onChange={updateCourse} id="countries" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                       <option selected>Choose a goal</option>
-                      <option value="US">University Studies</option>
-                      <option value="CA">IIT-JEE</option>
-                      <option value="FR">GATE</option>
-                      <option value="DE">UPSC-MPSC</option>
+                      <option value="University-Studies">University Studies</option>
+                      <option value="IIT-JEE">IIT-JEE</option>
+                      <option value="GATE">GATE</option>
+                      <option value="UPSC-MPSC">UPSC-MPSC</option>
                     </select>
                   </div>
                     <div>
@@ -152,13 +334,13 @@ export default function Explore() {
 
                     <div>
                       <label
-                        for="password"
+                        for="default-radio"
                         class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                       >
                         What is your availability?
                       </label>
                       <div class="flex items-center mb-4">
-                          <input checked id="default-radio-2" type="radio" value="" name="default-radio" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"/>
+                          <input defaultChecked id="default-radio-2" type="radio" value="" name="default-radio" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"/>
                           <label for="default-radio-2" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">I’m flexible / I’m available all the time</label>
                       </div>
                       <div class="flex items-center mb-4">
@@ -186,7 +368,7 @@ export default function Explore() {
                           id="bordered-radio-4"
                           type="radio"
                           value=""
-                          name="bordered-radio"
+                          name="bordered-radio-1"
                           class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                         />
                         <label
@@ -202,7 +384,7 @@ export default function Explore() {
                           id="bordered-radio-5"
                           type="radio"
                           value=""
-                          name="bordered-radio"
+                          name="bordered-radio-1"
                           class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                         />
                         <label
@@ -245,6 +427,8 @@ export default function Explore() {
                       </a>
                     </div> */}
                     <button
+                      onClick={handleSubmit}
+                      id="save-btn"
                       type="submit"
                       class="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                     >

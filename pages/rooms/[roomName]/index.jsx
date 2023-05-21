@@ -1,10 +1,10 @@
-import clientPromise from "../../database/connectDB";
+import clientPromise from "@/database/connectDB";
 // import useSWR from "swr";
 import { Tabs } from "flowbite";
 import { Key } from "react";
 import { useSession } from "next-auth/react";
-import Portfolio from "../../components/profile/portfolio";
-import Reports from "../../components/profile/reports";
+import Portfolio from "@/components/profile/portfolio";
+import Reports from "@/components/profile/reports";
 
 import { FcTemplate } from "react-icons/fc";
 import { GiTrophy } from "react-icons/gi";
@@ -18,7 +18,7 @@ import { useQuery, useMutation, useQueryClient } from "react-query";
 
 import { toast } from "react-toastify";
 import LoadingScreen from "@/components/animations/loadingScreen";
-import { getUser, getUsers, updateUser } from "../../lib/helper";
+import { getUser, getUsers, updateUser } from "@/lib/helper";
 
 const formReducer = (state, event) => {
   return {
@@ -27,7 +27,7 @@ const formReducer = (state, event) => {
   };
 };
 
-export default function Profile({ userDetails }) {
+export default function Profile({ roomDetails }) {
 
 
   useEffect(() => {
@@ -99,8 +99,8 @@ export default function Profile({ userDetails }) {
 
   console.log(session);
 
-  const userId = userDetails[0]?.id;
-  // const userId = "645111b866682caf52a4cca5";
+  // const userId = session?.user?.id;
+  const userId = "645111b866682caf52a4cca5";
 
   const queryClient = useQueryClient();
   const { isLoading, isError, data, error } = useQuery(["users", userId], () =>
@@ -359,7 +359,7 @@ export default function Profile({ userDetails }) {
                             ></path>
                           </svg>
                           <span className="ml-1 text-sm font-medium text-gray-500 md:ml-2 dark:text-gray-400">
-                            {userDetails[0]?.name}
+                            {roomDetails[0]?.name}
                           </span>
                         </div>
                       </li>
@@ -448,7 +448,7 @@ export default function Profile({ userDetails }) {
                       role="tabpanel"
                       aria-labelledby="dashboard-tab"
                     >
-                     <ProfileShowCase userDetails={userDetails} data={data}/>
+                     <ProfileShowCase roomDetails={roomDetails} data={data}/>
                     </div> */}
                     <div
                       className="hidden "
@@ -464,7 +464,7 @@ export default function Profile({ userDetails }) {
                       role="tabpanel"
                       aria-labelledby="contacts-tab"
                     >
-                      <ProfileAchievements trophies={userDetails[0].trophies || 0}/>
+                      <ProfileAchievements trophies={roomDetails[0].trophies || 0}/>
                     </div> */}
                   </div>
                 </div>
@@ -473,22 +473,22 @@ export default function Profile({ userDetails }) {
                 <div className="relative">
                   <img
                     className="w-32 mx-auto rounded-full mt-8 border-2 border-gray-400 bg-gray-200"
-                    src={`https://robohash.org/${userDetails[0]?.email}}`}
+                    src={`https://robohash.org/${roomDetails?.email}}`}
                     alt=""
                   />
                   {/* <div className="absolute bottom-2 left-44 p-1.5 bg-green-500 hover:border-2 cursor-pointer rounded-full w-fit h-fit"></div> */}
                 </div>
                 <div className="text-center mt-2 text-xl font-medium ">
-                  {userDetails[0]?.name}
+                  {roomDetails[0]?.name}
                 </div>
                 {/* <div className="text-center text-sm font-medium ">
-                  @{userDetails[0]?.email.split("@")[0]}
+                  @{roomDetails[0]?.email.split("@")[0]}
                 </div> */}
                 <div className="text-center text-sm font-bold ">
-                  @{userDetails[0]?.email.split("@")[0]}
+                  Pune, India
                 </div>
                 {/* {
-                  userDetails[0]?.email == session?.user?.email && (
+                  roomDetails[0]?.email == session?.user?.email && (
                     <button
                   data-modal-target="authentication-modal"
                   data-modal-toggle="authentication-modal"
@@ -742,26 +742,26 @@ export async function getStaticProps(context) {
   const client = await clientPromise;
   const db = client.db("database");
 
-  const searchRoute = context.params.userName;
+  const searchRoute = context.params.roomName;
   // console.log(searchRoute)
 
-  const userData = await db
+  const roomData = await db
     .collection("users")
     .find({ email: searchRoute })
     .sort({ metacritic: -1 })
     .toArray();
 
-  const userDetails = JSON.parse(JSON.stringify(userData));
+  const roomDetails = JSON.parse(JSON.stringify(roomData));
   // const session = await getSession(context);
 
-  // console.log(userDetails[0]?._id + "Cats are cute")
+  // console.log(roomDetails[0]?._id + "Cats are cute")
 
   // const clientProject = await clientPromise;
   // const dbProject = clientProject.db("projects-db");
 
   // const searchProjects = await dbProject
   //     .collection("projects")
-  //     // .find({ "adminUser.id": `${userDetails[0]?.id}`})
+  //     // .find({ "adminUser.id": `${roomDetails[0]?.id}`})
   //     .find({ "contributors": {$elemMatch: {login: `${searchRoute}`}} })
   //     // .find({ "adminUser.id": `642208e7d8a516f45afc5148`})
   //     .sort({ metacritic: -1 })
@@ -769,7 +769,7 @@ export async function getStaticProps(context) {
   //     .toArray();
 
   return {
-    props: { userDetails },
+    props: { roomDetails },
     revalidate: 1,
   };
 }
@@ -786,7 +786,7 @@ export async function getStaticPaths() {
     .toArray();
 
   const paths = searchUsers.map((userPath) => ({
-    params: { userName: userPath.email },
+    params: { roomName: userPath.email },
   }));
 
   return { paths, fallback: "blocking" };
