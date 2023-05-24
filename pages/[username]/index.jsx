@@ -126,44 +126,32 @@ export default function Profile({ userDetails }) {
 
 
 
-  const router = useRouter();
 
-  useEffect(() => {
-    const handleRouteChange = () => {
-      // Your JavaScript code here
-      const $modalElement = document.querySelector("#defaultModal");
+  const handleFormView = () => {
+    // Your JavaScript code here
+    const $modalElement = document.querySelector("#defaultModal");
 
-      const modalOptions = {
-        placement: "bottom-right",
-        backdrop: "dynamic",
-        backdropClasses:
-          "bg-gray-700 bg-opacity-50 dark:bg-opacity-80 fixed inset-0 z-40",
-        closable: true,
-        onHide: () => {
-          console.log("modal is hidden");
-        },
-        onShow: () => {
-          console.log("modal is shown");
-        },
-        onToggle: () => {
-          console.log("modal has been toggled");
-        },
-      };
-
-      const modal = new Modal($modalElement, modalOptions);
-      
-      // modal.show();
+    const modalOptions = {
+      placement: "bottom-right",
+      backdrop: "dynamic",
+      backdropClasses:
+        "bg-gray-700 bg-opacity-50 dark:bg-opacity-80 fixed inset-0 z-40",
+      closable: true,
+      onHide: () => {
+        console.log("modal is hidden");
+      },
+      onShow: () => {
+        console.log("modal is shown");
+      },
+      onToggle: () => {
+        console.log("modal has been toggled");
+      },
     };
 
-    // Listen for route changes
-    router.events.on('routeChangeComplete', handleRouteChange);
-
-    // Clean up the event listener on component unmount
-    return () => {
-      router.events.off('routeChangeComplete', handleRouteChange);
-    };
-  }, [router.events]);
-
+    const modal = new Modal($modalElement, modalOptions);
+    
+    modal.show();
+  };
   // if (isLoading) return <div>
   //   <ul
   //                     className="flex flex-wrap -mb-px text-sm font-medium text-center"
@@ -503,8 +491,8 @@ export default function Profile({ userDetails }) {
                 </button>
                   )
                 } */}
-                <button
-                  data-modal-target="defaultModal" data-modal-toggle="defaultModal"
+                <button data-modal-target="defaultModal" data-modal-toggle="defaultModal"
+                  onClick={handleFormView}
                   type="button" 
                   class="inline-flex items-center justify-center ml-20 mb-2 my-4 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group "
                 >
@@ -524,8 +512,7 @@ export default function Profile({ userDetails }) {
         >
           <div class="relative w-full max-w-3xl max-h-full">
             <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
-              <button
-                type="button"
+              <button onClick={handleFormView}
                 class="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-800 dark:hover:text-white"
                 data-modal-hide="defaultModal"
               >
