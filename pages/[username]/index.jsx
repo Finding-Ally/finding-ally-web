@@ -5,6 +5,7 @@ import { Key } from "react";
 import { useSession } from "next-auth/react";
 import Portfolio from "../../components/profile/portfolio";
 import Reports from "../../components/profile/reports";
+import { useRouter } from 'next/router';
 
 import { FcTemplate } from "react-icons/fc";
 import { GiTrophy } from "react-icons/gi";
@@ -30,31 +31,7 @@ const formReducer = (state, event) => {
 export default function Profile({ userDetails }) {
 
 
-  useEffect(() => {
-    const $modalElement = document.querySelector("#defaultModal");
-
-    const modalOptions = {
-      placement: "bottom-right",
-      backdrop: "dynamic",
-      backdropClasses:
-        "bg-gray-700 bg-opacity-50 dark:bg-opacity-80 fixed inset-0 z-40",
-      closable: true,
-      onHide: () => {
-        console.log("modal is hidden");
-      },
-      onShow: () => {
-        console.log("modal is shown");
-      },
-      onToggle: () => {
-        console.log("modal has been toggled");
-      },
-    };
-
-    const modal = new Modal($modalElement, modalOptions);
-
-    
-    // modal.show();
-  }, []);
+  
 
 
   const { data: session } = useSession();
@@ -146,6 +123,46 @@ export default function Profile({ userDetails }) {
     const tabs = new Tabs(tabElements, options);
     tabs.show("clubs");
   }, []);
+
+
+
+  const router = useRouter();
+
+  useEffect(() => {
+    const handleRouteChange = () => {
+      // Your JavaScript code here
+      const $modalElement = document.querySelector("#defaultModal");
+
+      const modalOptions = {
+        placement: "bottom-right",
+        backdrop: "dynamic",
+        backdropClasses:
+          "bg-gray-700 bg-opacity-50 dark:bg-opacity-80 fixed inset-0 z-40",
+        closable: true,
+        onHide: () => {
+          console.log("modal is hidden");
+        },
+        onShow: () => {
+          console.log("modal is shown");
+        },
+        onToggle: () => {
+          console.log("modal has been toggled");
+        },
+      };
+
+      const modal = new Modal($modalElement, modalOptions);
+      
+      // modal.show();
+    };
+
+    // Listen for route changes
+    router.events.on('routeChangeComplete', handleRouteChange);
+
+    // Clean up the event listener on component unmount
+    return () => {
+      router.events.off('routeChangeComplete', handleRouteChange);
+    };
+  }, [router.events]);
 
   // if (isLoading) return <div>
   //   <ul

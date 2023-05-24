@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 
 import { useSession, signIn, signOut } from "next-auth/react";
 import { useRouter } from "next/router";
+import Link from "next/link";
 
 export default function Sidebar() {
   const { data: session } = useSession();
@@ -31,18 +32,18 @@ export default function Sidebar() {
         <div className="fixed h-screen w-fit flex bg-gray-200">
           <aside className="flex flex-col items-center bg-white text-gray-700 shadow h-full px-1 pb-2">
             <div className="h-14 flex items-center w-full hover:bg-gray-200 rounded-xl">
-              <a className="h-6 w-6 mx-auto" href="">
+              <Link className="h-6 w-6 mx-auto" href="">
                 <img
                   className="h-6 w-6 mx-auto"
                   src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Svelte_Logo.svg/512px-Svelte_Logo.svg.png"
                   alt="svelte logo"
                 />
-              </a>
+              </Link>
             </div>
 
             <ul>
               <li className="hover:bg-blue-200 rounded-xl">
-                <a
+                <Link
                   href="\"
                   className="h-14 px-2 flex flex-col justify-center items-center w-full
                      focus:text-gray-700"
@@ -68,11 +69,11 @@ export default function Sidebar() {
                   </svg>
 
                   <p className="text-xs font-semibold">Dashboard</p>
-                </a>
+                </Link>
               </li>
 
               <li className="hover:bg-purple-200 rounded-xl">
-                <a
+                <Link
                   href="resources"
                   className="h-14 px-2 flex flex-col justify-center items-center w-full
                      focus:text-gray-700"
@@ -92,11 +93,11 @@ export default function Sidebar() {
                     <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
                   </svg>
                   <p className="text-xs font-semibold">Resources</p>
-                </a>
+                </Link>
               </li>
 
               <li className="hover:bg-emerald-200 rounded-xl">
-                <a
+                <Link
                   href="explore"
                   className="h-14 px-2 flex flex-col justify-center items-center w-full
                      focus:text-gray-700"
@@ -120,11 +121,11 @@ export default function Sidebar() {
                     ></path>
                   </svg>
                   <p className="text-xs font-semibold">FindAlly</p>
-                </a>
+                </Link>
               </li>
 
               <li className="hover:bg-amber-200 rounded-xl">
-                <a
+                <Link
                   href="study"
                   className="h-14 px-2 flex flex-col justify-center items-center w-full
                      focus:text-gray-700"
@@ -149,11 +150,11 @@ export default function Sidebar() {
                     ></path>
                   </svg>
                   <p className="text-xs font-semibold">Self Study</p>
-                </a>
+                </Link>
               </li>
 
               {/* <li className="hover:bg-blue-400 rounded-xl">
-                   <a
+                   <Link
                      href="."
                      className="h-14 px-2 flex justify-center items-center w-full
                      focus:text-orange-500">
@@ -187,12 +188,12 @@ export default function Sidebar() {
                          1.65 0 0 0-1.51 1z"></path>
                      </svg>
                      
-                   </a>
+                   </Link>
 
                  </li> */}
 
               {/* <li className="hover:bg-blue-400 rounded-xl">
-                   <a
+                   <Link
                      href="."
                      className="h-14 px-2 flex justify-center items-center w-full
                      focus:text-orange-500">
@@ -211,13 +212,13 @@ export default function Sidebar() {
                          d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
                        <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
                      </svg>
-                   </a>
+                   </Link>
                  </li> */}
             </ul>
 
             <div className="mt-auto h-32 flex flex-col items-center w-full">
               <div className="hover:bg-red-200 rounded-xl w-full">
-                <a
+                <Link
                   href={session?.user?.email}
                   className="h-14 px-2 flex flex-col justify-center items-center 
                      focus:text-gray-700"
@@ -228,10 +229,10 @@ export default function Sidebar() {
                     alt=""
                   />
                   <p className="text-xs font-semibold">Profile</p>
-                </a>
+                </Link>
               </div>
               <div className="hover:bg-gray-200 rounded-xl w-full">
-                <a
+                <Link
                   onClick={handleSignOut}
                   href="join"
                   className="h-14 px-2 flex flex-col justify-center items-center 
@@ -254,7 +255,7 @@ export default function Sidebar() {
                     <line x1="21" y1="12" x2="9" y2="12"></line>
                   </svg>
                   <p className="text-xs font-semibold">Logout</p>
-                </a>
+                </Link>
               </div>
             </div>
           </aside>
