@@ -31,7 +31,7 @@ export default function Profile({ userDetails }) {
 
 
   useEffect(() => {
-    const $modalElement = document.querySelector("#authentication-modal");
+    const $modalElement = document.querySelector("#defaultModal");
 
     const modalOptions = {
       placement: "bottom-right",
@@ -52,33 +52,7 @@ export default function Profile({ userDetails }) {
 
     const modal = new Modal($modalElement, modalOptions);
 
-    // modal.show();
-  }, []);
-
-
-  
-  useEffect(() => {
-    const $modalElement = document.querySelector("#authentication-modal");
-
-    const modalOptions = {
-      placement: "bottom-right",
-      backdrop: "dynamic",
-      backdropClasses:
-        "bg-gray-700 bg-opacity-50 dark:bg-opacity-80 fixed inset-0 z-40",
-      closable: true,
-      onHide: () => {
-        console.log("modal is hidden");
-      },
-      onShow: () => {
-        console.log("modal is shown");
-      },
-      onToggle: () => {
-        console.log("modal has been toggled");
-      },
-    };
-
-    const modal = new Modal($modalElement, modalOptions);
-
+    
     // modal.show();
   }, []);
 
@@ -87,19 +61,34 @@ export default function Profile({ userDetails }) {
 
   const [userName, setuserName] = useState();
   const [userImage, setuserImage] = useState();
+
+
   const [subjectMajor, setsubjectMajor] = useState();
   const [studyInterests, setstudyInterests] = useState();
+
+  const [availability, setavailability] = useState();
+
   const [userAge, setuserAge] = useState();
-  const [userGender, setuserGender] = useState();
+  const [userGender, setuserGender] = useState("Male");
+
+
   const [userBio, setuserBio] = useState();
+  const [userGoals, setuserGoals] = useState();
+  const [userStudyHabits, setuserStudyHabits] = useState();
+
   const [language, setLanguage] = useState();
+  const [userLocation, setuserLocation] = useState();
+
+
+
+
   //  from  form file
   const [formData, setFormData] = useReducer(formReducer, {});
   // const formId = useSelector((state) => state.app.client.formId)
 
-  console.log(session);
+  console.log(userDetails[0]?._id + "userId");
 
-  const userId = userDetails[0]?.id;
+  const userId = userDetails[0]?._id;
   // const userId = "645111b866682caf52a4cca5";
 
   const queryClient = useQueryClient();
@@ -282,17 +271,13 @@ export default function Profile({ userDetails }) {
   };
 
 
-
-
-
-
   return (
     <>
       <div className="w-full pl-[91px] h-min-screen pb-24 overflow-auto text-gray-700 bg-gradient-to-r from-indigo-300 from-10% via-sky-300 via-30% to-emerald-300 to-90%">
         <div className="w-full backdrop-blur-md bg-white/50">
           <div class="px-10 py-3">
             <h1 class="md:text-xl text-lg font-bold">
-              Good morning, {session?.user?.name}
+              Good morning, {userDetails[0]?.name}
             </h1>
           </div>
         </div>
@@ -440,7 +425,7 @@ export default function Profile({ userDetails }) {
                       role="tabpanel"
                       aria-labelledby="clubs-tab"
                     >
-                      <Portfolio />
+                      <Portfolio userDetails={userDetails} />
                     </div>
                     {/* <div
                       className="hidden  "
@@ -502,9 +487,8 @@ export default function Profile({ userDetails }) {
                   )
                 } */}
                 <button
-                  data-modal-target="authentication-modal"
-                  data-modal-toggle="authentication-modal"
-                  type="button"
+                  data-modal-target="defaultModal" data-modal-toggle="defaultModal"
+                  type="button" 
                   class="inline-flex items-center justify-center ml-20 mb-2 my-4 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group "
                 >
                   <span class="relative px-3 py-2 transition-all duration-300  bg-gradient-to-br from-green-400 to-blue-400 group-hover:from-green-400 group-hover:to-blue-400 hover:from-green-500 hover:to-blue-400  font-bold rounded-md group-hover:bg-opacity-0 text-gray-700 hover:text-gray-900">
@@ -516,7 +500,7 @@ export default function Profile({ userDetails }) {
           </div>
         </div>
         <div
-          id="authentication-modal"
+          id="defaultModal"
           tabindex="-1"
           aria-hidden="true"
           class="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full"
@@ -526,7 +510,7 @@ export default function Profile({ userDetails }) {
               <button
                 type="button"
                 class="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-800 dark:hover:text-white"
-                data-modal-hide="authentication-modal"
+                data-modal-hide="defaultModal"
               >
                 <svg
                   aria-hidden="true"
@@ -597,6 +581,7 @@ export default function Profile({ userDetails }) {
                       id="numberinput"
                       class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                       placeholder="add topics here"
+                      // defaultValue={userDetails[0]?.email}
                       onChange={updateAge}
                       required
                     />
@@ -616,8 +601,9 @@ export default function Profile({ userDetails }) {
                           id="bordered-radio-4"
                           type="radio"
                           name="bordered-radio-1"
+                          value="Male"
                           class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                          onChange={updateGender}
+                          onClick={updateGender}
                         />
                         <label
                           for="bordered-radio-4"
@@ -630,9 +616,10 @@ export default function Profile({ userDetails }) {
                         <input
                           id="bordered-radio-5"
                           type="radio"
-                          value=""
+                          value="Female"
                           name="bordered-radio-1"
                           class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                          onClick={updateGender}
                         />
                         <label
                           for="bordered-radio-5"

@@ -22,29 +22,6 @@ const formReducer = (state, event) => {
 
 
 export default function Explore() {
-
-
-
-  var [userEmail,setEmail]=useState()
-    var [Subject,setSubject]=useState()
-    var [Message,setMessage]=useState()
-
-
-    const emailUpdate=(event)=>{ // Dealing with name field changes to update our state
-      setEmail(event.target.value)
-      
-  }
-  const subjectUpdate=(event)=>{ // Dealing with name field changes to update our state
-      
-      setSubject(event.target.value)
-     
-  }
-  const messageUpdate=(event)=>{ // Dealing with name field changes to update our state
-      
-      setMessage(event.target.value)
-  }
-
-
   useEffect(() => {
     const $modalElement = document.querySelector("#authentication-modal");
 
@@ -82,13 +59,25 @@ export default function Explore() {
   const [userGender, setuserGender] = useState();
   const [userBio, setuserBio] = useState();
   const [language, setLanguage] = useState();
+  //  from  form file
+  const [formData, setFormData] = useReducer(formReducer, {});
+  // const formId = useSelector((state) => state.app.client.formId)
 
+  console.log(session);
 
-  const [goal, setGoal] = useState();
-  const [phase, setPhase] = useState("Intermediate");
-  const [availability, setAvailability] = useState("Anytime");
-  const [group_or_duo, setgroup_or_duo] = useState("duo");
+  // const userId = session?.user?.id;
+  const roomId = "645111b866682caf52a4cca5";
 
+  const queryClient = useQueryClient();
+  const { isLoading, isError, data, error } = useQuery(["rooms", roomId], () =>
+  postRoom(roomId)
+  );
+  const UpdateMutation = useMutation((newData) => postRoom(newData), {
+    onSuccess: async (data) => {
+      // queryClient.setQueryData('users', (old) => [data])
+      queryClient.prefetchQuery("rooms", getRooms);
+    },
+  });
 
 
 
@@ -137,104 +126,112 @@ export default function Explore() {
 
 
 
+  if (data){
+    let { name, email, admin, isMatched, gender, notifications, preparingFor, course, availibility, phase, group_or_duo, language } =
+    data;
+  }
+
+  
+
   const handleSubmit = async (e) => {
     document.getElementById("save-btn").disabled = true;
     document.getElementById("save-btn").textContent = "Saving...";
     e.preventDefault();
     console.log("buttton");
     // let userName = `${formData.firstname ?? firstname} ${formData.lastname ?? lastname}`;
-    // let updated = Object.assign({}, data, formData);
-    // await UpdateMutation.mutate(updated);
+    let updated = Object.assign({}, data, formData);
+    await UpdateMutation.mutate(updated);
+    const postData = {
+      name: userName,
+      bio: userBio,
+      course: course,
+      studyInterests: studyInterests,
+      age: userAge,
+      mydata: "mydata"
+    };
     
-    const postURL = '/api/createroom' //Our previously set up route in the backend
-      fetch(postURL, {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          // We should keep the fields consistent for managing this data later
-          submittedAt: Date.now(),
-          adminUser: {
-            name: session?.user?.name,
-            email: session?.user?.email,
-            login: session?.user?.login || session?.user?.email.split("@")[0],
-            image: session?.user?.image,
-            age: session?.user?.age,
-            major: session?.user?.major,
-            goals: session?.user?.goals,
-            bio: session?.user?.bio,
-            availability: session?.user?.availability,
-            language: session?.user?.language,
-            interests: session?.user?.interests,
-          },
-          members: [],
-          goal: goal,
-          phase: phase,
-          availability: availability,
-          group_or_duo: group_or_duo,
-          isMatched: false,
-          // studyInterests : formData?.studyInterests,
-          language : "English",
-        }),
-      }).then(() => {
-        toast.success("🔮 Room Created Successfully", {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "dark",
-        });
+    const url = '/api/rooms'; // Replace with your API endpoint
+    
+    axios.post(url, postData)
+      .then(response => {
+        // Handle success
+        console.log(response.data);
+      })
+      .catch(error => {
+        // Handle error
+        console.error(error);
       });
     
     document.getElementById("save-btn").disabled = false;
     document.getElementById("save-btn").textContent = "Saved";
-    // toast.success("Room Created", {
-    //   position: "top-right",
-    //   autoClose: 5000,
-    //   hideProgressBar: false,
-    //   closeOnClick: true,
-    //   pauseOnHover: true,
-    //   draggable: true,
-    //   progress: undefined,
-    //   theme: "dark",
-    // });
+    toast.success("Changes saved", {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "dark",
+    });
   };
 
-  const updateGoal = (e) => {
-    setGoal(e.target.value.trim());
+  const updateUserName = (e) => {
+    setuserName(e.target.value.trim());
+    formData.name = e.target.value.trim();
   };
 
 
-  const updatePhase = (e) => {
-    setPhase(e.target.value.trim());
+  const updateBio = (e) => {
+    setuserBio(e.target.value.trim());
+    formData.bio = e.target.value.trim();
+  };
+
+  const updateCourse = (e) => {
+    setCourse(e.target.value.trim());
+    formData.target = e.target.value.trim();
   };
 
   const updateAvailibility = (e) => {
-    setAvailability(e.target.value.trim());
+    setuserAvailibility(e.target.value.trim());
+    formData.availibility = e.target.value.trim();
   };
 
-
-  const updateGroup_or_duo = (e) => {
-    setgroup_or_duo(e.target.value.trim());
+  const updateInterests = (e) => {
+    setstudyInterests(e.target.value.trim());
+    formData.interests = e.target.value.trim();
   };
 
+  const updateMajor = (e) => {
+    setsubjectMajor(e.target.value.trim());
+    formData.major = e.target.value.trim();
+  };
 
+  const updateLanguage = (e) => {
+    setLanguage(e.target.value.trim());
+    formData.language = e.target.value.trim();
+  };
 
-  // const handleImageUpload = async (e) => {
-  //   const file = e.target.files[0];
-  //   console.log(file);
-  //   const base64 = await converToBase64(file);
-  //   formData.image = base64;
-  //   setuserImage(base64);
-  //   // console.log(base64);
-  //   // data.logo = base64;
-  //   // event.target.value.trim().replace(/\s/g, "-")
-  // };
+  const updateAge = (e) => {
+    setuserAge(e.target.value.trim());
+    formData.age = e.target.value.trim();
+  };
+
+  const updateGender = (e) => {
+    setuserGender(e.target.value.trim());
+    formData.gender = e.target.value.trim();
+  };
+
+  const handleImageUpload = async (e) => {
+    const file = e.target.files[0];
+    console.log(file);
+    const base64 = await converToBase64(file);
+    formData.image = base64;
+    setuserImage(base64);
+    // console.log(base64);
+    // data.logo = base64;
+    // event.target.value.trim().replace(/\s/g, "-")
+  };
 
 
   return (
@@ -292,7 +289,7 @@ export default function Explore() {
                   <form class="space-y-6" action="#">
                     <div>
                     <label for="countries" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Select an option</label>
-                    <select onChange={updateGoal} id="countries" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    <select onChange={updateCourse} id="countries" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                       <option selected>Choose a goal</option>
                       <option value="University-Studies">University Studies</option>
                       <option value="IIT-JEE">IIT-JEE</option>
@@ -312,11 +309,9 @@ export default function Explore() {
                         <input
                           id="bordered-radio-1"
                           type="radio"
-                          value="Beginner"
+                          value=""
                           name="bordered-radio"
                           class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                          onChange={updatePhase}
-                          // onClick={setPhase("Beginner")}
                         />
                         <label
                           for="bordered-radio-1"
@@ -330,11 +325,9 @@ export default function Explore() {
                           defaultChecked
                           id="bordered-radio-2"
                           type="radio"
-                          value="Intermediate"
+                          value=""
                           name="bordered-radio"
                           class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                          onChange={updatePhase}
-                          // onClick={setPhase("Intermediate")}
                         />
                         <label
                           for="bordered-radio-2"
@@ -347,11 +340,9 @@ export default function Explore() {
                         <input
                           id="bordered-radio-3"
                           type="radio"
-                          value="Advanced"
+                          value=""
                           name="bordered-radio"
                           class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                          onChange={updatePhase}
-                          // onClick={setPhase("Advanced")}
                         />
                         <label
                           for="bordered-radio-3"
@@ -371,24 +362,15 @@ export default function Explore() {
                         What is your availability?
                       </label>
                       <div class="flex items-center mb-4">
-                          <input defaultChecked id="default-radio-2" type="radio" value="flexible" name="default-radio" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                          onChange={updateAvailibility}
-                          // onClick={setAvailability("anytime")}
-                          />
+                          <input defaultChecked id="default-radio-2" type="radio" value="" name="default-radio" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"/>
                           <label for="default-radio-2" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">I’m flexible / I’m available all the time</label>
                       </div>
                       <div class="flex items-center mb-4">
-                          <input id="default-radio-1" type="radio" value="weekdays" name="default-radio" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                          onChange={updateAvailibility}
-                          // onClick={setAvailability("weekdays")}
-                          />
+                          <input id="default-radio-1" type="radio" value="" name="default-radio" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"/>
                           <label for="default-radio-1" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Weekdays</label>
                       </div>
                       <div class="flex items-center ">
-                          <input id="default-radio-3" type="radio" value="weekends" name="default-radio" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                          onChange={updateAvailibility}
-                          // onClick={setAvailability("weekends")}
-                          />
+                          <input id="default-radio-3" type="radio" value="" name="default-radio" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"/>
                           <label for="default-radio-3" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Weekends</label>
                       </div>
                       
@@ -407,11 +389,9 @@ export default function Explore() {
                         defaultChecked
                           id="bordered-radio-4"
                           type="radio"
-                          value="Duo"
+                          value=""
                           name="bordered-radio-1"
                           class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                          onChange={updateGroup_or_duo}
-                          // onClick={setgroup_or_duo("Duo")}
                         />
                         <label
                           for="bordered-radio-4"
@@ -425,11 +405,9 @@ export default function Explore() {
                           
                           id="bordered-radio-5"
                           type="radio"
-                          value="Group"
+                          value=""
                           name="bordered-radio-1"
                           class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                          onChange={updateGroup_or_duo}
-                          // onClick={setgroup_or_duo("Group")}
                         />
                         <label
                           for="bordered-radio-5"

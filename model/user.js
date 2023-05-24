@@ -12,7 +12,7 @@ const userSchema = new Schema({
     gender: Number,
     notifications: Array,
     goals: Array,
-    major: Array,
+    major: String,
     interests: Array,
     availibility: Array,
     onlineHours: Number,

@@ -26,6 +26,7 @@ export default function App({
     <SessionProvider session={session}>
       <Sidebar/>
       <Component {...pageProps} />
+      <ToastContainer/>
       {/* <Footer/> */}
     </SessionProvider>
     </Provider>
