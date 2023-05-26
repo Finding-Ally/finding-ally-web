@@ -18,6 +18,6 @@
       "@/*": ["./*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "pages/_app.jsx", "pages/index.jsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "pages/_app.jsx", "pages/index.jsx", "components/tools/AudioPlayer.jsx", "components/tools/AudioPlayer.jsx"],
   "exclude": ["node_modules"]
 }

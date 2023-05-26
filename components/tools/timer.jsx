@@ -60,7 +60,7 @@ const Timer = () => {
   };
 
   return (
-    <div className="flex flex-row items-center justify-center backdrop-blur-md bg-black/20 rounded-xl p-4 ">
+    <div className="flex flex-row items-center justify-center backdrop-blur-md bg-black/60 rounded-xl p-4 ">
       <div className="relative w-24 h-24">
         <div
           className="absolute w-full h-full rounded-full"
@@ -94,7 +94,7 @@ const Timer = () => {
         <div className="flex space-x-4">
           <div className='flex flex-col'>
           <div className='mb-2'>
-            <label htmlFor="targetTime" className="text-sm font-bold">
+            <label htmlFor="targetTime" className="text-sm font-bold text-white">
               Target:
             </label>
             <input
@@ -106,7 +106,7 @@ const Timer = () => {
             />
           </div>
           <div>
-            <label htmlFor="breakTime" className="text-sm font-bold">
+            <label htmlFor="breakTime" className="text-sm font-bold text-white" >
               Break:
             </label>
             <input

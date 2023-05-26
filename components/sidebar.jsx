@@ -29,7 +29,7 @@ export default function Sidebar() {
   return (
     <>
       {session && (
-        <div className="fixed h-screen w-fit flex bg-gray-200">
+        <div className="fixed z-50 h-screen w-fit flex bg-gray-200">
           <aside className="flex flex-col items-center bg-white text-gray-700 shadow h-full px-1 pb-2">
             <div className="h-14 flex items-center w-full hover:bg-gray-200 rounded-xl">
               <Link className="h-6 w-6 mx-auto" href="">

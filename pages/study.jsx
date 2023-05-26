@@ -3,6 +3,8 @@ import Head from 'next/head';
 import ReactPlayer from 'react-player';
 import Timer from '../components/tools/timer';
 import {FaMusic} from 'react-icons/fa';
+import AudioPlayer from '../components/tools/AudioPlayer';
+import tracks from '../components/tools/tracks';
 
 
 
@@ -33,49 +35,57 @@ const PomodoroPage = () => {
   };
 
   return (
-    <div className="w-full pl-[91px] h-min-screen pb-24 overflow-auto text-gray-700 bg-gradient-to-r from-indigo-300 from-10% via-sky-300 via-30% to-emerald-300 to-90% h-screen flex flex-col items-center justify-center">
+    <div className="w-full pl-[91px] h-min-screen overflow-auto text-gray-700 bg-gradient-to-r from-indigo-300 from-10% via-sky-300 via-30% to-emerald-300 to-90% h-screen flex flex-col items-center justify-center">
+      {/* <ReactPlayer url={'./video.mp4'} className="h-screen absolute w-full" controls={true} autoplay muted loop/> */}
       <Head>
-        <title>Pomodoro Timer</title>
+        <title>Selft Study</title>
       </Head>
-      <div className=" absolute top-0 left-24">
+      <video controls={false} autoPlay={true} muted={true} loop={true} className='h-screen z-30 fixed object-cover w-screen' >         
+          <source src="./train.mp4" type="video/mp4"/>       
+      </video>
+
+      
+      <div className="z-40 absolute top-5 left-28">
         <Timer />
         {/* ... */}
       </div>
-      <div className="absolute top-0 right-0">
+      <div className="z-40 absolute top-5 right-5">
+        {/* <AudioPlayer tracks={tracks} /> */}
+        <div className='backdrop-blur-md bg-white/20 rounded-xl p-4'>
         <button
           onClick={() => changeMusic('birds')}
           className={`${
-            currentMusic === 'birds' ? 'bg-blue-500' : 'bg-gray-300'
-          } px-4 py-2 mx-2 rounded text-white focus:outline-none`}
+            currentMusic === 'birds' ? 'bg-blue-600' : 'bg-gray-700'
+          } px-2 py-2 mx-2 rounded text-white focus:outline-none`}
         >
           Birds
         </button>
         <button
           onClick={() => changeMusic('campfire')}
           className={`${
-            currentMusic === 'campfire' ? 'bg-blue-500' : 'bg-gray-300'
-          } px-4 py-2 mx-2 rounded text-white focus:outline-none`}
+            currentMusic === 'campfire' ? 'bg-blue-600' : 'bg-gray-700'
+          } px-2 py-2 mx-2 rounded text-white focus:outline-none`}
         >
           Campfire
         </button>
         <button
           onClick={() => changeMusic('forest')}
           className={`${
-            currentMusic === 'forest' ? 'bg-blue-500' : 'bg-gray-300'
-          } px-4 py-2 mx-2 rounded text-white focus:outline-none`}
+            currentMusic === 'forest' ? 'bg-blue-600' : 'bg-gray-700'
+          } px-2 py-2 mx-2 rounded text-white focus:outline-none`}
         >
           Forest
         </button>
         <button
           onClick={() => changeMusic('rain')}
           className={`${
-            currentMusic === 'rain' ? 'bg-blue-500' : 'bg-gray-300'
-          } px-4 py-2 mx-2 rounded text-white focus:outline-none`}
+            currentMusic === 'rain' ? 'bg-blue-600' : 'bg-gray-700'
+          } px-2 py-2 mx-2 rounded text-white focus:outline-none`}
         >
           Rain
         </button>
         <div className='flex my-6'>
-        <FaMusic className="music-icon" />
+        <FaMusic className="music-icon text-white" />
         <input
           type="range"
           min="0"
@@ -88,14 +98,14 @@ const PomodoroPage = () => {
       </div>
       <div className="gif-container mt-4">
       <ReactPlayer
-        url={`music/${currentMusic}.mp3`}
+        url={`./${currentMusic}.mp3`}
         playing={isPlaying}
         loop={true}
         volume={volume}
         width="100%"
         height="100%"
       />
-    </div>
+    </div></div>
     </div>
   );
 };
