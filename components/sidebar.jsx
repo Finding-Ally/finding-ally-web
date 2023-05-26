@@ -3,10 +3,33 @@ import { BsFillLightningFill } from "react-icons/bs";
 import { FaSearch, FaPlus } from "react-icons/fa";
 import { TbListSearch } from "react-icons/tb";
 import { useEffect, useState } from "react";
+import { useRouter } from 'next/router';
 
 import { useSession, signIn, signOut } from "next-auth/react";
-import { useRouter } from "next/router";
 import Link from "next/link";
+
+
+
+const useActiveLink = () => {
+  const router = useRouter();
+  const [activeLink, setActiveLink] = useState('');
+
+  useEffect(() => {
+    const handleRouteChange = (url) => {
+      setActiveLink(url);
+    };
+
+    router.events.on('routeChangeComplete', handleRouteChange);
+
+    return () => {
+      router.events.off('routeChangeComplete', handleRouteChange);
+    };
+  }, [router.events]);
+
+  return activeLink;
+};
+
+
 
 export default function Sidebar() {
   const { data: session } = useSession();
@@ -26,11 +49,17 @@ export default function Sidebar() {
   // Profile
   // Logout
 
+
+  const activeLink = useActiveLink();
+
+  
+  
+
   return (
     <>
       {session && (
         <div className="fixed z-50 h-screen w-fit flex bg-gray-200">
-          <aside className="flex flex-col items-center bg-white text-gray-700 shadow h-full px-1 pb-2">
+          <aside className="flex flex-col items-center bg-white text-gray-700 shadow h-full pl-1">
             <div className="h-14 flex items-center w-full hover:bg-gray-200 rounded-xl">
               <Link className="h-6 w-6 mx-auto" href="">
                 <img
@@ -41,8 +70,8 @@ export default function Sidebar() {
               </Link>
             </div>
 
-            <ul>
-              <li className="hover:bg-blue-200 rounded-xl">
+            <ul className="">
+              <li className={`${activeLink === '/' ? 'bg-blue-300 ' : ''} hover:bg-blue-300 rounded-l-3xl rounded-r-none mb-2`}>
                 <Link
                   href="/"
                   className="h-14 px-2 flex flex-col justify-center items-center w-full
@@ -72,7 +101,7 @@ export default function Sidebar() {
                 </Link>
               </li>
 
-              <li className="hover:bg-purple-200 rounded-xl">
+              <li className={`${activeLink === '/resources' ? 'bg-purple-300 ' : ''} hover:bg-purple-300 rounded-l-3xl rounded-r-none mb-2`}>
                 <Link
                   href="/resources"
                   className="h-14 px-2 flex flex-col justify-center items-center w-full
@@ -96,7 +125,7 @@ export default function Sidebar() {
                 </Link>
               </li>
 
-              <li className="hover:bg-emerald-200 rounded-xl">
+              <li className={`${activeLink === '/explore' ? 'bg-green-300 ' : ''} hover:bg-green-300 rounded-l-3xl rounded-r-none mb-2`}>
                 <Link
                   href="/explore"
                   className="h-14 px-2 flex flex-col justify-center items-center w-full
@@ -124,7 +153,7 @@ export default function Sidebar() {
                 </Link>
               </li>
 
-              <li className="hover:bg-amber-200 rounded-xl">
+              <li className={`${activeLink === '/study' ? 'bg-yellow-300 ' : ''} hover:bg-yellow-300 rounded-l-3xl rounded-r-none mb-2`}>
                 <Link
                   href="/study"
                   className="h-14 px-2 flex flex-col justify-center items-center w-full

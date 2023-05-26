@@ -38,7 +38,7 @@ export default function Home() {
   // </div>
 
   return (
-    <div class="flex flex-col w-full pl-[91px] pb-24 h-screen overflow-auto text-gray-700 bg-gradient-to-r from-indigo-300 from-10% via-sky-300 via-30% to-emerald-300 to-90%">
+    <div class="flex flex-col w-full pl-[87px] pb-24 h-screen overflow-auto text-gray-700 bg-gradient-to-r from-indigo-300 from-10% via-sky-300 via-30% to-emerald-300 to-90%">
       <div className="w-full bg-yellow-100">
         <div className="h-fit w-fit rounded-xl bg-white py-1 pl-4 pr-8 shadow ml-4 my-2">
           <div className="text-lg font-bold ">{date}</div>
