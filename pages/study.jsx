@@ -33,38 +33,46 @@ const PomodoroPage = () => {
   };
 
   return (
-    <div className="h-screen flex flex-col items-center justify-center">
+    <div className="w-full pl-[91px] h-min-screen pb-24 overflow-auto text-gray-700 bg-gradient-to-r from-indigo-300 from-10% via-sky-300 via-30% to-emerald-300 to-90% h-screen flex flex-col items-center justify-center">
       <Head>
         <title>Pomodoro Timer</title>
       </Head>
-      <div className="timer-container">
+      <div className=" absolute top-0 left-24">
         <Timer />
         {/* ... */}
       </div>
-      <div className="music-container mt-4">
+      <div className="absolute top-0 right-0">
         <button
-          onClick={() => changeMusic('lofi')}
+          onClick={() => changeMusic('birds')}
           className={`${
-            currentMusic === 'lofi' ? 'bg-blue-500' : 'bg-gray-300'
+            currentMusic === 'birds' ? 'bg-blue-500' : 'bg-gray-300'
           } px-4 py-2 mx-2 rounded text-white focus:outline-none`}
         >
-          Lo-fi
+          Birds
         </button>
         <button
-          onClick={() => changeMusic('chillhop')}
+          onClick={() => changeMusic('campfire')}
           className={`${
-            currentMusic === 'chillhop' ? 'bg-blue-500' : 'bg-gray-300'
+            currentMusic === 'campfire' ? 'bg-blue-500' : 'bg-gray-300'
           } px-4 py-2 mx-2 rounded text-white focus:outline-none`}
         >
-          Chillhop
+          Campfire
         </button>
         <button
-          onClick={() => changeMusic('jazz')}
+          onClick={() => changeMusic('forest')}
           className={`${
-            currentMusic === 'jazz' ? 'bg-blue-500' : 'bg-gray-300'
+            currentMusic === 'forest' ? 'bg-blue-500' : 'bg-gray-300'
           } px-4 py-2 mx-2 rounded text-white focus:outline-none`}
         >
-          Jazz
+          Forest
+        </button>
+        <button
+          onClick={() => changeMusic('rain')}
+          className={`${
+            currentMusic === 'rain' ? 'bg-blue-500' : 'bg-gray-300'
+          } px-4 py-2 mx-2 rounded text-white focus:outline-none`}
+        >
+          Rain
         </button>
         <div className='flex my-6'>
         <FaMusic className="music-icon" />
@@ -79,15 +87,15 @@ const PomodoroPage = () => {
         /></div>
       </div>
       <div className="gif-container mt-4">
-  <ReactPlayer
-    url={`path_to_${currentMusic}_music.mp3`}
-    playing={isPlaying}
-    loop={true}
-    volume={volume}
-    width="100%"
-    height="100%"
-  />
-</div>
+      <ReactPlayer
+        url={`music/${currentMusic}.mp3`}
+        playing={isPlaying}
+        loop={true}
+        volume={volume}
+        width="100%"
+        height="100%"
+      />
+    </div>
     </div>
   );
 };

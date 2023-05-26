@@ -44,7 +44,7 @@ export default function Sidebar() {
             <ul>
               <li className="hover:bg-blue-200 rounded-xl">
                 <Link
-                  href="\"
+                  href="/"
                   className="h-14 px-2 flex flex-col justify-center items-center w-full
                      focus:text-gray-700"
                 >
@@ -74,7 +74,7 @@ export default function Sidebar() {
 
               <li className="hover:bg-purple-200 rounded-xl">
                 <Link
-                  href="resources"
+                  href="/resources"
                   className="h-14 px-2 flex flex-col justify-center items-center w-full
                      focus:text-gray-700"
                 >
@@ -98,7 +98,7 @@ export default function Sidebar() {
 
               <li className="hover:bg-emerald-200 rounded-xl">
                 <Link
-                  href="explore"
+                  href="/explore"
                   className="h-14 px-2 flex flex-col justify-center items-center w-full
                      focus:text-gray-700"
                 >
@@ -126,7 +126,7 @@ export default function Sidebar() {
 
               <li className="hover:bg-amber-200 rounded-xl">
                 <Link
-                  href="study"
+                  href="/study"
                   className="h-14 px-2 flex flex-col justify-center items-center w-full
                      focus:text-gray-700"
                 >
