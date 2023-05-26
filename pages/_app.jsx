@@ -2,7 +2,7 @@ import '@/styles/globals.css'
 import { SessionProvider } from "next-auth/react"
 import Sidebar from '@/components/sidebar'
 import Footer from '@/components/footer'
-
+import NextNProgress from 'nextjs-progressbar';
 
 import { QueryClientProvider, QueryClient } from 'react-query'; 
 import { store } from '../redux/store';
@@ -24,6 +24,8 @@ export default function App({
     <QueryClientProvider client={queryClient}>
       <Provider store={store}>
     <SessionProvider session={session}>
+    <NextNProgress color="#0072cf" startPosition={0.3} stopDelayMs={200} height={3} showOnShallow={true} />
+
       <Sidebar/>
       <Component {...pageProps} />
       <ToastContainer/>

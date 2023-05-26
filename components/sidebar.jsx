@@ -51,7 +51,7 @@ export default function Sidebar() {
 
 
   const activeLink = useActiveLink();
-
+  const userEmail = session?.user?.email;
   
   
 
@@ -246,7 +246,7 @@ export default function Sidebar() {
             </ul>
 
             <div className="mt-auto h-32 flex flex-col items-center w-full">
-              <div className="hover:bg-red-200 rounded-xl w-full">
+              <div className={`${activeLink === userEmail ? 'bg-red-300 ' : ''} hover:bg-red-300 rounded-l-3xl w-full rounded-r-none mb-2`}>
                 <Link
                   href={session?.user?.email}
                   className="h-14 px-2 flex flex-col justify-center items-center 
