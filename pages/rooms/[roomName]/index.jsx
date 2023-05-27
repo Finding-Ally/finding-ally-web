@@ -114,49 +114,6 @@ export default function Profile({ roomDetails }) {
   });
 
 
-  useEffect(() => {
-    const tabElements = [
-      {
-        id: "clubs",
-        triggerEl: document.querySelector("#clubs-tab"),
-        targetEl: document.querySelector("#clubs"),
-      },
-      // {
-      //     id: 'dashboard',
-      //     triggerEl: document.querySelector('#dashboard-tab'),
-      //     targetEl: document.querySelector('#dashboard')
-      // },
-      {
-        id: "repositories",
-        triggerEl: document.querySelector("#repositories-tab"),
-        targetEl: document.querySelector("#repositories"),
-      },
-      // {
-      //     id: 'contacts',
-      //     triggerEl: document.querySelector('#contacts-tab'),
-      //     targetEl: document.querySelector('#contacts')
-      // }
-    ];
-
-    // options with default values
-    const options = {
-      defaultTabId: "repositories",
-      activeClasses:
-        "text-gray-200 bg-gray-800 hover:bg-gray-700 hover:text-gray-200 dark:text-gray-100 dark:hover:text-gray-200 border-blue-600 dark:border-blue-500",
-      inactiveClasses:
-        "text-gray-700 bg-white hover:bg-gray-100 hover:text-gray-600 dark:text-gray-700 border-gray-100 hover:border-gray-300 dark:border-gray-700 dark:hover:text-gray-900",
-      onShow: () => {
-        console.log("tab is shown");
-      },
-    };
-
-    /*
-     * tabElements: array of tab objects
-     * options: optional
-     */
-    const tabs = new Tabs(tabElements, options);
-    tabs.show("clubs");
-  }, []);
 
   // if (isLoading) return <div>
   //   <ul
@@ -288,11 +245,11 @@ export default function Profile({ roomDetails }) {
 
   return (
     <>
-      <div className="w-full pl-[91px] h-min-screen pb-24 overflow-auto text-gray-700 bg-gradient-to-r from-indigo-300 from-10% via-sky-300 via-30% to-emerald-300 to-90%">
-        <div className="w-full backdrop-blur-md bg-white/50">
+      <div className="w-full pl-[87px] h-min-screen pb-24 overflow-auto text-gray-700 bg-gradient-to-r from-indigo-300 from-10% via-sky-300 via-30% to-emerald-300 to-90%">
+        <div className="w-full backdrop-blur-md bg-white/70">
           <div class="px-10 py-3">
             <h1 class="md:text-xl text-lg font-bold">
-              Good morning, {session?.user?.name}
+              {session?.user?.name}
             </h1>
           </div>
         </div>

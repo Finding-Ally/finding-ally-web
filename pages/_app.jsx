@@ -24,7 +24,7 @@ export default function App({
     <QueryClientProvider client={queryClient}>
       <Provider store={store}>
     <SessionProvider session={session}>
-    <NextNProgress color="#0072cf" startPosition={0.3} stopDelayMs={200} height={3} showOnShallow={true} />
+    <NextNProgress color="#9577ff" startPosition={0.3} stopDelayMs={200} height={3} showOnShallow={true} />
 
       <Sidebar/>
       <Component {...pageProps} />

@@ -4,7 +4,9 @@ import { useRouter } from "next/router";
 import { useSession, signIn, signOut } from "next-auth/react";
 import Calendar from "@/components/calendar";
 import {useDate} from "@/hooks/useDate";
+import Link from "next/link";
 // const inter = Inter({ subsets: ['latin'] })
+
 
 export default function Home() {
   const { data: session } = useSession();
@@ -57,7 +59,7 @@ export default function Home() {
           <span class="flex items-center justify-center w-5 h-5 ml-2 text-sm font-semibold text-indigo-500 bg-white rounded bg-opacity-30">
             3
           </span>
-          <a href="explore" class="flex items-center justify-center w-6 h-6 ml-auto text-indigo-500 rounded hover:bg-indigo-500 hover:text-indigo-100">
+          <Link href="/explore" class="flex items-center justify-center w-6 h-6 ml-auto text-indigo-500 rounded hover:bg-indigo-500 hover:text-indigo-100">
             <svg
               class="w-5 h-5"
               fill="none"
@@ -71,7 +73,7 @@ export default function Home() {
                 d="M12 6v6m0 0v6m0-6h6m-6 0H6"
               ></path>
             </svg>
-          </a>
+          </Link>
         </div>
         <div class="grid md:grid-cols-2 grid-cols-1 lg:grid-cols-3 gap-4 pb-2 overflow-auto">
 

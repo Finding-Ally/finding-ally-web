@@ -59,7 +59,7 @@ export default function Sidebar() {
     <>
       {session && (
         <div className="fixed z-50 h-screen w-fit flex bg-gray-200">
-          <aside className="flex flex-col items-center bg-white text-gray-700 shadow h-full pl-1">
+          <aside className="flex flex-col items-center bg-white text-gray-700 h-full pl-1">
             <div className="h-14 flex items-center w-full hover:bg-gray-200 rounded-xl">
               <Link className="h-6 w-6 mx-auto" href="">
                 <img
@@ -71,7 +71,7 @@ export default function Sidebar() {
             </div>
 
             <ul className="">
-              <li className={`${activeLink === '/' ? 'bg-blue-300 ' : ''} hover:bg-blue-300 rounded-l-3xl rounded-r-none mb-2`}>
+              <li className={`${activeLink === '/' || activeLink.includes('/rooms') ? 'bg-indigo-300 ' : ''} hover:bg-indigo-300 rounded-l-2xl rounded-r-none mb-2`}>
                 <Link
                   href="/"
                   className="h-14 px-2 flex flex-col justify-center items-center w-full
@@ -101,7 +101,7 @@ export default function Sidebar() {
                 </Link>
               </li>
 
-              <li className={`${activeLink === '/resources' ? 'bg-purple-300 ' : ''} hover:bg-purple-300 rounded-l-3xl rounded-r-none mb-2`}>
+              <li className={`${activeLink.includes('resources') ? 'bg-purple-300 ' : ''} hover:bg-purple-300 rounded-l-2xl rounded-r-none mb-2`}>
                 <Link
                   href="/resources"
                   className="h-14 px-2 flex flex-col justify-center items-center w-full
@@ -125,7 +125,7 @@ export default function Sidebar() {
                 </Link>
               </li>
 
-              <li className={`${activeLink === '/explore' ? 'bg-green-300 ' : ''} hover:bg-green-300 rounded-l-3xl rounded-r-none mb-2`}>
+              <li className={`${activeLink.includes('explore') ? 'bg-emerald-300 ' : ''} hover:bg-emerald-300 rounded-l-2xl rounded-r-none mb-2`}>
                 <Link
                   href="/explore"
                   className="h-14 px-2 flex flex-col justify-center items-center w-full
@@ -153,7 +153,7 @@ export default function Sidebar() {
                 </Link>
               </li>
 
-              <li className={`${activeLink === '/study' ? 'bg-yellow-300 ' : ''} hover:bg-yellow-300 rounded-l-3xl rounded-r-none mb-2`}>
+              <li className={`${activeLink === '/study' ? 'bg-yellow-300 ' : ''} hover:bg-yellow-300 rounded-l-2xl rounded-r-none mb-2`}>
                 <Link
                   href="/study"
                   className="h-14 px-2 flex flex-col justify-center items-center w-full
@@ -246,9 +246,9 @@ export default function Sidebar() {
             </ul>
 
             <div className="mt-auto h-32 flex flex-col items-center w-full">
-              <div className={`${activeLink === userEmail ? 'bg-red-300 ' : ''} hover:bg-red-300 rounded-l-3xl w-full rounded-r-none mb-2`}>
+              <div className={`${activeLink === userEmail ? 'bg-red-300 ' : ''} hover:bg-red-300 rounded-l-2xl w-full rounded-r-none mb-2`}>
                 <Link
-                  href={session?.user?.email}
+                  href={`/${session?.user?.email}`}
                   className="h-14 px-2 flex flex-col justify-center items-center 
                      focus:text-gray-700"
                 >
