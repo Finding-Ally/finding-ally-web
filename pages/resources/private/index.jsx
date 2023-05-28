@@ -19,7 +19,7 @@ import Other from '../../../components/resources/other';
 import PDF from '../../../components/resources/pdf';
 import HandWritten from '../../../components/resources/handwritten';
 import WebsiteLink from '../../../components/resources/websitelinks';
-
+import {IoCaretBack} from 'react-icons/io5';
 
 
 export default function PrivateDrive(){
@@ -84,7 +84,11 @@ export default function PrivateDrive(){
     return (
         <div className="w-full pl-[87px] h-screen pb-24 overflow-auto text-gray-700 bg-gradient-to-r from-purple-300 from-10% to-blue-300 to-90%">
         <div className="w-full backdrop-blur-md bg-white/70">
-          <div class="pl-6 py-3">
+          <div class="pl-6 py-3 flex">
+            <Link href="/resources">
+            <IoCaretBack className="inline-block text-xl text-gray-200 bg-gray-700 mr-2 rounded" />
+
+            </Link>
             <h1 class="md:text-xl text-lg font-bold">
               Your Personal Resources
             </h1>
