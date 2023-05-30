@@ -17,7 +17,7 @@ const AblyChatComponent = () => {
   });
 
   const sendChatMessage = (messageText) => {
-    channel.publish({ name: "chat-message", data: messageText });
+    channel.publish({ name: "chat-message", data: messageText, date: new Date().toISOString() });
     setMessageText("");
     inputBox.focus();
   }
@@ -43,7 +43,7 @@ const AblyChatComponent = () => {
   useEffect(() => {
     messageEnd.scrollIntoView({ behaviour: "smooth" });
   });
-
+ 
   return (
     <div className={styles.chatHolder}>
       <div className={styles.chatText}>

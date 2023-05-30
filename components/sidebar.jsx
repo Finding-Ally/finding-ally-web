@@ -71,7 +71,7 @@ export default function Sidebar() {
             </div>
 
             <ul className="">
-              <li className={`${activeLink === '/' || activeLink.includes('/rooms') ? 'bg-indigo-300 ' : ''} hover:bg-indigo-300 rounded-l-2xl rounded-r-none mb-2`}>
+              <li className={`${activeLink === '/' || activeLink.includes('/room') ? 'bg-indigo-300 ' : ''} hover:bg-indigo-300 rounded-l-2xl rounded-r-none mb-2`}>
                 <Link
                   href="/"
                   className="h-14 px-2 flex flex-col justify-center items-center w-full
