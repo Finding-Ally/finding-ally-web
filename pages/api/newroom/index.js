@@ -1,5 +1,5 @@
 import { MongoClient, ObjectId } from 'mongodb';
-import nextConnect from 'next-connect';
+import nc from 'next-connect';
 
 const client = new MongoClient(process.env.MONGODB_URI, {
   useNewUrlParser: true,
@@ -13,13 +13,13 @@ async function database(req, res, next) {
   return next();
 }
 
-const handler = nextConnect();
+const handler = nc();
 
 handler.use(database);
 
 handler.post(async (req, res) => {
   const { title, description } = req.body;
-  const result = await req.db.collection('request').insertOne({
+  const result = await req.db.collection('requests').insertOne({
     title,
     description,
   });
@@ -30,7 +30,7 @@ handler.get(async (req, res) => {
   const { id } = req.query;
   if (id) {
     const document = await req.db
-      .collection('request')
+      .collection('requests')
       .findOne({ _id: new ObjectId(id) });
     if (!document) {
       res.status(404).end();
@@ -39,7 +39,7 @@ handler.get(async (req, res) => {
     }
   } else {
     const documents = await req.db
-      .collection('request')
+      .collection('requests')
       .find()
       .toArray();
     res.status(200).json(documents);
@@ -49,7 +49,7 @@ handler.get(async (req, res) => {
 handler.put(async (req, res) => {
   const { id } = req.query;
   const { title, description } = req.body;
-  const result = await req.db.collection('request').updateOne(
+  const result = await req.db.collection('requests').updateOne(
     { _id: new ObjectId(id) },
     { $set: { title, description } }
   );
@@ -63,7 +63,7 @@ handler.put(async (req, res) => {
 handler.delete(async (req, res) => {
   const { id } = req.query;
   const result = await req.db
-    .collection('request')
+    .collection('requests')
     .deleteOne({ _id: new ObjectId(id) });
   if (result.deletedCount === 0) {
     res.status(404).end();

@@ -127,10 +127,10 @@ export const authOptions = {
         // @ts-ignore
         const dataUsers = await db
           .collection("users")
-          .updateMany({ _id: User.id }, { $set: insertDocument });
+          .updateOne({ _id: User.id }, { $set: insertDocument });
         if (dataUsers) {
           console.log("Added " + String(User.id) + " to database!");
-          // this.session.user.trophies = dataUsers.trophies;
+          this.session.user.login = dataUsers.login;
           return this.session;
         }
         return this.session;

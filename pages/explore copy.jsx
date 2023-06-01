@@ -74,9 +74,6 @@ export default function Explore() {
 
   const { data: session } = useSession();
 
-
-  const userId = session?.user?.id;
-
   const [userName, setuserName] = useState();
   const [userImage, setuserImage] = useState();
   const [course, setCourse] = useState();
@@ -95,51 +92,93 @@ export default function Explore() {
 
 
 
+  // "user_id": "harshita_dsa"
+  // "gender": "Female",
+  // "matched": 0,
+  // "matchId": "",
+  // "age": 20,
+  // "phase": 1 ,  //beginner:1 , mid:2, advanced:3
+  // "group_or_duo": 1,
+  // "course": "Computer Science",
+  // "preparingFor": "CAT",
+  // "studyHabits": {
+  //   "groupOrSolo": "Group",
+  //   "preferredStudyHours": 4,
+  //   "preferredStudyEnvironment": "Coffee Shop"
+  // },
+  // "location": {
+  //   "city": "Pune",
+  //   "state": "Maharashtra",
+  //   "pincode": "400101",
+  //   "country": "India"
+  // },
+  // "interests": [
+  //   "Photography",
+  //   "Gardening"
+  // ],
+  // "availability": {
+  //   "weekday": [{
+  //     "days": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+  //     "Morning": true,
+  //     "Evening": false
+  //   }
+  //   ],
+  //   "weekend": [{
+  //     "days": ["Saturday", "Sunday"],
+  //     "Morning": true,
+  //     "Night": true
+  //   }]
+  // },
+  // "language": "English",
+  // "personalityTraits": [
+  //   "Shy"
+  // ],
+  // "occupation": "Sophomore"
+
+
 
   const handleSubmit = async (e) => {
     document.getElementById("save-btn").disabled = true;
     document.getElementById("save-btn").textContent = "Saving...";
     e.preventDefault();
-
-    const data = {
-      // We should keep the fields consistent for managing this data later
-      submittedAt: Date.now(),
-      adminUser: {
-        name: session?.user?.name,
-        id: session?.user?.id,
-        email: session?.user?.email,
-        login: session?.user?.login || session?.user?.email.split("@")[0],
-        image: session?.user?.image,
-        age: session?.user?.age,
-        major: session?.user?.major,
-        goals: session?.user?.goals,
-        bio: session?.user?.bio,
-        availability: session?.user?.availability,
-        language: session?.user?.language,
-        interests: session?.user?.interests,
-      },
-      members: [],
-      goal: goal,
-      phase: phase,
-      availability: availability,
-      group_or_duo: group_or_duo,
-      isMatched: false,
-      // studyInterests : formData?.studyInterests,
-      language : "English",
-    };
-
-    try {
-      const response = await fetch('/api/createroom', {
-        method: 'POST',
+    console.log("buttton");
+    // let userName = `${formData.firstname ?? firstname} ${formData.lastname ?? lastname}`;
+    // let updated = Object.assign({}, data, formData);
+    // await UpdateMutation.mutate(updated);
+    
+    const postURL = '/api/createroom' //Our previously set up route in the backend
+      fetch(postURL, {
+        method: "POST",
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(data),
-      });
-
-      if (response.ok) {
-        console.log('Document created successfully');
+        body: JSON.stringify({
+          // We should keep the fields consistent for managing this data later
+          submittedAt: Date.now(),
+          adminUser: {
+            name: session?.user?.name,
+            email: session?.user?.email,
+            login: session?.user?.login || session?.user?.email.split("@")[0],
+            image: session?.user?.image,
+            age: session?.user?.age,
+            major: session?.user?.major,
+            goals: session?.user?.goals,
+            bio: session?.user?.bio,
+            availability: session?.user?.availability,
+            language: session?.user?.language,
+            interests: session?.user?.interests,
+          },
+          members: [],
+          goal: goal,
+          phase: phase,
+          availability: availability,
+          group_or_duo: group_or_duo,
+          isMatched: false,
+          // studyInterests : formData?.studyInterests,
+          language : "English",
+        }),
+      }).then(() => {
         toast.success("🔮 Room Created Successfully", {
           position: "top-right",
           autoClose: 5000,
@@ -150,22 +189,21 @@ export default function Explore() {
           progress: undefined,
           theme: "dark",
         });
-        // Reset form fields
-      } else {
-        console.error('Failed to create document');
-      }
-    } catch (error) {
-      console.error('An error occurred:', error);
-    }
-
-    document.getElementById("save-btn").disabled = false;
-    document.getElementById("save-btn").textContent = "Saved";  
-  };
-
+      });
     
-
-
-
+    document.getElementById("save-btn").disabled = false;
+    document.getElementById("save-btn").textContent = "Saved";
+    // toast.success("Room Created", {
+    //   position: "top-right",
+    //   autoClose: 5000,
+    //   hideProgressBar: false,
+    //   closeOnClick: true,
+    //   pauseOnHover: true,
+    //   draggable: true,
+    //   progress: undefined,
+    //   theme: "dark",
+    // });
+  };
 
   const updateGoal = (e) => {
     setGoal(e.target.value.trim());
@@ -199,54 +237,8 @@ export default function Explore() {
   // };
 
 
-
-  // Fetch the Request rooms of the current user
-
-
-
-// Initialize a state to store the fetched data
-const [requestedRooms, setRequestedRooms] = useState([]);
-
-// Fetch data from MongoDB using useEffect
-
-useEffect(() => {
-  const fetchData = async () => {
-    try {
-      const response = await fetch(`/api/createroom?adminId=${userId}`);
-      const jsonData = await response.json();
-      setRequestedRooms(jsonData);
-    } catch (error) {
-      console.error('Error fetching data:', error);
-    }
-  };
-
-  fetchData();
-}, [userId]);
-
-
-
-const handleDeleteRoom = async (roomId) => {
-  try {
-    const response = await fetch(`/api/createroom?roomId=${roomId}`, {
-      method: 'DELETE',
-    });
-    if (response.status === 204) {
-      // Successful deletion
-      // Perform any necessary actions or update the UI accordingly
-      console.log('Room deleted successfully');
-    } else {
-      // Handle the error or display an error message
-      console.error('Failed to delete room');
-    }
-  } catch (error) {
-    // Handle the error or display an error message
-    console.error('Error deleting room:', error);
-  }
-};
-
-
   return (
-    <div className="w-full pl-[87px] h-screen pb-10 overflow-auto text-gray-700 bg-gradient-to-r bg-emerald-300 from-10% to-indigo-300 to-90%">
+    <div className="w-full pl-[87px] h-fit pb-10 overflow-auto text-gray-700 bg-gradient-to-r bg-emerald-300 from-10% to-indigo-300 to-90%">
       <div className="w-full bg-gray-900">
         <div class="px-10 py-3">
           <h1 class="text-2xl font-bold text-white">Find your Ally</h1>
@@ -506,8 +498,6 @@ const handleDeleteRoom = async (roomId) => {
             <div class="mb-4">
               <h1 class="font-semibold text-gray-800">Your Allies</h1>
             </div>
-
-
             <div class="flex justify-start items-start mb-2">
               <div class="w-1/5">
                 <img
@@ -534,9 +524,84 @@ const handleDeleteRoom = async (roomId) => {
                 </div>
               </div>
             </div>
-
-
-
+            <div class="flex justify-start items-start mb-2">
+              <div class="w-1/5">
+                <img
+                  class="w-12 h-12 rounded-full border border-gray-100 shadow-sm"
+                  src="https://randomuser.me/api/portraits/men/20.jpg"
+                  alt=""
+                />
+              </div>
+              <div class="w-4/5 flex justify-between">
+                <span class="font-semibold text-gray-800">Ezio Dani</span>
+                <div>
+                  <a
+                    href=""
+                    class="text-gray-100 mr-2 bg-gray-600 hover:bg-gray-800 p-2 rounded-lg"
+                  >
+                    Unmatch
+                  </a>
+                  <a
+                    href=""
+                    class="text-gray-700 mr-2 bg-gray-200 hover:bg-gray-100 p-2 rounded-lg"
+                  >
+                    Report
+                  </a>
+                </div>
+              </div>
+            </div>
+            <div class="flex justify-start items-start mb-2">
+              <div class="w-1/5">
+                <img
+                  class="w-12 h-12 rounded-full border border-gray-100 shadow-sm"
+                  src="https://randomuser.me/api/portraits/men/20.jpg"
+                  alt=""
+                />
+              </div>
+              <div class="w-4/5 flex justify-between">
+                <span class="font-semibold text-gray-800">Ezio Dani</span>
+                <div>
+                  <a
+                    href=""
+                    class="text-gray-100 mr-2 bg-gray-600 hover:bg-gray-800 p-2 rounded-lg"
+                  >
+                    Unmatch
+                  </a>
+                  <a
+                    href=""
+                    class="text-gray-700 mr-2 bg-gray-200 hover:bg-gray-100 p-2 rounded-lg"
+                  >
+                    Report
+                  </a>
+                </div>
+              </div>
+            </div>
+            <div class="flex justify-start items-start mb-2">
+              <div class="w-1/5">
+                <img
+                  class="w-12 h-12 rounded-full border border-gray-100 shadow-sm"
+                  src="https://randomuser.me/api/portraits/men/20.jpg"
+                  alt=""
+                />
+              </div>
+              <div class="w-4/5 flex justify-between">
+                <span class="font-semibold text-gray-800">Ezio Dani</span>
+                <div>
+                  <a
+                    href=""
+                    class="text-gray-100 mr-2 bg-gray-600 hover:bg-gray-800 p-2 rounded-lg"
+                  >
+                    Unmatch
+                  </a>
+                  <a
+                    href=""
+                    class="text-gray-700 mr-2 bg-gray-200 hover:bg-gray-100 p-2 rounded-lg"
+                  >
+                    Report
+                  </a>
+                </div>
+              </div>
+            </div>
           </div>
 
           <div class="bg-white  rounded-lg shadow-xl border border-black p-8 w-full">
@@ -544,9 +609,7 @@ const handleDeleteRoom = async (roomId) => {
               Waiting List:
             </h2>
             <ul class="max-w-md space-y-1 text-gray-500 list-inside dark:text-gray-400">
-              {
-                requestedRooms.length > 0 ? requestedRooms.map((room) => (
-                  <li class="flex items-center bg-gray-50 p-2 rounded-xl hover:bg-gray-100" key={room?.id}> 
+              <li class="flex items-center">
                 <svg
                   class="w-4 h-4 mr-1.5 text-blue-500 dark:text-green-400 flex-shrink-0"
                   fill="currentColor"
@@ -559,23 +622,53 @@ const handleDeleteRoom = async (roomId) => {
                     clip-rule="evenodd"
                   ></path>
                 </svg>
-                <div class="flex justify-between w-full items-start mb-2">
-                <span class="font-semibold text-gray-800 flex flex-row my-auto">{room?.goal}</span>
-                <div>
-                  <button
-                    onClick={() => handleDeleteRoom(room?.id)}
-
-                    class="text-gray-700 mr-2 bg-gray-200 hover:bg-gray-100 p-2 rounded-lg"
-                  >
-                    Cancel
-                  </button>
-              </div>
-            </div>
+                At least 10 characters
               </li>
-                )): <h1>Rooms Not Found</h1>
-              }
-              
-              
+              <li class="flex items-center">
+                <svg
+                  class="w-4 h-4 mr-1.5 text-blue-500 dark:text-green-400 flex-shrink-0"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                    clip-rule="evenodd"
+                  ></path>
+                </svg>
+                At least one lowercase character
+              </li>
+              <li class="flex items-center">
+                <svg
+                  class="w-4 h-4 mr-1.5 text-green-500 dark:text-green-400 flex-shrink-0"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                    clip-rule="evenodd"
+                  ></path>
+                </svg>
+                At least one lowercase character
+              </li>
+              <li class="flex items-center">
+                <svg
+                  class="w-4 h-4 mr-1.5 text-green-500 dark:text-green-400 flex-shrink-0"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                    clip-rule="evenodd"
+                  ></path>
+                </svg>
+                At least one lowercase character
+              </li>
             </ul>
           </div>
         </div>
