@@ -18,8 +18,10 @@ export default async function handler(req, res) {
   try {
     switch (req.method) {
       case 'GET':
+        // Handle different GET queries based on req.query parameters
+        if (req.query.adminId) {
         const adminId = req?.query?.adminId;
-        console.log("adminId", adminId);
+        // console.log("adminId", adminId);
           // Perform a query to find a specific document by id
           const readData = await fetch(`${baseUrl}/find`, {
             ...fetchOptions,
@@ -29,9 +31,20 @@ export default async function handler(req, res) {
             }),
           });
           const readDataJson = await readData.json();
-          console.log("readDataJson", readDataJson);
+          // console.log("readDataJson", readDataJson);
           res.status(200).json(readDataJson.documents);
-
+        } else {
+          // Perform a query to find multiple documents
+          const readData = await fetch(`${baseUrl}/find`, {
+            ...fetchOptions,
+            body: JSON.stringify({
+              ...fetchBody,
+              sort: { postedAt: -1 },
+            }),
+          });
+          const readDataJson = await readData.json();
+          res.status(200).json(readDataJson.documents);
+        }
         break;
       case 'POST':
         // Handle the POST request to insert a new document
