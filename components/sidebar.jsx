@@ -12,7 +12,7 @@ import Link from "next/link";
 
 const useActiveLink = () => {
   const router = useRouter();
-  const [activeLink, setActiveLink] = useState('');
+  const [activeLink, setActiveLink] = useState('/');
 
   useEffect(() => {
     const handleRouteChange = (url) => {

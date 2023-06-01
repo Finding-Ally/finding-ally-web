@@ -9,7 +9,7 @@ export default function Resources(){
     console.log(session);
 
     return (
-        <div className="w-full pl-[87px] h-screen pb-24 overflow-auto text-gray-700 bg-gradient-to-r from-purple-300 from-10% to-blue-300 to-90%">
+        <div className="w-full pl-[87px] h-screen pb-24 overflow-auto text-gray-700 bg-gradient-to-r bg-purple-300 from-10% to-blue-300 to-90%">
 
       
       <div className="px-10 mt-4">

@@ -82,7 +82,7 @@ export default function PrivateDrive(){
   }, []);
 
     return (
-        <div className="w-full pl-[87px] h-screen pb-24 overflow-auto text-gray-700 bg-gradient-to-r from-purple-300 from-10% to-blue-300 to-90%">
+        <div className="w-full pl-[87px] h-screen pb-24 overflow-auto text-gray-700 bg-gradient-to-r bg-purple-300 from-10% to-blue-300 to-90%">
         <div className="w-full backdrop-blur-md bg-white/70">
           <div class="pl-6 py-3 flex">
             <Link href="/resources">
