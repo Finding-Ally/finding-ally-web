@@ -248,7 +248,7 @@ export default function Profile({ roomDetails }) {
 
   return (
     <>
-      <div className="w-full pl-[87px] h-screen overflow-auto text-gray-700 bg-gradient-to-r from-indigo-300 from-10% via-sky-300 via-30% to-emerald-300 to-90%">
+      <div className="w-full pl-[87px] h-screen overflow-auto text-gray-700 bg-gradient-to-r bg-indigo-300 from-10% via-sky-300 via-30% to-emerald-300 to-90%">
         {/* <div className="w-full backdrop-blur-md bg-white/70">
           <div class="px-10 py-3">
             <h1 class="md:text-xl text-lg font-bold">

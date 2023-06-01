@@ -18,20 +18,30 @@ export default async function handler(req, res) {
   try {
     switch (req.method) {
       case 'GET':
-        const adminId = req?.query?.adminId;
-        console.log("adminId", adminId);
+        // Handle different GET queries based on req.query parameters
+        if (req.query.id) {
           // Perform a query to find a specific document by id
+          const readData = await fetch(`${baseUrl}/findOne`, {
+            ...fetchOptions,
+            body: JSON.stringify({
+              ...fetchBody,
+              filter: { adminUser: { $oid: req.query.id } },
+            }),
+          });
+          const readDataJson = await readData.json();
+          res.status(200).json(readDataJson.document);
+        } else {
+          // Perform a query to find multiple documents
           const readData = await fetch(`${baseUrl}/find`, {
             ...fetchOptions,
             body: JSON.stringify({
               ...fetchBody,
-              filter: { 'adminUser.id': adminId },
+              sort: { postedAt: -1 },
             }),
           });
           const readDataJson = await readData.json();
-          console.log("readDataJson", readDataJson);
           res.status(200).json(readDataJson.documents);
-
+        }
         break;
       case 'POST':
         // Handle the POST request to insert a new document
@@ -46,23 +56,23 @@ export default async function handler(req, res) {
         const insertDataJson = await insertData.json();
         res.status(201).json(insertDataJson);
         break;
-      // case 'PUT':
-      //   // Handle the PUT request to update a document by id
-      //   const updateData = await fetch(`${baseUrl}/updateOne`, {
-      //     ...fetchOptions,
-      //     body: JSON.stringify({
-      //       ...fetchBody,
-      //       filter: { _id: { $oid: req.body._id } },
-      //       update: {
-      //         $set: {
-      //           body: req.body.body,
-      //         },
-      //       },
-      //     }),
-      //   });
-      //   const updateDataJson = await updateData.json();
-      //   res.status(200).json(updateDataJson);
-      //   break;
+      case 'PUT':
+        // Handle the PUT request to update a document by id
+        const updateData = await fetch(`${baseUrl}/updateOne`, {
+          ...fetchOptions,
+          body: JSON.stringify({
+            ...fetchBody,
+            filter: { _id: { $oid: req.body._id } },
+            update: {
+              $set: {
+                body: req.body.body,
+              },
+            },
+          }),
+        });
+        const updateDataJson = await updateData.json();
+        res.status(200).json(updateDataJson);
+        break;
         case 'DELETE':
           // Handle the DELETE request to delete a room by room ID
           const roomId = req.query.roomId;
