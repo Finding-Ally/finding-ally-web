@@ -249,18 +249,18 @@ export default function Profile({ roomDetails }) {
   return (
     <>
       <div className="w-full pl-[87px] h-screen overflow-auto text-gray-700 bg-gradient-to-r from-indigo-300 from-10% via-sky-300 via-30% to-emerald-300 to-90%">
-        <div className="w-full backdrop-blur-md bg-white/70">
+        {/* <div className="w-full backdrop-blur-md bg-white/70">
           <div class="px-10 py-3">
             <h1 class="md:text-xl text-lg font-bold">
               Room Name
             </h1>
           </div>
-        </div>
+        </div> */}
         <div className="md:px-4 px-2 ">
           <div className="">
             <div className="grid md:grid-cols-5 md:gap-5">
               <div className="md:col-span-4  backdrop-blur-md bg-white/40 mt-6 rounded-2xl p-4">
-              <h1 className="text-black">Chat With Your Partner</h1>
+              <h1 className="text-black backdrop-blur-md bg-white/70 p-2 rounded-lg">Your Partnet Name</h1>
               <AblyChatComponent />
               </div>
               <div className="md:card h-fit w-full mt-20 rounded-2xl mx-auto backdrop-blur-md bg-white/60 md:pb-10 pb-0  shadow ">
@@ -273,13 +273,13 @@ export default function Profile({ roomDetails }) {
                   {/* <div className="absolute bottom-2 left-44 p-1.5 bg-green-500 hover:border-2 cursor-pointer rounded-full w-fit h-fit"></div> */}
                 </div>
                 <div className="text-center mt-2 text-xl font-medium ">
-                  {roomDetails[0]?.name}
+                  {session?.user?.name}
                 </div>
                 {/* <div className="text-center text-sm font-medium ">
                   @{roomDetails[0]?.email.split("@")[0]}
                 </div> */}
                 <div className="text-center text-sm font-bold ">
-                  Pune, India
+                  {session?.user?.login}
                 </div>
                 {/* {
                   roomDetails[0]?.email == session?.user?.email && (
@@ -296,13 +296,11 @@ export default function Profile({ roomDetails }) {
                   )
                 } */}
                 <button
-                  data-modal-target="authentication-modal"
-                  data-modal-toggle="authentication-modal"
                   type="button"
                   class="inline-flex items-center justify-center ml-20 mb-2 my-4 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group "
                 >
                   <span class="relative px-3 py-2 transition-all duration-300  bg-gradient-to-br from-green-400 to-blue-400 group-hover:from-green-400 group-hover:to-blue-400 hover:from-green-500 hover:to-blue-400  font-bold rounded-md group-hover:bg-opacity-0 text-gray-700 hover:text-gray-900">
-                    Edit Portfolio
+                    View Profile
                   </span>
                 </button>
               </div>
