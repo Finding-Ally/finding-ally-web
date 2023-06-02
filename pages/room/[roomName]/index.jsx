@@ -376,5 +376,5 @@ export async function getStaticPaths() {
     params: { roomName: userPath.name },
   }));
 
-  return { paths, fallback: "blocking" };
+  return { paths, fallback: false };
 }

@@ -119,9 +119,9 @@ export default function Home() {
               stroke="currentColor"
             >
               <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
                 d="M12 6v6m0 0v6m0-6h6m-6 0H6"
               ></path>
             </svg>
@@ -151,7 +151,7 @@ export default function Home() {
             <h4 className="mt-1 text-sm font-medium mb-2">
               {room?.goal}
             </h4>
-            <div className="flex justify-between items-center mb-2 w-full mt-3 text-xs font-medium text-gray-400">
+            <div className="flex justify-between items-center mb-2 w-full mt-3 text-xs font-medium text-gray-400 pt-6">
             <div className="flex">
               {room?.members?.map((member) => (
                 <img key={member?._id}
@@ -169,9 +169,9 @@ export default function Home() {
                   fill="currentColor"
                 >
                   <path
-                    fill-rule="evenodd"
+                    fillRule="evenodd"
                     d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
-                    clip-rule="evenodd"
+                    clipRule="evenodd"
                   />
                 </svg>
                 <span className="ml-1 leading-none">Dec 12</span>

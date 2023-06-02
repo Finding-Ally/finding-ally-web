@@ -78,7 +78,7 @@ export default async function handler(req, res) {
       //   break;
       case 'DELETE':
         // Handle the DELETE request to delete a room by room ID
-        const roomId = req.query.roomId;
+        const roomId = req?.query?.roomId;
         console.log("roomId", roomId);
 
         const deleteData = await fetch(`${baseUrl}/deleteOne`, {

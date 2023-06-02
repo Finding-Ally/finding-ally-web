@@ -3,7 +3,7 @@ import { ModalOptions, ModalInterface } from "flowbite";
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import { useReducer } from "react";
-
+import Link from "next/link";
 import { useQuery, useMutation, useQueryClient } from "react-query";
 
 import { toast } from "react-toastify";
@@ -344,6 +344,8 @@ export default function Explore() {
     try {
       const response = await fetch(`/api/createroom?roomId=${roomId}`, {
         method: "DELETE",
+        contentType: "application/json",
+
       });
       if (response.status === 204) {
         // Successful deletion
@@ -363,6 +365,8 @@ export default function Explore() {
     try {
       const response = await fetch(`/api/newroom?roomId=${roomId}`, {
         method: "DELETE",
+        contentType: "application/json",
+
       });
       if (response.status === 204) {
         // Successful deletion
@@ -704,7 +708,7 @@ export default function Explore() {
             {currentUserRooms.length > 0 ? (
               currentUserRooms.map((room) => (
                 <div
-                  key={room?.id}
+                  key={room?._id}
                   className="flex justify-between items-start mb-2 bg-gray-50 p-2 rounded-xl hover:bg-gray-100 w-full"
                 >
                   <div className="flex">
@@ -724,12 +728,11 @@ export default function Explore() {
                     >
                       Unmatch
                     </button>
-                    <a
-                      href=""
+                    <Link href="/report"
                       className="text-gray-700 mr-2 bg-gray-200 hover:bg-gray-100 p-2 rounded-lg"
                     >
                       Report
-                    </a>
+                    </Link>
                   </div>
                 </div>
               ))
@@ -753,7 +756,7 @@ export default function Explore() {
                 requestedRooms.map((room) => (
                   <li
                     className="flex items-center bg-gray-50 p-2 rounded-xl hover:bg-gray-100 w-full"
-                    key={room?.id}
+                    key={room?._id}
                   >
                     <svg
                       className="w-6 h-6 mr-1.5 text-blue-500 dark:text-green-400 flex-shrink-0"
