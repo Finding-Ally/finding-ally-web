@@ -37,6 +37,7 @@ const formReducer = (state, event) => {
 
 export default function Profile({ roomDetails }) {
 
+  console.log(roomDetails);
 
   useEffect(() => {
     const $modalElement = document.querySelector("#authentication-modal");
@@ -332,8 +333,8 @@ export async function getStaticProps(context) {
   // console.log(searchRoute)
 
   const roomData = await db
-    .collection("users")
-    .find({ email: searchRoute })
+    .collection("rooms")
+    .find({ name: searchRoute })
     .sort({ metacritic: -1 })
     .toArray();
 
@@ -366,13 +367,13 @@ export async function getStaticPaths() {
 
   // Use this to display all projects
   const searchUsers = await db
-    .collection("users")
+    .collection("rooms")
     .find()
     .sort({ metacritic: -1 })
     .toArray();
 
   const paths = searchUsers.map((userPath) => ({
-    params: { roomName: userPath.email },
+    params: { roomName: userPath.name },
   }));
 
   return { paths, fallback: "blocking" };

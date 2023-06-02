@@ -67,6 +67,29 @@ export default function Home() {
   }, [session?.user?.id]);
 
 
+  const [quote, setQuote] = useState([]);
+
+  useEffect(() => {
+    const fetchQuotes = async () => {
+      try {
+        const response = await fetch(
+          `https://zenquotes.io/api/random`
+        );
+        if (!response.ok) {
+          throw new Error("Failed to fetch quotes");
+        }
+        const jsonData = await response.json();
+        setQuote(jsonData);
+      } catch (error) {
+        console.error("An error occurred while fetching quotes:", error);
+      }
+    };
+  
+    fetchQuotes();
+  }, []);
+  
+
+
 
   return (
     <div className="flex flex-col w-full pl-[87px] pb-24 h-screen overflow-auto text-gray-700 bg-gradient-to-r bg-indigo-300 from-10% via-sky-300 via-30% to-emerald-300 to-90%">
@@ -78,7 +101,7 @@ export default function Home() {
         </div>
         <div className="h-full">
           <p className="text-center text-xl -mt-12 mb-6">
-            “The more something scares you, the more you should do it.” -xyz
+            {quote?.q} - {quote?.a}
           </p>
         </div>
       </div>
