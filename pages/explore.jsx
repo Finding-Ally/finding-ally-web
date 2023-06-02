@@ -141,21 +141,125 @@ export default function Explore() {
     const matchedRooms = fetchRooms.filter((room) => {
       if(room.adminUser.id === userId) return false;
       return (
-        room?.goal === data?.goal
-      );
+        room?.goal === data?.goal &&
+        room?.gender === data?.gender &&
+        room?.group_or_duo === data?.group_or_duo &&
+        room?.phase === data?.phase &&
+        room?.availability === data?.availability
+        
+        );
     });
 
 
-    console.log("matchedRooms", matchedRooms);
+// Calculate the matching score based on specific criteria
+const calculateMatchingScore = (formData, room) => {
+  let score = 0;
+
+  // Compare the goal
+  if (formData.goal === room.goal) {
+    score += 10; // Increment score if goal matches
+  }
+
+  // Compare the availability
+  if (formData.availability === room.availability) {
+    score += 5; // Increment score if availability matches
+  }
+
+  if(formData.phase === room.phase) {
+    score += 5;
+  }
+
+  // Compare other criteria and update the score accordingly
+  // Add more conditions and assign appropriate scores based on your matching logic
+
+  return score;
+};
 
 
 
     if (matchedRooms.length > 0) {
       console.log("matchedRooms", matchedRooms);
+
+      // Calculate the matching score here and then sort the matchedRooms array
+      // based on the matching score
+      matchedRooms.forEach((room) => {
+        // Calculate the matching score based on your criteria
+        const matchingScore = calculateMatchingScore(data, room);
+
+        // Add the matching score to the room object
+        room.matchingScore = matchingScore;
+      });
+
+      // Sort the matchedRooms array based on the matching score in descending order
+      matchedRooms.sort((a, b) => b.matchingScore - a.matchingScore);
+
+
       const matchedRoom = matchedRooms[0];
+      
       console.log("matchedRoom", matchedRoom);
       const matchedRoomId = matchedRoom._id;
       console.log("matchedRoomId", matchedRoomId);
+
+      // Update the matched room with the current user
+
+      const newData = {
+        ...matchedRoom,
+        members: [
+          ...matchedRoom.members,
+          matchedRoom.adminUser,
+          {
+            name: session?.user?.name,
+            id: session?.user?.id,
+            email: session?.user?.email,
+            login: session?.user?.login || session?.user?.email.split("@")[0],
+            image: session?.user?.image,
+            age: session?.user?.age,
+            major: session?.user?.major,
+            goals: session?.user?.goals,
+            bio: session?.user?.bio,
+            availability: session?.user?.availability,
+            language: session?.user?.language,
+            interests: session?.user?.interests,
+          },
+        ],
+        isMatched: true,
+      };
+
+
+      const response = await fetch("/api/newroom", {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newData),
+      });
+
+      console.log("response", response);
+
+      if (response.ok) {
+        console.log("Document created successfully");
+        toast.success("🔮 Room Created Successfully", {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+        });
+        // Reset form fields
+      } else {
+        console.error("Failed to create document");
+      }
+  
+  document.getElementById("save-btn").disabled = false;
+  document.getElementById("save-btn").textContent = "Saved";
+
+
+
+
       return;
     } else {
       console.log("No matched rooms");
@@ -171,7 +275,7 @@ export default function Explore() {
   
         if (response.ok) {
           console.log("Document created successfully");
-          toast.success("🔮 Room Created Successfully", {
+          toast.success("🔮 Request initiated...", {
             position: "top-right",
             autoClose: 5000,
             hideProgressBar: false,

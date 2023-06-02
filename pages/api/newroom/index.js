@@ -1,75 +1,102 @@
-import { MongoClient, ObjectId } from 'mongodb';
-import nc from 'next-connect';
+import fetch from 'node-fetch';
 
-const client = new MongoClient(process.env.MONGODB_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
+export default async function handler(req, res) {
+  const fetchOptions = {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'api-key': process.env.MONGODB_DATA_API_KEY,
+    },
+  };
+  const fetchBody = {
+    dataSource: process.env.MONGODB_DATA_SOURCE,
+    database: 'database',
+    collection: 'rooms',
+  };
+  const baseUrl = `${process.env.MONGODB_DATA_API_URL}/action`;
 
-async function database(req, res, next) {
-  if (!client.isConnected()) await client.connect();
-  req.dbClient = client;
-  req.db = client.db('database');
-  return next();
-}
-
-const handler = nc();
-
-handler.use(database);
-
-handler.post(async (req, res) => {
-  const { title, description } = req.body;
-  const result = await req.db.collection('requests').insertOne({
-    title,
-    description,
-  });
-  res.status(201).json(result.ops[0]);
-});
-
-handler.get(async (req, res) => {
-  const { id } = req.query;
-  if (id) {
-    const document = await req.db
-      .collection('requests')
-      .findOne({ _id: new ObjectId(id) });
-    if (!document) {
-      res.status(404).end();
-    } else {
-      res.status(200).json(document);
+  try {
+    switch (req.method) {
+      case 'GET':
+        // Handle different GET queries based on req.query parameters
+        if (req?.query?.adminId) {
+        const adminId = req?.query?.adminId;
+        // console.log("adminId", adminId);
+          // Perform a query to find a specific document by id
+          const readData = await fetch(`${baseUrl}/find`, {
+            ...fetchOptions,
+            body: JSON.stringify({
+              ...fetchBody,
+              filter: { 'adminUser.id': adminId },
+            }),
+          });
+          const readDataJson = await readData.json();
+          // console.log("readDataJson", readDataJson);
+          res.status(200).json(readDataJson.documents);
+        } else {
+          // Perform a query to find multiple documents
+          const readData = await fetch(`${baseUrl}/find`, {
+            ...fetchOptions,
+            body: JSON.stringify({
+              ...fetchBody,
+              sort: { postedAt: -1 },
+            }),
+          });
+          const readDataJson = await readData.json();
+          res.status(200).json(readDataJson.documents);
+        }
+        break;
+      case 'POST':
+        // Handle the POST request to insert a new document
+        const data = req.body;
+        const insertData = await fetch(`${baseUrl}/insertOne`, {
+          ...fetchOptions,
+          body: JSON.stringify({
+            ...fetchBody,
+            document: data,
+          }),
+        });
+        const insertDataJson = await insertData.json();
+        res.status(201).json(insertDataJson);
+        break;
+      // case 'PUT':
+      //   // Handle the PUT request to update a document by id
+      //   const updateData = await fetch(`${baseUrl}/updateOne`, {
+      //     ...fetchOptions,
+      //     body: JSON.stringify({
+      //       ...fetchBody,
+      //       filter: { _id: { $oid: req.body._id } },
+      //       update: {
+      //         $set: {
+      //           body: req.body.body,
+      //         },
+      //       },
+      //     }),
+      //   });
+      //   const updateDataJson = await updateData.json();
+      //   res.status(200).json(updateDataJson);
+      //   break;
+        case 'DELETE':
+          // Handle the DELETE request to delete a room by room ID
+          const roomId = req.query.roomId;
+          console.log("roomId", roomId);
+  
+          const deleteData = await fetch(`${baseUrl}/deleteOne`, {
+            ...fetchOptions,
+            body: JSON.stringify({
+              ...fetchBody,
+              filter: { _id: { $oid: roomId } },
+            }),
+          });
+          const deleteDataJson = await deleteData.json();
+          res.status(204).json(deleteDataJson);
+          break;
+        default:
+          res.status(405).end();
+          break;
     }
-  } else {
-    const documents = await req.db
-      .collection('requests')
-      .find()
-      .toArray();
-    res.status(200).json(documents);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Something went wrong' });
   }
-});
-
-handler.put(async (req, res) => {
-  const { id } = req.query;
-  const { title, description } = req.body;
-  const result = await req.db.collection('requests').updateOne(
-    { _id: new ObjectId(id) },
-    { $set: { title, description } }
-  );
-  if (result.modifiedCount === 0) {
-    res.status(404).end();
-  } else {
-    res.status(200).json({ _id: id, title, description });
-  }
-});
-
-handler.delete(async (req, res) => {
-  const { id } = req.query;
-  const result = await req.db
-    .collection('requests')
-    .deleteOne({ _id: new ObjectId(id) });
-  if (result.deletedCount === 0) {
-    res.status(404).end();
-  } else {
-    res.status(204).end();
-  }
-});
-
-export default handler;
+}
