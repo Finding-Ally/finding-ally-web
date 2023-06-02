@@ -84,10 +84,9 @@ export default function Explore() {
 
   const [fetchRooms, setFetchRooms] = useState([]);
 
-  const fetchRequestedRooms = async () => {
-    // Initialize a state to store the fetched data
-
-    // Fetch data from MongoDB using useEffect
+  useEffect(() => {
+    const fetchData = async () => {
+          // Fetch data from MongoDB using useEffect
     try {
       const response = await fetch(`/api/createroom`);
       const jsonData = await response.json();
@@ -95,7 +94,10 @@ export default function Explore() {
     } catch (error) {
       console.error("Error fetching data:", error);
     }
-  };
+    };
+
+    fetchData();
+  }, []);
 
   const handleSubmit = async (e) => {
     document.getElementById("save-btn").disabled = true;
@@ -131,18 +133,22 @@ export default function Explore() {
 
     // matching algorithm
 
-    fetchRequestedRooms();
+    // fetchRequestedRooms();
 
     // data --> current form data which needs to be matched to the fetched rooms
+    console.log("fetchRooms", fetchRooms);
 
     const matchedRooms = fetchRooms.filter((room) => {
+      if(room.adminUser.id === userId) return false;
       return (
-        room.goal === data.goal &&
-        room.phase === data.phase &&
-        room.availability === data.availability &&
-        room.group_or_duo === data.group_or_duo
+        room?.goal === data?.goal
       );
     });
+
+
+    console.log("matchedRooms", matchedRooms);
+
+
 
     if (matchedRooms.length > 0) {
       console.log("matchedRooms", matchedRooms);
@@ -153,38 +159,39 @@ export default function Explore() {
       return;
     } else {
       console.log("No matched rooms");
-    }
-
-    try {
-      const response = await fetch("/api/createroom", {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
-
-      if (response.ok) {
-        console.log("Document created successfully");
-        toast.success("🔮 Room Created Successfully", {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "dark",
+      try {
+        const response = await fetch("/api/createroom", {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
         });
-        // Reset form fields
-      } else {
-        console.error("Failed to create document");
+  
+        if (response.ok) {
+          console.log("Document created successfully");
+          toast.success("🔮 Room Created Successfully", {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "dark",
+          });
+          // Reset form fields
+        } else {
+          console.error("Failed to create document");
+        }
+      } catch (error) {
+        console.error("An error occurred:", error);
       }
-    } catch (error) {
-      console.error("An error occurred:", error);
+  
     }
 
+    
     document.getElementById("save-btn").disabled = false;
     document.getElementById("save-btn").textContent = "Saved";
   };

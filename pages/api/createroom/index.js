@@ -19,7 +19,7 @@ export default async function handler(req, res) {
     switch (req.method) {
       case 'GET':
         // Handle different GET queries based on req.query parameters
-        if (req.query.adminId) {
+        if (req?.query?.adminId) {
         const adminId = req?.query?.adminId;
         // console.log("adminId", adminId);
           // Perform a query to find a specific document by id
