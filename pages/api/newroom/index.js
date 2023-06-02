@@ -19,15 +19,15 @@ export default async function handler(req, res) {
     switch (req.method) {
       case 'GET':
         // Handle different GET queries based on req.query parameters
-        if (req?.query?.adminId) {
-        const adminId = req?.query?.adminId;
+        if (req?.query?.userId) {
+        const userId = req?.query?.userId;
         // console.log("adminId", adminId);
           // Perform a query to find a specific document by id
           const readData = await fetch(`${baseUrl}/find`, {
             ...fetchOptions,
             body: JSON.stringify({
               ...fetchBody,
-              filter: { 'adminUser.id': adminId },
+              filter: { 'adminUser.id': userId },
             }),
           });
           const readDataJson = await readData.json();
@@ -76,21 +76,21 @@ export default async function handler(req, res) {
       //   const updateDataJson = await updateData.json();
       //   res.status(200).json(updateDataJson);
       //   break;
-        case 'DELETE':
-          // Handle the DELETE request to delete a room by room ID
-          const roomId = req.query.roomId;
-          console.log("roomId", roomId);
-  
-          const deleteData = await fetch(`${baseUrl}/deleteOne`, {
-            ...fetchOptions,
-            body: JSON.stringify({
-              ...fetchBody,
-              filter: { _id: { $oid: roomId } },
-            }),
-          });
-          const deleteDataJson = await deleteData.json();
-          res.status(204).json(deleteDataJson);
-          break;
+      case 'DELETE':
+        // Handle the DELETE request to delete a room by room ID
+        const roomId = req.query.roomId;
+        console.log("roomId", roomId);
+
+        const deleteData = await fetch(`${baseUrl}/deleteOne`, {
+          ...fetchOptions,
+          body: JSON.stringify({
+            ...fetchBody,
+            filter: { _id: { $oid: roomId } },
+          }),
+        });
+        const deleteDataJson = await deleteData.json();
+        res.status(204).json(deleteDataJson);
+        break;
         default:
           res.status(405).end();
           break;

@@ -86,14 +86,14 @@ export default function Explore() {
 
   useEffect(() => {
     const fetchData = async () => {
-          // Fetch data from MongoDB using useEffect
-    try {
-      const response = await fetch(`/api/createroom`);
-      const jsonData = await response.json();
-      setFetchRooms(jsonData);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
+      // Fetch data from MongoDB using useEffect
+      try {
+        const response = await fetch(`/api/createroom`);
+        const jsonData = await response.json();
+        setFetchRooms(jsonData);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
     };
 
     fetchData();
@@ -139,43 +139,39 @@ export default function Explore() {
     console.log("fetchRooms", fetchRooms);
 
     const matchedRooms = fetchRooms.filter((room) => {
-      if(room.adminUser.id === userId) return false;
+      if (room.adminUser.id === userId) return false;
       return (
         room?.goal === data?.goal &&
         room?.gender === data?.gender &&
         room?.group_or_duo === data?.group_or_duo &&
         room?.phase === data?.phase &&
         room?.availability === data?.availability
-        
-        );
+      );
     });
 
+    // Calculate the matching score based on specific criteria
+    const calculateMatchingScore = (formData, room) => {
+      let score = 0;
 
-// Calculate the matching score based on specific criteria
-const calculateMatchingScore = (formData, room) => {
-  let score = 0;
+      // Compare the goal
+      if (formData.goal === room.goal) {
+        score += 10; // Increment score if goal matches
+      }
 
-  // Compare the goal
-  if (formData.goal === room.goal) {
-    score += 10; // Increment score if goal matches
-  }
+      // Compare the availability
+      if (formData.availability === room.availability) {
+        score += 5; // Increment score if availability matches
+      }
 
-  // Compare the availability
-  if (formData.availability === room.availability) {
-    score += 5; // Increment score if availability matches
-  }
+      if (formData.phase === room.phase) {
+        score += 5;
+      }
 
-  if(formData.phase === room.phase) {
-    score += 5;
-  }
+      // Compare other criteria and update the score accordingly
+      // Add more conditions and assign appropriate scores based on your matching logic
 
-  // Compare other criteria and update the score accordingly
-  // Add more conditions and assign appropriate scores based on your matching logic
-
-  return score;
-};
-
-
+      return score;
+    };
 
     if (matchedRooms.length > 0) {
       console.log("matchedRooms", matchedRooms);
@@ -193,9 +189,8 @@ const calculateMatchingScore = (formData, room) => {
       // Sort the matchedRooms array based on the matching score in descending order
       matchedRooms.sort((a, b) => b.matchingScore - a.matchingScore);
 
-
       const matchedRoom = matchedRooms[0];
-      
+
       console.log("matchedRoom", matchedRoom);
       const matchedRoomId = matchedRoom._id;
       console.log("matchedRoomId", matchedRoomId);
@@ -204,6 +199,7 @@ const calculateMatchingScore = (formData, room) => {
 
       const newData = {
         ...matchedRoom,
+        name: matchedRoom.goal + "-" + matchedRoom.adminUser.id.slice(-6),
         members: [
           ...matchedRoom.members,
           matchedRoom.adminUser,
@@ -224,7 +220,6 @@ const calculateMatchingScore = (formData, room) => {
         ],
         isMatched: true,
       };
-
 
       const response = await fetch("/api/newroom", {
         method: "POST",
@@ -253,12 +248,9 @@ const calculateMatchingScore = (formData, room) => {
       } else {
         console.error("Failed to create document");
       }
-  
-  document.getElementById("save-btn").disabled = false;
-  document.getElementById("save-btn").textContent = "Saved";
 
-
-
+      document.getElementById("save-btn").disabled = false;
+      document.getElementById("save-btn").textContent = "Saved";
 
       return;
     } else {
@@ -272,7 +264,7 @@ const calculateMatchingScore = (formData, room) => {
           },
           body: JSON.stringify(data),
         });
-  
+
         if (response.ok) {
           console.log("Document created successfully");
           toast.success("🔮 Request initiated...", {
@@ -292,10 +284,8 @@ const calculateMatchingScore = (formData, room) => {
       } catch (error) {
         console.error("An error occurred:", error);
       }
-  
     }
 
-    
     document.getElementById("save-btn").disabled = false;
     document.getElementById("save-btn").textContent = "Saved";
   };
@@ -369,14 +359,56 @@ const calculateMatchingScore = (formData, room) => {
     }
   };
 
+  const handleDeleteRoomConnected = async (roomId) => {
+    try {
+      const response = await fetch(`/api/newroom?roomId=${roomId}`, {
+        method: "DELETE",
+      });
+      if (response.status === 204) {
+        // Successful deletion
+        // Perform any necessary actions or update the UI accordingly
+        console.log("Room deleted successfully");
+      } else {
+        // Handle the error or display an error message
+        console.error("Failed to delete room");
+      }
+    } catch (error) {
+      // Handle the error or display an error message
+      console.error("Error deleting room:", error);
+    }
+  };
+
+  // Fetch the Request rooms of the current user
+
+  // Initialize a state to store the fetched data
+  const [currentUserRooms, setCurrentUserRooms] = useState([]);
+
+  // Fetch data from MongoDB using useEffect
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(
+          `/api/newroom?userId=${session?.user?.id}`
+        );
+        const jsonData = await response.json();
+        setCurrentUserRooms(jsonData);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, [session?.user?.id]);
+
   return (
-    <div className="w-full pl-[87px] h-screen pb-10 overflow-auto text-gray-700 bg-gradient-to-r bg-emerald-300 from-10% to-indigo-300 to-90%">
+    <div className="w-full pl-[87px] h-screen pb-10 text-gray-700 bg-gradient-to-r bg-emerald-300 from-10% to-indigo-300 to-90%">
       <div className="w-full bg-gray-900">
         <div className="px-10 py-3">
           <h1 className="text-2xl font-bold text-white">Find your Ally</h1>
         </div>
       </div>
-      <div className="grid grid-cols-2 gap-6">
+      <div className="grid grid-cols-2 gap-6 pr-4">
         <div className="bg-white  rounded-lg shadow-xl border border-black p-8 w-full m-4">
           <button
             data-modal-target="authentication-modal"
@@ -669,32 +701,47 @@ const calculateMatchingScore = (formData, room) => {
               <h1 className="font-semibold text-gray-800">Your Allies</h1>
             </div>
 
-            <div className="flex justify-between items-start mb-2 bg-gray-50 p-2 rounded-xl hover:bg-gray-100 w-full">
-              <div className="flex">
-                <img
-                  className="w-12 h-12 rounded-full mr-4 border border-gray-100 shadow-sm"
-                  src="https://randomuser.me/api/portraits/men/20.jpg"
-                  alt=""
-                />
-                <span className="font-semibold text-gray-800 my-auto">
-                  Ezio Dani
-                </span>
-              </div>
-              <div className="my-auto">
-                <a
-                  href=""
-                  className="text-gray-100 mr-2 bg-gray-600 hover:bg-gray-800 p-2 rounded-lg"
+            {currentUserRooms.length > 0 ? (
+              currentUserRooms.map((room) => (
+                <div
+                  key={room?.id}
+                  className="flex justify-between items-start mb-2 bg-gray-50 p-2 rounded-xl hover:bg-gray-100 w-full"
                 >
-                  Unmatch
-                </a>
-                <a
-                  href=""
-                  className="text-gray-700 mr-2 bg-gray-200 hover:bg-gray-100 p-2 rounded-lg"
-                >
-                  Report
-                </a>
+                  <div className="flex">
+                    <img
+                      className="w-12 h-12 rounded-full mr-4 border border-gray-100 shadow-sm"
+                      src={room?.members[1]?.image}
+                      alt=""
+                    />
+                    <span className="font-semibold text-gray-800 my-auto">
+                      {room?.members[1]?.name}
+                    </span>
+                  </div>
+                  <div className="my-auto">
+                    <button
+                      onClick={() => handleDeleteRoomConnected(room?._id)}
+                      className="text-gray-100 mr-2 bg-gray-600 hover:bg-gray-800 p-2 rounded-lg"
+                    >
+                      Unmatch
+                    </button>
+                    <a
+                      href=""
+                      className="text-gray-700 mr-2 bg-gray-200 hover:bg-gray-100 p-2 rounded-lg"
+                    >
+                      Report
+                    </a>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <div className="flex justify-between items-start mb-2 bg-gray-50 p-2 rounded-xl hover:bg-gray-100 py-10 w-full">
+                <div className="flex mx-auto text-center w-full">
+                  <span className="font-semibold text-gray-800 my-auto mx-auto text-center w-full">
+                    No Allies Yet
+                  </span>
+                </div>
               </div>
-            </div>
+            )}
           </div>
 
           <div className="bg-white  rounded-lg shadow-xl border border-black p-4 w-full">

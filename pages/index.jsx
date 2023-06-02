@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 // import { Heading, Button, Grid } from '@chakra-ui/react'
 import { useSession, signIn, signOut } from "next-auth/react";
@@ -10,6 +10,8 @@ import Link from "next/link";
 
 export default function Home() {
   const { data: session } = useSession();
+
+  const userId = session?.user?.id;
 
   const { date, time, wish } = useDate(); // custom hook
 
@@ -39,8 +41,35 @@ export default function Home() {
   // 	)}
   // </div>
 
+
+  // Fetch the Request rooms of the current user
+
+  // Initialize a state to store the fetched data
+  const [currentUserRooms, setCurrentUserRooms] = useState([]);
+
+  // Fetch data from MongoDB using useEffect
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(
+          `/api/newroom?userId=${session?.user?.id}`
+        );
+        const jsonData = await response.json();
+        setCurrentUserRooms(jsonData);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+
+  }, [session?.user?.id]);
+
+
+
   return (
-    <div class="flex flex-col w-full pl-[87px] pb-24 h-screen overflow-auto text-gray-700 bg-gradient-to-r bg-indigo-300 from-10% via-sky-300 via-30% to-emerald-300 to-90%">
+    <div className="flex flex-col w-full pl-[87px] pb-24 h-screen overflow-auto text-gray-700 bg-gradient-to-r bg-indigo-300 from-10% via-sky-300 via-30% to-emerald-300 to-90%">
       <div className="w-full bg-yellow-100">
         <div className="h-fit w-fit rounded-xl bg-white py-1 pl-4 pr-8 shadow ml-4 my-2">
           <div className="text-lg font-bold ">{date}</div>
@@ -53,15 +82,15 @@ export default function Home() {
           </p>
         </div>
       </div>
-      <div class="px-10 mt-4">
-        <div class="flex items-center flex-shrink-0 h-10">
-          <span class="block text-xl font-bold">Your Ally Rooms</span>
-          <span class="flex items-center justify-center w-5 h-5 ml-2 text-sm font-semibold text-indigo-500 bg-white rounded bg-opacity-30">
-            3
+      <div className="px-10 mt-4">
+        <div className="flex items-center flex-shrink-0 h-10">
+          <span className="block text-xl font-bold">Your Ally Rooms</span>
+          <span className="flex items-center justify-center w-5 h-5 ml-2 text-sm font-semibold text-indigo-500 bg-white rounded bg-opacity-30">
+            {currentUserRooms.length || 0}
           </span>
-          <Link href="/explore" class="flex items-center justify-center w-6 h-6 ml-auto text-indigo-500 rounded hover:bg-indigo-500 hover:text-indigo-100">
+          <Link href="/explore" className="flex items-center justify-center w-6 h-6 ml-auto text-indigo-500 rounded hover:bg-indigo-500 hover:text-indigo-100">
             <svg
-              class="w-5 h-5"
+              className="w-5 h-5"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -75,42 +104,43 @@ export default function Home() {
             </svg>
           </Link>
         </div>
-        <div class="grid md:grid-cols-2 grid-cols-1 lg:grid-cols-3 gap-4 pb-2 overflow-auto">
+        <div className="grid md:grid-cols-2 grid-cols-1 lg:grid-cols-3 gap-4 pb-2 overflow-auto">
 
 
-          <Link href="/room/roomLink"
-            class="relative flex flex-col items-start p-4 py-4 mt-3 bg-white rounded-lg bg-opacity-90 group hover:bg-opacity-100"
+          {currentUserRooms.length > 0 ? currentUserRooms.map((room) => ( 
+
+          <Link href={`/room/${room?.name}`} key={room?._id}
+            className="relative flex flex-col items-start p-4 py-4 mt-3 bg-white rounded-lg bg-opacity-90 group hover:bg-opacity-100"
           >
-            <button class="absolute top-0 right-0 items-center justify-center hidden w-5 h-5 mt-3 mr-2 text-gray-500 rounded hover:bg-gray-200 hover:text-gray-700 group-hover:flex">
+            {/* <button className="absolute top-0 right-0 items-center justify-center hidden w-5 h-5 mt-3 mr-2 text-gray-500 rounded hover:bg-gray-200 hover:text-gray-700 group-hover:flex">
               <svg
-                class="w-4 h-4 fill-current"
+                className="w-4 h-4 fill-current"
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 20 20"
                 fill="currentColor"
               >
                 <path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z" />
               </svg>
-            </button>
-            <span class="text-lg font-bold mt-2 ">
-              Room Name
+            </button> */}
+            <span className="text-lg font-bold mt-2 ">
+              {room?.name}
             </span>
-            <h4 class="mt-1 text-sm font-medium mb-2">
-              This is the title of the card for the thing that needs to be done.
+            <h4 className="mt-1 text-sm font-medium mb-2">
+              {room?.goal}
             </h4>
-            <div class="flex justify-between items-center mb-2 w-full mt-3 text-xs font-medium text-gray-400">
+            <div className="flex justify-between items-center mb-2 w-full mt-3 text-xs font-medium text-gray-400">
             <div className="flex">
-              <img
-                class="w-8 h-8 ml-auto rounded-full"
-                src="https://randomuser.me/api/portraits/women/26.jpg"
+              {room?.members?.map((member) => (
+                <img key={member?._id}
+                className="w-8 h-8 ml-auto rounded-full"
+                src={member?.image}
               />
-              <img
-                class="w-8 h-8 ml-auto rounded-full"
-                src="https://randomuser.me/api/portraits/women/26.jpg"
-              />
+              )) 
+              }
               </div>
-              <div class="flex items-center ">
+              <div className="flex items-center ">
                 <svg
-                  class="w-4 h-4 text-gray-300 fill-current"
+                  className="w-4 h-4 text-gray-300 fill-current"
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 20 20"
                   fill="currentColor"
@@ -121,12 +151,36 @@ export default function Home() {
                     clip-rule="evenodd"
                   />
                 </svg>
-                <span class="ml-1 leading-none">Dec 12</span>
+                <span className="ml-1 leading-none">Dec 12</span>
               </div>
               
               
             </div>
           </Link>
+
+          )): <div className="relative flex flex-col items-start p-4 py-8 mt-3 bg-white rounded-lg bg-opacity-90 group hover:bg-opacity-100"
+        >
+          {/* <button className="absolute top-0 right-0 items-center justify-center hidden w-5 h-5 mt-3 mr-2 text-gray-500 rounded hover:bg-gray-200 hover:text-gray-700 group-hover:flex">
+            <svg
+              className="w-4 h-4 fill-current"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+            >
+              <path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z" />
+            </svg>
+          </button> */}
+          <span className="text-lg font-bold mt-2 ">
+            No Rooms Found
+          </span>
+          <h4 className="mt-1 text-sm font-medium mb-2">
+            Create a room to get started
+          </h4>
+          <div className="flex justify-between items-center mb-2 w-full mt-3 text-xs font-medium text-gray-400">
+          
+            
+          </div>
+        </div>}
 
 
           
@@ -134,7 +188,7 @@ export default function Home() {
 
 
         <br />
-        <span class="block text-xl mb-4 font-bold">Calendar</span>
+        <span className="block text-xl mb-4 font-bold">Calendar</span>
         <Calendar />
       </div>
         
