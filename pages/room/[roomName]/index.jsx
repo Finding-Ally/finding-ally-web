@@ -8,6 +8,10 @@ import Reports from "@/components/profile/reports";
 
 import TodoList from "../../../components/tools/todolist";
 import {IoCaretBack} from "react-icons/io5";
+import {MdOutlineLibraryBooks} from "react-icons/md";
+import {IoVideocamOutline} from "react-icons/io5";
+import {IoEllipsisVerticalOutline} from "react-icons/io5";
+
 
 import { FcTemplate } from "react-icons/fc";
 import { GiTrophy } from "react-icons/gi";
@@ -265,6 +269,7 @@ export default function Profile({ roomDetails }) {
         </div> */}
         <div className="md:px-4 px-2">
         <div className="w-full mt-4 rounded-xl backdrop-blur-md bg-white/70">
+          <div className="flex justify-between">
           <div class="pl-6 py-3 flex my-auto">
             <Link href="/">
             <IoCaretBack className=" text-lg mt-1 text-gray-200 bg-gray-700 mr-2 rounded" />
@@ -274,6 +279,15 @@ export default function Profile({ roomDetails }) {
               {roomDetails[0]?.members[1]?.name}
             </h1>
           </div>
+          <div className="flex justify-end my-auto">
+            <button className="flex flex-row p-3 rounded-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300">
+              <MdOutlineLibraryBooks className="text-4xl p-2 mt-1 text-gray-200 bg-gray-700 mr-2 rounded" />
+              <IoVideocamOutline className="text-4xl p-2 mt-1 text-gray-200 bg-gray-700 mr-2 rounded" />
+              {/* <IoEllipsisVerticalOutline className="text-lg text-gray-200 bg-gray-700 mr-2 rounded" /> */}
+            </button>
+            </div>
+          </div>
+          
         </div>
         <div>
             <div className="grid md:grid-cols-5 md:gap-5">
