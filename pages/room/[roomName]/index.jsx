@@ -31,7 +31,8 @@ import dynamic from "next/dynamic";
 
 const AblyChatComponent = dynamic(
   () => import("@/components/AblyChatComponent"),
-  { ssr: false }
+  { ssr: false,
+    loading: () => <LoadingScreen />,}
 );
 
 const formReducer = (state, event) => {
@@ -310,17 +311,17 @@ export default function Profile({ roomDetails }) {
                   
                 </div>
               </div>
-              <div className="md:col-span-2 w-full mt-4 rounded-2xl mx-auto backdrop-blur-md bg-white/60 md:pb-10 pb-0  shadow ">
+              <div className="md:col-span-2 w-full mt-4 rounded-2xl mx-auto  md:pb-10 pb-0 ">
                 <div class="grid relative">
-                  <div class="w-full static h-1/6  bg-red-100">
+                  <div class="w-full h-1/6 backdrop-blur-md bg-white/60 ">
                   <TodoList />
                   </div>
-                  <div class="w-full h-fit static bg-gray-300  top-40">
-                    <h1 className="text-black backdrop-blur-md bg-white/70 p-2 rounded-lg">
+                  <div class="w-full h-fit backdrop-blur-md bg-white/60  top-40 mt-4">
+                    <h1 className="text-black backdrop-blur-md bg-white/90 p-2 rounded-xl">
                       Room Chat
                     </h1>
+                  <AblyChatComponent roomId={roomDetails[0]?.id} />
                   </div>
-                  <AblyChatComponent />
                 </div>
               </div>
             </div>

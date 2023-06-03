@@ -2,7 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { useChannel } from "./AblyReactEffect";
 import styles from './AblyChatComponent.module.css';
 
-const AblyChatComponent = () => {
+const AblyChatComponent = (props) => {
+
+  const { roomId } = props;
+
+  console.log("AblyChatComponent: props: ", props?.roomId);
+
 
   let inputBox = null;
   let messageEnd = null;
@@ -11,7 +16,7 @@ const AblyChatComponent = () => {
   const [receivedMessages, setMessages] = useState([]);
   const messageTextIsEmpty = messageText.trim().length === 0;
 
-  const [channel, ably] = useChannel("chat-demo", (message) => {
+  const [channel, ably] = useChannel(props?.roomId, (message) => {
     const history = receivedMessages.slice(-199);
     setMessages([...history, message]);
   });
@@ -45,6 +50,7 @@ const AblyChatComponent = () => {
   });
  
   return (
+    // <div className={styles.chatHolder}>
     <div className="">
       <div className={styles.chatText}>
         {messages}
