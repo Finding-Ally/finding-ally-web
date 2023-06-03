@@ -45,7 +45,7 @@ const AblyChatComponent = () => {
   });
  
   return (
-    <div className={styles.chatHolder}>
+    <div className="">
       <div className={styles.chatText}>
         {messages}
         <div ref={(element) => { messageEnd = element; }}></div>

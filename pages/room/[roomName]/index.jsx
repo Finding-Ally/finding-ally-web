@@ -6,6 +6,9 @@ import { useSession } from "next-auth/react";
 import Portfolio from "@/components/profile/portfolio";
 import Reports from "@/components/profile/reports";
 
+import TodoList from "../../../components/tools/todolist";
+import {IoCaretBack} from "react-icons/io5";
+
 import { FcTemplate } from "react-icons/fc";
 import { GiTrophy } from "react-icons/gi";
 import { FcParallelTasks } from "react-icons/fc";
@@ -19,14 +22,13 @@ import { useQuery, useMutation, useQueryClient } from "react-query";
 import { toast } from "react-toastify";
 import LoadingScreen from "@/components/animations/loadingScreen";
 import { getUser, getUsers, updateUser } from "@/lib/helper";
-import Head from 'next/head'
-import dynamic from 'next/dynamic'
+import Head from "next/head";
+import dynamic from "next/dynamic";
 
-
-
-const AblyChatComponent = dynamic(() => import('@/components/AblyChatComponent'), { ssr: false });
-
-
+const AblyChatComponent = dynamic(
+  () => import("@/components/AblyChatComponent"),
+  { ssr: false }
+);
 
 const formReducer = (state, event) => {
   return {
@@ -36,7 +38,6 @@ const formReducer = (state, event) => {
 };
 
 export default function Profile({ roomDetails }) {
-
   console.log(roomDetails);
 
   useEffect(() => {
@@ -64,8 +65,6 @@ export default function Profile({ roomDetails }) {
     // modal.show();
   }, []);
 
-
-  
   useEffect(() => {
     const $modalElement = document.querySelector("#authentication-modal");
 
@@ -90,7 +89,6 @@ export default function Profile({ roomDetails }) {
 
     // modal.show();
   }, []);
-
 
   const { data: session } = useSession();
 
@@ -122,8 +120,6 @@ export default function Profile({ roomDetails }) {
     },
   });
 
-
-
   // if (isLoading) return <div>
   //   <ul
   //                     className="flex flex-wrap -mb-px text-sm font-medium text-center"
@@ -154,7 +150,7 @@ export default function Profile({ roomDetails }) {
   //                         aria-controls="repositories"
   //                         aria-selected="false"
   //                       >
-                         
+
   //                         Reports
   //                       </button>
   //                     </li>
@@ -163,9 +159,20 @@ export default function Profile({ roomDetails }) {
   //   </div>;
   // if (isError) return <div>Error : {error}</div>;
 
-  if (data){
-    let { name, email, age, gender, notifications, bio, goals, availibility, interests, major, language } =
-    data;
+  if (data) {
+    let {
+      name,
+      email,
+      age,
+      gender,
+      notifications,
+      bio,
+      goals,
+      availibility,
+      interests,
+      major,
+      language,
+    } = data;
   }
 
   const handleSubmit = async (e) => {
@@ -194,7 +201,6 @@ export default function Profile({ roomDetails }) {
     setuserName(e.target.value.trim());
     formData.name = e.target.value.trim();
   };
-
 
   const updateBio = (e) => {
     setuserBio(e.target.value.trim());
@@ -257,69 +263,69 @@ export default function Profile({ roomDetails }) {
             </h1>
           </div>
         </div> */}
-        <div className="md:px-4 px-2 ">
-          <div className="">
+        <div className="md:px-4 px-2">
+        <div className="w-full mt-4 rounded-xl backdrop-blur-md bg-white/70">
+          <div class="pl-6 py-3 flex my-auto">
+            <Link href="/">
+            <IoCaretBack className=" text-lg mt-1 text-gray-200 bg-gray-700 mr-2 rounded" />
+
+            </Link>
+            <h1 class="md:text-xl text-lg font-bold">
+              {roomDetails[0]?.members[1]?.name}
+            </h1>
+          </div>
+        </div>
+        <div>
             <div className="grid md:grid-cols-5 md:gap-5">
-              <div className="md:col-span-4  backdrop-blur-md bg-white/40 mt-6 rounded-2xl p-4">
-              <h1 className="text-black backdrop-blur-md bg-white/70 p-2 rounded-lg">Your Partnet Name</h1>
-              <AblyChatComponent />
-              </div>
-              <div className="md:card h-fit w-full mt-20 rounded-2xl mx-auto backdrop-blur-md bg-white/60 md:pb-10 pb-0  shadow ">
-                <div className="relative">
+              <div className="md:col-span-3 rounded-2xl p-4">
+              <div class="grid relative">
+                <div className="backdrop-blur-md static bg-white/80 p-4 py-40 rounded-xl mb-4">
+                  <div class="w-full h-1/4 ">
                   <img
-                    className="w-32 mx-auto rounded-full mt-8 border-2 border-gray-400 bg-gray-200"
+                    className="w-40 mx-auto rounded-full border-2 border-gray-400 bg-gray-200"
                     src={`https://robohash.org/${roomDetails[0]?.email}}`}
                     alt=""
                   />
-                  {/* <div className="absolute bottom-2 left-44 p-1.5 bg-green-500 hover:border-2 cursor-pointer rounded-full w-fit h-fit"></div> */}
+                  </div></div>
+                  <div class="w-full h-3/4 bg-gray-300 static backdrop-blur-md bg-white/70 p-16 rounded-lg">
+                    <h1 className="text-black ">
+                      Room Chat
+                    </h1>
+                  </div>
+                </div><div className="relative">
+                  
                 </div>
-                <div className="text-center mt-2 text-xl font-medium ">
-                  {session?.user?.name}
+              </div>
+              <div className="md:col-span-2 w-full mt-4 rounded-2xl mx-auto backdrop-blur-md bg-white/60 md:pb-10 pb-0  shadow ">
+                <div class="grid relative">
+                  <div class="w-full static h-1/6  bg-red-100">
+                  <TodoList />
+                  </div>
+                  <div class="w-full h-fit static bg-gray-300  top-40">
+                    <h1 className="text-black backdrop-blur-md bg-white/70 p-2 rounded-lg">
+                      Room Chat
+                    </h1>
+                  </div>
+                  <AblyChatComponent />
                 </div>
-                {/* <div className="text-center text-sm font-medium ">
-                  @{roomDetails[0]?.email.split("@")[0]}
-                </div> */}
-                <div className="text-center text-sm font-bold ">
-                  {session?.user?.login}
-                </div>
-                {/* {
-                  roomDetails[0]?.email == session?.user?.email && (
-                    <button
-                  data-modal-target="authentication-modal"
-                  data-modal-toggle="authentication-modal"
-                  type="button"
-                  class="inline-flex items-center justify-center ml-20 mb-2 my-4 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group "
-                >
-                  <span class="relative px-3 py-2 transition-all duration-300  bg-gradient-to-br from-green-400 to-blue-400 group-hover:from-green-400 group-hover:to-blue-400 hover:from-green-500 hover:to-blue-400  font-bold rounded-md group-hover:bg-opacity-0 text-black hover:text-white">
-                    Edit Portfolio
-                  </span>
-                </button>
-                  )
-                } */}
-                <button
-                  type="button"
-                  class="inline-flex items-center justify-center ml-20 mb-2 my-4 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group "
-                >
-                  <span class="relative px-3 py-2 transition-all duration-300  bg-gradient-to-br from-green-400 to-blue-400 group-hover:from-green-400 group-hover:to-blue-400 hover:from-green-500 hover:to-blue-400  font-bold rounded-md group-hover:bg-opacity-0 text-gray-700 hover:text-gray-900">
-                    View Profile
-                  </span>
-                </button>
               </div>
             </div>
-            </div>
+          </div>
         </div>
-
-      <style jsx global>{`
-
-        [data-author="me"] {
-          background: linear-gradient(to right, #363795, #005C97); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-          color: white;
-          align-self: flex-end;
-          border-bottom-right-radius: 0!important;
-          border-bottom-left-radius: 10px!important;
-        }
         
-      `}</style>
+        <style jsx global>{`
+          [data-author="me"] {
+            background: linear-gradient(
+              to right,
+              #363795,
+              #005c97
+            ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+            color: white;
+            align-self: flex-end;
+            border-bottom-right-radius: 0 !important;
+            border-bottom-left-radius: 10px !important;
+          }
+        `}</style>
       </div>
     </>
   );
