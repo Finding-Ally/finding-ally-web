@@ -6,6 +6,9 @@ import { useSession } from "next-auth/react";
 import Portfolio from "@/components/profile/portfolio";
 import Reports from "@/components/profile/reports";
 
+
+
+import Timer from '@/components/tools/timer';
 import TodoList from "../../../components/tools/todolist";
 import {IoCaretBack} from "react-icons/io5";
 import {MdOutlineLibraryBooks} from "react-icons/md";
@@ -282,7 +285,9 @@ export default function Profile({ roomDetails }) {
           </div>
           <div className="flex justify-end my-auto">
             <button className="flex flex-row p-3 rounded-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300">
+            <Link href={`/resources/${roomDetails[0]?.name}`}>
               <MdOutlineLibraryBooks className="text-4xl p-2 mt-1 text-gray-200 bg-gray-700 mr-2 rounded" />
+              </Link>
               <IoVideocamOutline className="text-4xl p-2 mt-1 text-gray-200 bg-gray-700 mr-2 rounded" />
               {/* <IoEllipsisVerticalOutline className="text-lg text-gray-200 bg-gray-700 mr-2 rounded" /> */}
             </button>
@@ -303,9 +308,7 @@ export default function Profile({ roomDetails }) {
                   />
                   </div></div>
                   <div class="w-full h-3/4 bg-gray-300 static backdrop-blur-md bg-white/70 p-16 rounded-lg">
-                    <h1 className="text-black ">
-                      Room Chat
-                    </h1>
+                    <Timer/>
                   </div>
                 </div><div className="relative">
                   

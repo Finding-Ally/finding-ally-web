@@ -72,14 +72,23 @@ export default function Home() {
   useEffect(() => {
     const fetchQuotes = async () => {
       try {
-        const response = await fetch(
-          `https://zenquotes.io/api/random`
-        );
+        const response = await fetch(`https://type.fit/api/quotes`);
         if (!response.ok) {
           throw new Error("Failed to fetch quotes");
         }
         const jsonData = await response.json();
-        setQuote(jsonData);
+        
+        let randomQuote = null;
+        do {
+          const randomIndex = Math.floor(Math.random() * jsonData.length);
+          randomQuote = jsonData[randomIndex];
+        } while (randomQuote && randomQuote.text.split(' ').length > 12);
+  
+        if (randomQuote) {
+          setQuote(randomQuote);
+        } else {
+          console.error("No quotes found with less than 12 words.");
+        }
       } catch (error) {
         console.error("An error occurred while fetching quotes:", error);
       }
@@ -88,11 +97,17 @@ export default function Home() {
     fetchQuotes();
   }, []);
   
+  
+  
+  
+
+  console.log(quote);
+  
 
 
 
   return (
-    <div className="flex flex-col w-full pl-[87px] pb-24 h-screen overflow-auto text-gray-700 bg-gradient-to-r bg-indigo-300 from-10% via-sky-300 via-30% to-emerald-300 to-90%">
+    <div className="flex flex-col w-full pl-[87px] pb-24 h-screen overflow-auto text-gray-700 bg-gradient-to-r bg-violet-100 from-10% via-sky-300 via-30% to-emerald-300 to-90%">
       <div className="w-full bg-yellow-100">
         <div className="h-fit w-fit rounded-xl bg-white py-1 pl-4 pr-8 shadow ml-4 my-2">
           <div className="text-lg font-bold ">{date}</div>
@@ -101,7 +116,7 @@ export default function Home() {
         </div>
         <div className="h-full">
           <p className="text-center text-xl -mt-12 mb-6">
-            {quote?.q} - {quote?.a}
+          &quot;{quote?.text}&quot; - {quote?.author}
           </p>
         </div>
       </div>

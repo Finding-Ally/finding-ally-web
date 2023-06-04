@@ -145,7 +145,7 @@ export default function Explore() {
         room?.gender === data?.gender &&
         room?.group_or_duo === data?.group_or_duo &&
         room?.phase === data?.phase &&
-        room?.availability === data?.availability
+        room?.location === data?.location
       );
     });
 
@@ -406,7 +406,7 @@ export default function Explore() {
   }, [session?.user?.id]);
 
   return (
-    <div className="w-full pl-[87px] h-screen pb-10 text-gray-700 bg-gradient-to-r bg-emerald-300 from-10% to-indigo-300 to-90%">
+    <div className="w-full pl-[87px] h-screen pb-10 text-gray-700 bg-gradient-to-r bg-cyan-100 from-10% to-indigo-300 to-90%">
       <div className="w-full bg-gray-900">
         <div className="px-10 py-3">
           <h1 className="text-2xl font-bold text-white">Find your Ally</h1>
