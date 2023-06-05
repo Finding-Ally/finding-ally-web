@@ -116,7 +116,7 @@ export default function Home() {
         </div>
         <div className="h-full">
           <p className="text-center text-xl -mt-12 mb-6">
-          &quot;{quote?.text}&quot; - {quote?.author}
+          &quot;{quote?.text}&quot; - {quote?.author || "Anonymous"}
           </p>
         </div>
       </div>

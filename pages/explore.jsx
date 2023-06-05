@@ -11,6 +11,8 @@ import LoadingScreen from "@/components/animations/loadingScreen";
 import { getRooms, getRoom, updateRoom } from "../database/controllerRoom";
 
 import axios from "axios";
+import LoadingAnimation from "../components/animations/LoadingAnimation";
+import '../styles/loadingAnimation.module.css';
 
 const formReducer = (state, event) => {
   return {
@@ -424,6 +426,7 @@ export default function Explore() {
               FIND ALLY
             </span>
           </button>
+          <LoadingAnimation />
 
           <div
             id="authentication-modal"
