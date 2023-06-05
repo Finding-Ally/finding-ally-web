@@ -7,7 +7,7 @@ export default function Portfolio({userDetails}) {
 
 
   return (
-    <div className="w-full min-h-screen rounded-2xl backdrop-blur-md bg-white/50 p-4">
+    <div className="w-full rounded-2xl backdrop-blur-md bg-white/50 p-4">
       
 
       <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -97,7 +97,7 @@ export default function Portfolio({userDetails}) {
         
 
 {
-  userDetails[0]?.bio && (
+  userDetails[0]?.about && (
     <div className="grid rounded-2xl ">
           <div className="flex bg-gray-800 px-4 py-2 rounded-t-2xl text-start justify-center place-content-center place-items-center">
             <img
@@ -110,7 +110,7 @@ export default function Portfolio({userDetails}) {
             </h3>
           </div>
           <p className="bg-white p-4 rounded-b-2xl font-semibold text-center place-items-center">
-            {userDetails[0]?.bio}
+            {userDetails[0]?.about}
           </p>
         </div>
   )
@@ -130,7 +130,8 @@ export default function Portfolio({userDetails}) {
             </h3>
           </div>
           <p className="bg-white p-4 rounded-b-2xl font-semibold text-center place-items-center">
-            Not Connected to Database
+          {userDetails[0]?.goals}
+
           </p>
         </div>
 )
@@ -150,7 +151,7 @@ export default function Portfolio({userDetails}) {
             </h3>
           </div>
           <p className="bg-white p-4 rounded-b-2xl font-semibold text-center place-items-center">
-          Not Connected to Database
+          {userDetails[0]?.studyHabits}
           </p>
         </div>
   )

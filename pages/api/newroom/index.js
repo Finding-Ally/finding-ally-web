@@ -77,20 +77,20 @@ export default async function handler(req, res) {
       //   res.status(200).json(updateDataJson);
       //   break;
       case 'DELETE':
-        // Handle the DELETE request to delete a room by room ID
-        const roomId = req?.query?.roomId;
-        console.log("roomId", roomId);
+            // Handle the DELETE request to delete a room by room ID
+            const roomId = req.query.roomId;
+            console.log("request roomId", roomId);
 
-        const deleteData = await fetch(`${baseUrl}/deleteOne`, {
-          ...fetchOptions,
-          body: JSON.stringify({
-            ...fetchBody,
-            filter: { _id: { $oid: roomId } },
-          }),
-        });
-        const deleteDataJson = await deleteData.json();
-        res.status(204).json(deleteDataJson);
-        break;
+            const deleteData = await fetch(`${baseUrl}/deleteOne`, {
+              ...fetchOptions,
+              body: JSON.stringify({
+                ...fetchBody,
+                filter: { _id: { $oid: roomId } },
+              }),
+            });
+            const deleteDataJson = await deleteData.json();
+            res.status(204).json(deleteDataJson);
+            break;
         default:
           res.status(405).end();
           break;

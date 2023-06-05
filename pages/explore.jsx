@@ -342,7 +342,7 @@ export default function Explore() {
     fetchData();
   }, [session?.user?.id, userId]);
 
-  const handleDeleteRoom = async (roomId) => {
+  const handleDeleteRequestedRoom = async (roomId) => {
     try {
       const response = await fetch(`/api/createroom?roomId=${roomId}`, {
         method: "DELETE",
@@ -352,6 +352,7 @@ export default function Explore() {
       if (response.status === 204) {
         // Successful deletion
         // Perform any necessary actions or update the UI accordingly
+        setRequestedRooms((prevRooms) => prevRooms.filter((room) => room._id !== roomId));
         console.log("Room deleted successfully");
       } else {
         // Handle the error or display an error message
@@ -779,7 +780,7 @@ export default function Explore() {
                       </span>
                       <div>
                         <button
-                          onClick={() => handleDeleteRoom(room?._id)}
+                          onClick={() => handleDeleteRequestedRoom(room?._id)}
                           className="text-gray-700 mr-2 bg-gray-200 hover:bg-gray-300 p-2 rounded-lg"
                         >
                           Cancel

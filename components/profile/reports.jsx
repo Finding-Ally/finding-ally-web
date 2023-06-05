@@ -2,8 +2,6 @@ import Script from "next/script";
 import { useEffect } from "react";
 import { Chart } from "chart.js/auto";
 
-
-
 export default function Reports() {
 
   useEffect(() => {
@@ -16,8 +14,9 @@ export default function Reports() {
             {
                 data: [40, 100, 44, 70, 63, 30, 10],
                 label: "Hours / Day",
-                borderColor: "rgb(75, 192, 192)",
-                backgroundColor: "rgb(75, 192, 192,0.7)",
+                backgroundColor: ['rgb(255, 99, 132)','rgb(0, 255, 0)','rgb(255, 99, 132)','rgb(128, 255, 0)','rgb(0, 255, 255)','rgb(255, 255, 0)','rgb(255, 255, 128)'],
+            // borderColor: 'rgb(255, 99, 132)',
+
                 borderWidth: 2
             }
             ]
@@ -29,7 +28,7 @@ export default function Reports() {
   return (
     <>
     <div className="w-full h-screen rounded-2xl backdrop-blur-md bg-white/50 p-4">
-    <h1 className="w-full mx-auto mb-10 text-xl font-semibold capitalize ">Hours Spent On Platform</h1>
+    <h1 className="w-fit mx-auto mb-10 text-xl font-semibold capitalize ">Hours Spent On Platform</h1>
             <div className="w-[1000px] h-fit flex mx-auto my-auto">
                 <div className='border border-gray-400 pt-0 rounded-xl  w-full h-fit my-auto  shadow-xl'>
                     <canvas id='myChart'></canvas>

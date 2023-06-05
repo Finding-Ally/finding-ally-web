@@ -9,6 +9,9 @@ import MainProfile from "../../components/profile/mainProfile";
 import { useRouter } from 'next/router';
 import React from "react";
 import { IoCaretBackOutline } from "react-icons/io5";
+import {FaUserAlt} from "react-icons/fa";
+
+
 import { GiTrophy } from "react-icons/gi";
 import { FcParallelTasks } from "react-icons/fc";
 import { FcWorkflow } from "react-icons/fc";
@@ -47,17 +50,15 @@ export default function Profile({ userDetails }) {
   const [availability, setavailability] = useState();
 
   const [userAge, setuserAge] = useState();
-  const [userGender, setuserGender] = useState("Male");
+  const [userGender, setuserGender] = useState();
 
 
-  const [userBio, setuserBio] = useState();
+  const [userAboutMe, setuserAboutMe] = useState();
   const [userGoals, setuserGoals] = useState();
   const [userStudyHabits, setuserStudyHabits] = useState();
 
   const [language, setLanguage] = useState();
   const [userLocation, setuserLocation] = useState();
-
-
 
 
   //  from  form file
@@ -193,7 +194,7 @@ export default function Profile({ userDetails }) {
   // if (isError) return <div>Error : {error}</div>;
 
   if (data){
-    let { name, email, age, gender, notifications, bio, goals, availibility, interests, major, language } =
+    let { name, email, age, gender, notifications, about, goals, studyHabits, availibility, interests, major, language } =
     data;
   }
 
@@ -219,20 +220,19 @@ export default function Profile({ userDetails }) {
     });
   };
 
-  const updateUserName = (e) => {
-    setuserName(e.target.value.trim());
-    formData.name = e.target.value.trim();
-  };
-
-
-  const updateBio = (e) => {
-    setuserBio(e.target.value.trim());
-    formData.bio = e.target.value.trim();
+  const updateAboutMe = (e) => {
+    setuserAboutMe(e.target.value.trim());
+    formData.about = e.target.value.trim();
   };
 
   const updateGoals = (e) => {
     setuserGoals(e.target.value.trim());
     formData.goals = e.target.value.trim();
+  };
+
+  const updateStudyHabits = (e) => {
+    setuserStudyHabits(e.target.value.trim());
+    formData.studyHabits = e.target.value.trim();
   };
 
   const updateAvailibility = (e) => {
@@ -263,17 +263,6 @@ export default function Profile({ userDetails }) {
   const updateGender = (e) => {
     setuserGender(e.target.value.trim());
     formData.gender = e.target.value.trim();
-  };
-
-  const handleImageUpload = async (e) => {
-    const file = e.target.files[0];
-    console.log(file);
-    const base64 = await converToBase64(file);
-    formData.image = base64;
-    setuserImage(base64);
-    // console.log(base64);
-    // data.logo = base64;
-    // event.target.value.trim().replace(/\s/g, "-")
   };
 
 
@@ -310,7 +299,7 @@ export default function Profile({ userDetails }) {
 
   return (
     <>
-      <div className="w-full pl-[87px] h-min-screen pb-24 overflow-auto text-gray-700 bg-gradient-to-r bg-indigo-100 from-10% via-sky-300 via-30% to-emerald-300 to-90%">
+      <div className="w-full pl-[87px] h-min-screen pb-24 overflow-auto text-gray-700  bg-white">
         <div className="w-full backdrop-blur-md bg-white/50">
           <div class="pl-6 py-3">
             <h1 class="md:text-xl text-lg font-bold">
@@ -318,10 +307,10 @@ export default function Profile({ userDetails }) {
             </h1>
           </div>
         </div>
-        <div className="md:px-4 px-2 ">
+        <div className="md:px-4 px-2  min-h-screen ">
           <div className="">
             <div className="grid md:grid-cols-5 md:gap-5">
-              <div className="md:col-span-4 mt-4 md:mt-0">
+              <div className="md:col-span-4 mt-4 md:mt-0 shadow  rounded-2xl bg-indigo-100 px-4 pb-4">
                 <div className="">
                   {/* <nav className="flex my-8" aria-label="Breadcrumb">
                     <ol className="inline-flex items-center space-x-1 md:space-x-3">
@@ -406,7 +395,7 @@ export default function Profile({ userDetails }) {
                           aria-controls="dashboard"
                           aria-selected="false"
                         >
-                          <IoCaretBackOutline className="text-xl mr-2"/>
+                          <FaUserAlt className=" mr-2"/>
                           Profile
                           </button>
                       </li>
@@ -493,7 +482,7 @@ export default function Profile({ userDetails }) {
                   </div>
                 </div>
               </div>
-              <div className="md:card h-fit w-full mt-20 rounded-2xl mx-auto backdrop-blur-md bg-white/60 md:pb-10 pb-0  shadow ">
+              <div className="md:card h-fit w-full mt-20 mx-auto md:pb-10 pb-0   ">
                 <div className="relative">
                   <img
                     className="w-32 mx-auto rounded-full mt-8 border-2 border-gray-400 bg-gray-200"
@@ -678,10 +667,27 @@ export default function Profile({ userDetails }) {
 
                   <div>
                     <label
-                      for="message"
+                      for="aboutMe"
                       class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                     >
                       About Me
+                    </label>
+                    <textarea
+                      id="aboutMe"
+                      rows="4"
+                      class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                      placeholder="Write your thoughts here..."
+                      // defaultValue={bio}
+                      onChange={updateAboutMe}
+                    ></textarea>
+                  </div>
+
+                  <div>
+                    <label
+                      for="message"
+                      class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    >
+                      Goals 
                     </label>
                     <textarea
                       id="message"
@@ -689,7 +695,25 @@ export default function Profile({ userDetails }) {
                       class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                       placeholder="Write your thoughts here..."
                       // defaultValue={bio}
-                      onChange={updateBio}
+                      onChange={updateGoals}
+                    ></textarea>
+                  </div>
+
+
+                  <div>
+                    <label
+                      for="message"
+                      class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    >
+                      Study Habits
+                    </label>
+                    <textarea
+                      id="message"
+                      rows="4"
+                      class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                      placeholder="Write your thoughts here..."
+                      // defaultValue={bio}
+                      onChange={updateStudyHabits}
                     ></textarea>
                   </div>
 
