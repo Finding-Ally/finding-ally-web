@@ -299,7 +299,7 @@ export default function Profile({ userDetails }) {
 
   return (
     <>
-      <div className="w-full pl-[87px] h-min-screen pb-24 overflow-auto text-gray-700  bg-white">
+      <div className="w-full pl-[87px] h-screen overflow-auto text-gray-700  bg-white">
         <div className="w-full backdrop-blur-md bg-white/50">
           <div class="pl-6 py-3">
             <h1 class="md:text-xl text-lg font-bold">
@@ -309,8 +309,8 @@ export default function Profile({ userDetails }) {
         </div>
         <div className="md:px-4 px-2  min-h-screen ">
           <div className="">
-            <div className="grid md:grid-cols-5 md:gap-5">
-              <div className="md:col-span-4 mt-4 md:mt-0 shadow  rounded-2xl bg-indigo-100 px-4 pb-4">
+            <div className="grid md:grid-cols-6 md:gap-5">
+              <div className="md:col-span-5 mt-4 md:mt-0 shadow  rounded-2xl bg-indigo-100 px-4 pb-4">
                 <div className="">
                   {/* <nav className="flex my-8" aria-label="Breadcrumb">
                     <ol className="inline-flex items-center space-x-1 md:space-x-3">
@@ -520,7 +520,7 @@ export default function Profile({ userDetails }) {
                     <button data-modal-target="defaultModal" data-modal-toggle="defaultModal"
                     onClick={handleFormView}
                     type="button" 
-                    class="inline-flex items-center justify-center ml-20 mb-2 my-4 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group "
+                    class="inline-flex items-center justify-center ml-14 mb-2 my-4 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group "
                   >
                     <span class="relative px-3 py-2 transition-all duration-300 bg-blue-300 hover:bg-blue-400  font-bold rounded-md text-gray-700 hover:text-gray-900">
                       Edit Portfolio
