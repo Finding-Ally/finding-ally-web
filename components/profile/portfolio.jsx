@@ -75,7 +75,7 @@ export default function Portfolio({userDetails}) {
         }
 
         
-        {
+        {/* {
           userDetails[0]?.availibility.length>0 && (
             <div className="grid rounded-2xl ">
           <div className="flex bg-gray-800 px-4 py-2 rounded-t-2xl text-start justify-center place-content-center place-items-center">
@@ -93,7 +93,7 @@ export default function Portfolio({userDetails}) {
           </p>
         </div>
           )
-        }
+        } */}
         
 
 {
