@@ -122,7 +122,7 @@ export default function Profile({ userDetails }) {
      * options: optional
      */
     const tabs = new Tabs(tabElements, options);
-    tabs.show("clubs");
+    tabs.show("dashboard");
   }, []);
 
 
