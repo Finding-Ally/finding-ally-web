@@ -848,14 +848,14 @@ export default function Profile({ userDetails }) {
                     <div className="flex items-center pl-2 border border-gray-200 rounded dark:border-gray-700">
                       <input
                         defaultChecked
-                        id="bordered-checkbox-2"
+                        id="introvert"
                         type="checkbox"
                         value=""
                         name="bordered-checkbox"
                         className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                       />
                       <label
-                        for="bordered-checkbox-2"
+                        for="introvert"
                         className="w-full py-2 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
                       >
                         Introvert
@@ -863,14 +863,14 @@ export default function Profile({ userDetails }) {
                     </div>
                     <div className="flex items-center pl-2 border border-gray-200 rounded dark:border-gray-700">
                       <input
-                        id="bordered-checkbox-1"
+                        id="organized"
                         type="checkbox"
                         value=""
                         name="bordered-checkbox"
                         className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                       />
                       <label
-                        for="bordered-checkbox-1"
+                        for="organized"
                         className="w-full py-2 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
                       >
                         Organized
@@ -879,14 +879,14 @@ export default function Profile({ userDetails }) {
                     <div className="flex items-center pl-2 border border-gray-200 rounded dark:border-gray-700">
                       <input
                         defaultChecked
-                        id="bordered-checkbox-2"
+                        id="goal-oriented"
                         type="checkbox"
                         value=""
                         name="bordered-checkbox"
                         className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                       />
                       <label
-                        for="bordered-checkbox-2"
+                        for="goal-oriented"
                         className="w-full py-2 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
                       >
                         Goal-Oriented
@@ -894,14 +894,14 @@ export default function Profile({ userDetails }) {
                     </div>
                     <div className="flex items-center pl-2 border border-gray-200 rounded dark:border-gray-700">
                       <input
-                        id="bordered-checkbox-3"
+                        id="creative"
                         type="checkbox"
                         value=""
                         name="bordered-checkbox"
                         className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                       />
                       <label
-                        for="bordered-checkbox-3"
+                        for="creative"
                         className="w-full py-2 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
                       >
                         Creative
@@ -909,14 +909,14 @@ export default function Profile({ userDetails }) {
                     </div>
                     <div className="flex items-center pl-2 border border-gray-200 rounded dark:border-gray-700">
                       <input
-                        id="bordered-checkbox-4"
+                        id="analytical"
                         type="checkbox"
                         value=""
                         name="bordered-checkbox"
                         className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                       />
                       <label
-                        for="bordered-checkbox-4"
+                        for="analytical"
                         className="w-full py-2 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
                       >
                         Analytical
@@ -925,14 +925,14 @@ export default function Profile({ userDetails }) {
 
                     <div className="flex items-center pl-2 border border-gray-200 rounded dark:border-gray-700">
                       <input
-                        id="bordered-checkbox-4"
+                        id="punctual"
                         type="checkbox"
                         value=""
                         name="bordered-checkbox"
                         className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                       />
                       <label
-                        for="bordered-checkbox-4"
+                        for="punctual"
                         className="w-full py-2 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
                       >
                         Punctual
@@ -963,14 +963,14 @@ export default function Profile({ userDetails }) {
                   <div className="my-8 grid grid-cols-2 md:grid-cols-4 gap-4 place-content-center">
                     <div className="flex items-center pl-2 border border-gray-200 rounded dark:border-gray-700">
                       <input
-                        id="bordered-checkbox-1"
+                        id="sports"
                         type="checkbox"
                         value=""
                         name="bordered-checkbox-2"
                         className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                       />
                       <label
-                        for="bordered-checkbox-1"
+                        for="sports"
                         className="w-full py-2 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
                       >
                         Sports
@@ -979,14 +979,14 @@ export default function Profile({ userDetails }) {
                     <div className="flex items-center pl-2 border border-gray-200 rounded dark:border-gray-700">
                       <input
                         defaultChecked
-                        id="bordered-checkbox-2"
+                        id="cooking"
                         type="checkbox"
                         value=""
                         name="bordered-checkbox-2"
                         className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                       />
                       <label
-                        for="bordered-checkbox-2"
+                        for="cooking"
                         className="w-full py-2 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
                       >
                         Cooking
@@ -994,14 +994,14 @@ export default function Profile({ userDetails }) {
                     </div>
                     <div className="flex items-center pl-2 border border-gray-200 rounded dark:border-gray-700">
                       <input
-                        id="bordered-checkbox-1"
+                        id="reading"
                         type="checkbox"
                         value=""
                         name="bordered-checkbox-2"
                         className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                       />
                       <label
-                        for="bordered-checkbox-1"
+                        for="reading"
                         className="w-full py-2 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
                       >
                         Reading
@@ -1010,14 +1010,14 @@ export default function Profile({ userDetails }) {
                     <div className="flex items-center pl-2 border border-gray-200 rounded dark:border-gray-700">
                       <input
                         defaultChecked
-                        id="bordered-checkbox-2"
+                        id="art"
                         type="checkbox"
                         value=""
                         name="bordered-checkbox-2"
                         className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                       />
                       <label
-                        for="bordered-checkbox-2"
+                        for="art"
                         className="w-full py-2 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
                       >
                         Art
@@ -1025,14 +1025,14 @@ export default function Profile({ userDetails }) {
                     </div>
                     <div className="flex items-center pl-2 border border-gray-200 rounded dark:border-gray-700">
                       <input
-                        id="bordered-checkbox-3"
+                        id="crafts"
                         type="checkbox"
                         value=""
                         name="bordered-checkbox-2"
                         className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                       />
                       <label
-                        for="bordered-checkbox-3"
+                        for="crafts"
                         className="w-full py-2 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
                       >
                         Crafts
@@ -1040,14 +1040,14 @@ export default function Profile({ userDetails }) {
                     </div>
                     <div className="flex items-center pl-2 border border-gray-200 rounded dark:border-gray-700">
                       <input
-                        id="bordered-checkbox-4"
+                        id="dance"
                         type="checkbox"
                         value=""
                         name="bordered-checkbox-2"
                         className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                       />
                       <label
-                        for="bordered-checkbox-4"
+                        for="dance"
                         className="w-full py-2 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
                       >
                         Dancing
@@ -1056,14 +1056,14 @@ export default function Profile({ userDetails }) {
 
                     <div className="flex items-center pl-2 border border-gray-200 rounded dark:border-gray-700">
                       <input
-                        id="bordered-checkbox-4"
+                        id="singing"
                         type="checkbox"
                         value=""
                         name="bordered-checkbox-2"
                         className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                       />
                       <label
-                        for="bordered-checkbox-4"
+                        for="singing"
                         className="w-full py-2 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
                       >
                         Singing
@@ -1072,30 +1072,30 @@ export default function Profile({ userDetails }) {
 
                     <div className="flex items-center pl-2 border border-gray-200 rounded dark:border-gray-700">
                       <input
-                        id="bordered-checkbox-4"
+                        id="travel"
                         type="checkbox"
                         value=""
                         name="bordered-checkbox-2"
                         className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                       />
                       <label
-                        for="bordered-checkbox-4"
+                        for="travel"
                         className="w-full py-2 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
                       >
-                        Travel
+                        Travel 
                       </label>
                     </div>
 
                     <div className="flex items-center pl-2 border border-gray-200 rounded dark:border-gray-700">
                       <input
-                        id="bordered-checkbox-4"
+                        id="gardening"
                         type="checkbox"
                         value=""
                         name="bordered-checkbox-2"
                         className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                       />
                       <label
-                        for="bordered-checkbox-4"
+                        for="gardening"
                         className="w-full py-2 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
                       >
                         Gardening
@@ -1104,14 +1104,14 @@ export default function Profile({ userDetails }) {
 
                     <div className="flex items-center pl-2 border border-gray-200 rounded dark:border-gray-700">
                       <input
-                        id="bordered-checkbox-4"
+                        id="collecting"
                         type="checkbox"
                         value=""
                         name="bordered-checkbox-2"
                         className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                       />
                       <label
-                        for="bordered-checkbox-4"
+                        for="collecting"
                         className="w-full py-2 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
                       >
                         Collecting
@@ -1120,14 +1120,14 @@ export default function Profile({ userDetails }) {
 
                     <div className="flex items-center pl-2 border border-gray-200 rounded dark:border-gray-700">
                       <input
-                        id="bordered-checkbox-4"
+                        id="sleeping"
                         type="checkbox"
                         value=""
                         name="bordered-checkbox-2"
                         className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                       />
                       <label
-                        for="bordered-checkbox-4"
+                        for="sleeping"
                         className="w-full py-2 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
                       >
                         Sleeping
@@ -1136,14 +1136,14 @@ export default function Profile({ userDetails }) {
 
                     <div className="flex items-center pl-2 border border-gray-200 rounded dark:border-gray-700">
                       <input
-                        id="bordered-checkbox-4"
+                        id="debating"
                         type="checkbox"
                         value=""
                         name="bordered-checkbox-2"
                         className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                       />
                       <label
-                        for="bordered-checkbox-4"
+                        for="debating"
                         className="w-full py-2 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
                       >
                         Debating
