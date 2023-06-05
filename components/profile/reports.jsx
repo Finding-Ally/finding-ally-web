@@ -27,8 +27,8 @@ export default function Reports() {
 
   return (
     <>
-    <div className="w-full rounded-2xl backdrop-blur-md bg-white/50 p-4">
-    <h1 className="w-fit mx-auto mb-10 text-xl font-semibold capitalize ">Hours Spent On Platform</h1>
+    <div className="w-full rounded-2xl p-4">
+    <h1 className="w-full mx-auto mb-10 text-xl font-semibold capitalize ">Hours Spent On Platform</h1>
             <div className="w-[1000px] h-fit flex mx-auto my-auto">
                 <div className='border border-gray-400 pt-0 rounded-xl  w-full h-fit my-auto  shadow-xl'>
                     <canvas id='myChart'></canvas>

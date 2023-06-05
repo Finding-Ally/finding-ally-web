@@ -456,7 +456,7 @@ export default function Profile({ userDetails }) {
                      <MainProfile userDetails={userDetails} data={data}/>
                     </div>
                     <div
-                      className="hidden "
+                      className="hidden min-h-[550px]"
                       id="clubs"
                       role="tabpanel"
                       aria-labelledby="clubs-tab"
@@ -482,10 +482,10 @@ export default function Profile({ userDetails }) {
                   </div>
                 </div>
               </div>
-              <div className="md:card h-fit w-full mt-20 mx-auto md:pb-10 pb-0   ">
+              <div className="md:card h-fit w-full mx-auto md:pb-10 pb-0   ">
                 <div className="relative">
                   <img
-                    className="w-32 mx-auto rounded-full mt-8 border-2 border-gray-400 bg-gray-200"
+                    className="w-48 mx-auto rounded-full mt-8 border-2 border-gray-400 bg-gray-200"
                     src={`https://robohash.org/${userDetails[0]?.email}}`}
                     alt=""
                   />
