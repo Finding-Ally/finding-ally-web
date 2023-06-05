@@ -17,7 +17,7 @@ export default function Reports() {
                 data: [40, 100, 44, 70, 63, 30, 10],
                 label: "Hours / Day",
                 borderColor: "rgb(75, 192, 192)",
-                backgroundColor: "rgb(75, 192, 192,0.5)",
+                backgroundColor: "rgb(75, 192, 192,0.7)",
                 borderWidth: 2
             }
             ]

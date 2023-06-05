@@ -7,7 +7,7 @@ import Portfolio from "../../components/profile/portfolio";
 import Reports from "../../components/profile/reports";
 import MainProfile from "../../components/profile/mainProfile";
 import { useRouter } from 'next/router';
-
+import React from "react";
 import { IoCaretBackOutline } from "react-icons/io5";
 import { GiTrophy } from "react-icons/gi";
 import { FcParallelTasks } from "react-icons/fc";
@@ -277,13 +277,44 @@ export default function Profile({ userDetails }) {
   };
 
 
+  const [serverTime, setServerTime] = useState(null);
+
+  useEffect(() => {
+    const fetchServerTime = async () => {
+      try {
+        const response = await fetch('/api/time');
+        const data = await response.json();
+        setServerTime(new Date(data.time));
+      } catch (error) {
+        console.error('Error fetching server time:', error);
+      }
+    };
+
+    fetchServerTime();
+  }, []);
+
+  const getGreeting = () => {
+    if (!serverTime) return '';
+
+    const currentHour = serverTime.getHours();
+
+    if (currentHour >= 5 && currentHour < 12) {
+      return 'Good morning';
+    } else if (currentHour >= 12 && currentHour < 18) {
+      return 'Good afternoon';
+    } else {
+      return 'Good evening';
+    }
+  };
+
+
   return (
     <>
       <div className="w-full pl-[87px] h-min-screen pb-24 overflow-auto text-gray-700 bg-gradient-to-r bg-indigo-100 from-10% via-sky-300 via-30% to-emerald-300 to-90%">
         <div className="w-full backdrop-blur-md bg-white/50">
           <div class="pl-6 py-3">
             <h1 class="md:text-xl text-lg font-bold">
-              Good morning, {userDetails[0]?.name}
+            {getGreeting()}, {userDetails[0]?.name}
             </h1>
           </div>
         </div>
