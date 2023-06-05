@@ -241,8 +241,15 @@ export default function Profile({ userDetails }) {
   };
 
   const updateInterests = (e) => {
-    setstudyInterests(e.target.value.trim());
-    formData.interests = e.target.value.trim();
+    // setstudyInterests(e.target.value.trim());
+    // formData.interests = e.target.value.trim();
+    const originalString = e.target.value;
+    var separatedArray = [];
+    separatedArray = originalString.split(", ");
+    console.log(separatedArray);
+    setstudyInterests(separatedArray);
+    formData.interests = e.target.value;
+    console.log(formData.interests);
   };
 
   const updateMajor = (e) => {
@@ -586,22 +593,49 @@ export default function Profile({ userDetails }) {
                     </select>
                   </div>
 
-                  <div>
+                  <div className="sm:col-span-2">
+                  <div className="flex mb-2">
                     <label
-                      for="first_name"
-                      class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                      for="brand"
+                      className=" text-sm mr-2 font-medium text-gray-900 dark:text-white"
                     >
                       Study Interests
                     </label>
-                    <input
-                      type="text"
-                      id="first_name"
-                      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                      placeholder="add topics here"
-                      onChange={updateInterests}
-                      required
-                    />
+                    <span className="flex">
+                      {studyInterests?.map((tag) => {
+                        return (
+                          <span
+                            key={tag}
+                            className="bg-gray-100 rounded border text-gray-800  p-1 text-xs mr-1"
+                          >
+                            {tag}
+                          </span>
+                        );
+                      })}
+                    </span>
                   </div>
+                  <input
+                    type="text"
+                    name="tags"
+                    defaultValue={studyInterests}
+                    onChange={updateInterests}
+                    id="techstack"
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-navbarDark dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    placeholder="add your interests"
+                    required=""
+                  />
+                  <p className="text-gray-400 text-xs mt-2">
+                    Note: Use{" "}
+                    <code className="bg-gray-100 rounded border  text-gray-800 px-1 pb-1">
+                      ,
+                    </code>{" "}
+                    +{" "}
+                    <code className="bg-gray-100 rounded border  text-gray-800 p-1">
+                      space
+                    </code>{" "}
+                    to seperate tags.
+                  </p>
+                </div>
 
                   <div>
                     <label
@@ -665,57 +699,6 @@ export default function Profile({ userDetails }) {
                     </div>
                   </div>
 
-                  <div>
-                    <label
-                      for="aboutMe"
-                      class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                    >
-                      About Me
-                    </label>
-                    <textarea
-                      id="aboutMe"
-                      rows="4"
-                      class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                      placeholder="Write your thoughts here..."
-                      // defaultValue={bio}
-                      onChange={updateAboutMe}
-                    ></textarea>
-                  </div>
-
-                  <div>
-                    <label
-                      for="message"
-                      class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                    >
-                      Goals 
-                    </label>
-                    <textarea
-                      id="message"
-                      rows="4"
-                      class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                      placeholder="Write your thoughts here..."
-                      // defaultValue={bio}
-                      onChange={updateGoals}
-                    ></textarea>
-                  </div>
-
-
-                  <div>
-                    <label
-                      for="message"
-                      class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                    >
-                      Study Habits
-                    </label>
-                    <textarea
-                      id="message"
-                      rows="4"
-                      class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                      placeholder="Write your thoughts here..."
-                      // defaultValue={bio}
-                      onChange={updateStudyHabits}
-                    ></textarea>
-                  </div>
 
                   <div>
                     <label
@@ -776,6 +759,403 @@ export default function Profile({ userDetails }) {
                       </div>
                     </div>
                   </div>
+
+
+                  <div>
+                    <label
+                      for="aboutMe"
+                      class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    >
+                      About Me
+                    </label>
+                    <textarea
+                      id="aboutMe"
+                      rows="4"
+                      class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                      placeholder="Write your thoughts here..."
+                      // defaultValue={bio}
+                      onChange={updateAboutMe}
+                    ></textarea>
+                  </div>
+
+                  <div>
+                    <label
+                      for="message"
+                      class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    >
+                      Goals 
+                    </label>
+                    <textarea
+                      id="message"
+                      rows="4"
+                      class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                      placeholder="Write your thoughts here..."
+                      // defaultValue={bio}
+                      onChange={updateGoals}
+                    ></textarea>
+                  </div>
+
+
+                  <div>
+                    <label
+                      for="message"
+                      class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    >
+                      Study Habits
+                    </label>
+                    <textarea
+                      id="message"
+                      rows="4"
+                      class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                      placeholder="Write your thoughts here..."
+                      // defaultValue={bio}
+                      onChange={updateStudyHabits}
+                    ></textarea>
+                  </div>
+
+                  
+                  <div className="sm:col-span-2 mt-4 p-4 text-gray-900 bg-white rounded-lg border border-gray-100 shadow dark:border-gray-600 md:p-4 dark:bg-navbarDark dark:text-white">
+                  <div className="">
+                    <div className="grid ">
+                      <h3 className="text-sm font-medium text-gray-900 dark:text-white">
+                      Personality Traits
+                      </h3>
+                      {/* <p className="text-xs text-gray-500 dark:text-gray-400">
+                        Manage what non-members can see/edit.
+                      </p> */}
+                    </div>
+                    {/* <div className="-mt-14 flex justify-end items-baseline">
+                              <span className="mr-2 md:text-5xl text-2xl font-extrabold">Secured</span>
+                              <span className="text-gray-500 dark:text-gray-400">/private</span>
+                          </div> */}
+                  </div>
+                  <div className="my-8 grid grid-cols-2 md:grid-cols-4 gap-4 place-content-center">
+                    <div className="flex items-center pl-2 border border-gray-200 rounded dark:border-gray-700">
+                      <input
+                        id="social"
+                        type="checkbox"
+                        value=""
+                        name="bordered-checkbox"
+                        className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                      />
+                      <label
+                        for="social"
+                        className="w-full py-2 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                      >
+                        Social
+                      </label>
+                    </div>
+                    <div className="flex items-center pl-2 border border-gray-200 rounded dark:border-gray-700">
+                      <input
+                        defaultChecked
+                        id="bordered-checkbox-2"
+                        type="checkbox"
+                        value=""
+                        name="bordered-checkbox"
+                        className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                      />
+                      <label
+                        for="bordered-checkbox-2"
+                        className="w-full py-2 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                      >
+                        Introvert
+                      </label>
+                    </div>
+                    <div className="flex items-center pl-2 border border-gray-200 rounded dark:border-gray-700">
+                      <input
+                        id="bordered-checkbox-1"
+                        type="checkbox"
+                        value=""
+                        name="bordered-checkbox"
+                        className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                      />
+                      <label
+                        for="bordered-checkbox-1"
+                        className="w-full py-2 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                      >
+                        Organized
+                      </label>
+                    </div>
+                    <div className="flex items-center pl-2 border border-gray-200 rounded dark:border-gray-700">
+                      <input
+                        defaultChecked
+                        id="bordered-checkbox-2"
+                        type="checkbox"
+                        value=""
+                        name="bordered-checkbox"
+                        className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                      />
+                      <label
+                        for="bordered-checkbox-2"
+                        className="w-full py-2 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                      >
+                        Goal-Oriented
+                      </label>
+                    </div>
+                    <div className="flex items-center pl-2 border border-gray-200 rounded dark:border-gray-700">
+                      <input
+                        id="bordered-checkbox-3"
+                        type="checkbox"
+                        value=""
+                        name="bordered-checkbox"
+                        className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                      />
+                      <label
+                        for="bordered-checkbox-3"
+                        className="w-full py-2 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                      >
+                        Creative
+                      </label>
+                    </div>
+                    <div className="flex items-center pl-2 border border-gray-200 rounded dark:border-gray-700">
+                      <input
+                        id="bordered-checkbox-4"
+                        type="checkbox"
+                        value=""
+                        name="bordered-checkbox"
+                        className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                      />
+                      <label
+                        for="bordered-checkbox-4"
+                        className="w-full py-2 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                      >
+                        Analytical
+                      </label>
+                    </div>
+
+                    <div className="flex items-center pl-2 border border-gray-200 rounded dark:border-gray-700">
+                      <input
+                        id="bordered-checkbox-4"
+                        type="checkbox"
+                        value=""
+                        name="bordered-checkbox"
+                        className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                      />
+                      <label
+                        for="bordered-checkbox-4"
+                        className="w-full py-2 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                      >
+                        Punctual
+                      </label>
+                    </div>
+
+                  </div>
+
+                </div>
+
+
+
+                <div className="sm:col-span-2 mt-4 p-4 text-gray-900 bg-white rounded-lg border border-gray-100 shadow dark:border-gray-600 md:p-4 dark:bg-navbarDark dark:text-white">
+                  <div className="">
+                    <div className="grid ">
+                      <h3 className="text-sm font-medium text-gray-900 dark:text-white">
+                      Co-curricular Interests
+                      </h3>
+                      {/* <p className="text-xs text-gray-500 dark:text-gray-400">
+                        Manage what non-members can see/edit.
+                      </p> */}
+                    </div>
+                    {/* <div className="-mt-14 flex justify-end items-baseline">
+                              <span className="mr-2 md:text-5xl text-2xl font-extrabold">Secured</span>
+                              <span className="text-gray-500 dark:text-gray-400">/private</span>
+                          </div> */}
+                  </div>
+                  <div className="my-8 grid grid-cols-2 md:grid-cols-4 gap-4 place-content-center">
+                    <div className="flex items-center pl-2 border border-gray-200 rounded dark:border-gray-700">
+                      <input
+                        id="bordered-checkbox-1"
+                        type="checkbox"
+                        value=""
+                        name="bordered-checkbox-2"
+                        className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                      />
+                      <label
+                        for="bordered-checkbox-1"
+                        className="w-full py-2 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                      >
+                        Sports
+                      </label>
+                    </div>
+                    <div className="flex items-center pl-2 border border-gray-200 rounded dark:border-gray-700">
+                      <input
+                        defaultChecked
+                        id="bordered-checkbox-2"
+                        type="checkbox"
+                        value=""
+                        name="bordered-checkbox-2"
+                        className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                      />
+                      <label
+                        for="bordered-checkbox-2"
+                        className="w-full py-2 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                      >
+                        Cooking
+                      </label>
+                    </div>
+                    <div className="flex items-center pl-2 border border-gray-200 rounded dark:border-gray-700">
+                      <input
+                        id="bordered-checkbox-1"
+                        type="checkbox"
+                        value=""
+                        name="bordered-checkbox-2"
+                        className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                      />
+                      <label
+                        for="bordered-checkbox-1"
+                        className="w-full py-2 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                      >
+                        Reading
+                      </label>
+                    </div>
+                    <div className="flex items-center pl-2 border border-gray-200 rounded dark:border-gray-700">
+                      <input
+                        defaultChecked
+                        id="bordered-checkbox-2"
+                        type="checkbox"
+                        value=""
+                        name="bordered-checkbox-2"
+                        className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                      />
+                      <label
+                        for="bordered-checkbox-2"
+                        className="w-full py-2 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                      >
+                        Art
+                      </label>
+                    </div>
+                    <div className="flex items-center pl-2 border border-gray-200 rounded dark:border-gray-700">
+                      <input
+                        id="bordered-checkbox-3"
+                        type="checkbox"
+                        value=""
+                        name="bordered-checkbox-2"
+                        className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                      />
+                      <label
+                        for="bordered-checkbox-3"
+                        className="w-full py-2 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                      >
+                        Crafts
+                      </label>
+                    </div>
+                    <div className="flex items-center pl-2 border border-gray-200 rounded dark:border-gray-700">
+                      <input
+                        id="bordered-checkbox-4"
+                        type="checkbox"
+                        value=""
+                        name="bordered-checkbox-2"
+                        className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                      />
+                      <label
+                        for="bordered-checkbox-4"
+                        className="w-full py-2 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                      >
+                        Dancing
+                      </label>
+                    </div>
+
+                    <div className="flex items-center pl-2 border border-gray-200 rounded dark:border-gray-700">
+                      <input
+                        id="bordered-checkbox-4"
+                        type="checkbox"
+                        value=""
+                        name="bordered-checkbox-2"
+                        className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                      />
+                      <label
+                        for="bordered-checkbox-4"
+                        className="w-full py-2 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                      >
+                        Singing
+                      </label>
+                    </div>
+
+                    <div className="flex items-center pl-2 border border-gray-200 rounded dark:border-gray-700">
+                      <input
+                        id="bordered-checkbox-4"
+                        type="checkbox"
+                        value=""
+                        name="bordered-checkbox-2"
+                        className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                      />
+                      <label
+                        for="bordered-checkbox-4"
+                        className="w-full py-2 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                      >
+                        Travel
+                      </label>
+                    </div>
+
+                    <div className="flex items-center pl-2 border border-gray-200 rounded dark:border-gray-700">
+                      <input
+                        id="bordered-checkbox-4"
+                        type="checkbox"
+                        value=""
+                        name="bordered-checkbox-2"
+                        className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                      />
+                      <label
+                        for="bordered-checkbox-4"
+                        className="w-full py-2 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                      >
+                        Gardening
+                      </label>
+                    </div>
+
+                    <div className="flex items-center pl-2 border border-gray-200 rounded dark:border-gray-700">
+                      <input
+                        id="bordered-checkbox-4"
+                        type="checkbox"
+                        value=""
+                        name="bordered-checkbox-2"
+                        className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                      />
+                      <label
+                        for="bordered-checkbox-4"
+                        className="w-full py-2 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                      >
+                        Collecting
+                      </label>
+                    </div>
+
+                    <div className="flex items-center pl-2 border border-gray-200 rounded dark:border-gray-700">
+                      <input
+                        id="bordered-checkbox-4"
+                        type="checkbox"
+                        value=""
+                        name="bordered-checkbox-2"
+                        className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                      />
+                      <label
+                        for="bordered-checkbox-4"
+                        className="w-full py-2 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                      >
+                        Sleeping
+                      </label>
+                    </div>
+
+                    <div className="flex items-center pl-2 border border-gray-200 rounded dark:border-gray-700">
+                      <input
+                        id="bordered-checkbox-4"
+                        type="checkbox"
+                        value=""
+                        name="bordered-checkbox-2"
+                        className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                      />
+                      <label
+                        for="bordered-checkbox-4"
+                        className="w-full py-2 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                      >
+                        Debating
+                      </label>
+                    </div>
+
+                  </div>
+
+                </div>
+
+
+
                   <button
                     onClick={handleSubmit}
                     id="save-btn"
