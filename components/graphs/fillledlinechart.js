@@ -37,9 +37,9 @@ function FilledLineChart() {
     return (
         <>
             {/* Filled line chart */}
-            <h1 className="w-[150px] mx-auto mt-5 mb-5 text-xl font-semibold capitalize flex ">Your Weekly report Analysis</h1>
-            <div className="w-[1100px] h-screen flex mx-auto ">
-                <div className='border border-gray-400 pt-0 rounded-xl  w-full h-fit  shadow-xl'>
+            <h1 className="w-full mx-auto mt-5 mb-5 text-xl font-semibold capitalize flex ">Hours Spent On Platform</h1>
+            <div className="w-[1000px] h-screen flex mx-auto ">
+                <div className='border border-gray-400 pt-0 rounded-xl  w-full h-fit  shadow'>
                     <canvas id='myChart'></canvas>
                 </div>
             </div>

@@ -5,9 +5,10 @@ import { Key } from "react";
 import { useSession } from "next-auth/react";
 import Portfolio from "../../components/profile/portfolio";
 import Reports from "../../components/profile/reports";
+import MainProfile from "../../components/profile/mainProfile";
 import { useRouter } from 'next/router';
 
-import { FcTemplate } from "react-icons/fc";
+import { IoCaretBackOutline } from "react-icons/io5";
 import { GiTrophy } from "react-icons/gi";
 import { FcParallelTasks } from "react-icons/fc";
 import { FcWorkflow } from "react-icons/fc";
@@ -83,15 +84,15 @@ export default function Profile({ userDetails }) {
   useEffect(() => {
     const tabElements = [
       {
+          id: 'dashboard',
+          triggerEl: document.querySelector('#dashboard-tab'),
+          targetEl: document.querySelector('#dashboard')
+      },
+      {
         id: "clubs",
         triggerEl: document.querySelector("#clubs-tab"),
         targetEl: document.querySelector("#clubs"),
       },
-      // {
-      //     id: 'dashboard',
-      //     triggerEl: document.querySelector('#dashboard-tab'),
-      //     targetEl: document.querySelector('#dashboard')
-      // },
       {
         id: "repositories",
         triggerEl: document.querySelector("#repositories-tab"),
@@ -278,7 +279,7 @@ export default function Profile({ userDetails }) {
 
   return (
     <>
-      <div className="w-full pl-[87px] h-min-screen pb-24 overflow-auto text-gray-700 bg-gradient-to-r from-indigo-300 from-10% via-sky-300 via-30% to-emerald-300 to-90%">
+      <div className="w-full pl-[87px] h-min-screen pb-24 overflow-auto text-gray-700 bg-gradient-to-r bg-indigo-100 from-10% via-sky-300 via-30% to-emerald-300 to-90%">
         <div className="w-full backdrop-blur-md bg-white/50">
           <div class="pl-6 py-3">
             <h1 class="md:text-xl text-lg font-bold">
@@ -363,6 +364,21 @@ export default function Profile({ userDetails }) {
                       data-tabs-toggle="#myTabContent"
                       role="tablist"
                     >
+
+                      <li className="mr-2" role="presentation">
+                        <button
+                          className="flex flex-row p-3 rounded-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
+                          id="dashboard-tab"
+                          data-tabs-target="#dashboard"
+                          type="button"
+                          role="tab"
+                          aria-controls="dashboard"
+                          aria-selected="false"
+                        >
+                          <IoCaretBackOutline className="text-xl mr-2"/>
+                          Profile
+                          </button>
+                      </li>
                       <li className="mr-2" role="presentation">
                         <button
                           className="flex flex-row p-3 rounded-lg"
@@ -377,20 +393,7 @@ export default function Profile({ userDetails }) {
                           Portfolio
                         </button>
                       </li>
-                      {/* <li className="mr-2" role="presentation">
-                        <button
-                          className="flex flex-row p-3 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
-                          id="dashboard-tab"
-                          data-tabs-target="#dashboard"
-                          type="button"
-                          role="tab"
-                          aria-controls="dashboard"
-                          aria-selected="false"
-                        >
-                          <FcTemplate className="text-xl mr-2"/>
-                          ShowCase
-                          </button>
-                      </li> */}
+                      
                       <li className="mr-2" role="presentation">
                         <button
                           className="flex flex-row p-3 rounded-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
@@ -425,6 +428,14 @@ export default function Profile({ userDetails }) {
         
                   <div id="myTabContent" className="mt-5">
                     <div
+                      className="hidden  "
+                      id="dashboard"
+                      role="tabpanel"
+                      aria-labelledby="dashboard-tab"
+                    >
+                     <MainProfile userDetails={userDetails} data={data}/>
+                    </div>
+                    <div
                       className="hidden "
                       id="clubs"
                       role="tabpanel"
@@ -432,14 +443,6 @@ export default function Profile({ userDetails }) {
                     >
                       <Portfolio userDetails={userDetails} />
                     </div>
-                    {/* <div
-                      className="hidden  "
-                      id="dashboard"
-                      role="tabpanel"
-                      aria-labelledby="dashboard-tab"
-                    >
-                     <ProfileShowCase userDetails={userDetails} data={data}/>
-                    </div> */}
                     <div
                       className="hidden "
                       id="repositories"
@@ -499,7 +502,7 @@ export default function Profile({ userDetails }) {
                     type="button" 
                     class="inline-flex items-center justify-center ml-20 mb-2 my-4 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group "
                   >
-                    <span class="relative px-3 py-2 transition-all duration-300  bg-gradient-to-br from-green-400 to-blue-400 group-hover:from-green-400 group-hover:to-blue-400 hover:from-green-500 hover:to-blue-400  font-bold rounded-md group-hover:bg-opacity-0 text-gray-700 hover:text-gray-900">
+                    <span class="relative px-3 py-2 transition-all duration-300 bg-blue-300 hover:bg-blue-400  font-bold rounded-md text-gray-700 hover:text-gray-900">
                       Edit Portfolio
                     </span>
                   </button>
