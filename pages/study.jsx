@@ -83,13 +83,13 @@ const PomodoroPage = () => {
         {/* ... */}
       </div>
 
-      <div className="z-40 absolute top-5 right-5 -translate-x-1/2">
+      <div className="z-50 absolute top-5 left-5 translate-x-2/3">
         <h1 className='text-black font-bold text-xl'>&quot;{quote?.text}&quot; - {quote?.author || "Anonymous"}</h1>
       
       </div>
       <div className="z-40 absolute top-5 right-5">
         {/* <AudioPlayer tracks={tracks} /> */}
-        <div className='backdrop-blur-md bg-black/60 rounded-xl p-4'>
+        <div className='backdrop-blur-md bg-black/80 rounded-2xl p-4'>
         <button
           onClick={() => changeMusic('birds')}
           className={`${
