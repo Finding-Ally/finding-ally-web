@@ -19,7 +19,7 @@ const Layout = ({ children }) => {
     };
   }, []);
 
-  const userName = session?.user?.name;
+  const userId = session?.user?.id;
 
   useEffect(() => {
     // Update the user's minutes spent in MongoDB
@@ -30,7 +30,7 @@ const Layout = ({ children }) => {
         const db = client.db();
         const collection = db.collection('users');
         await collection.updateOne(
-          { name: userName }, // Replace with your user identifier
+          { id: userId }, // Replace with your user identifier
           { $push: { minutesSpent: minutes } }
         );
         client.close();
@@ -40,7 +40,7 @@ const Layout = ({ children }) => {
     };
 
     updateMinutesSpent();
-  }, [minutes, userName]);
+  }, [minutes, userId]);
 
   // Navigates to the requested page
   const navigateTo = (path) => {

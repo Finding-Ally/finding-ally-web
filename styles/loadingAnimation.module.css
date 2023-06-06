@@ -1,14 +1,14 @@
 @keyframes ldio-apoyzbf4opq {
   0% {
-    top: 375.83px;
-    left: 375.83px;
+    top: 300.83px; /* Adjust the top position as per your preference */
+    left: 320.83px; /* Adjust the left position as per your preference */
     width: 0;
     height: 0;
     opacity: 1;
   }
   100% {
-    top: 72.865px;
-    left: 72.865px;
+    top: 18.865px; /* Adjust the top position as per your preference */
+    left: 20.865px; /* Adjust the left position as per your preference */
     width: 605.93px;
     height: 605.93px;
     opacity: 0;
@@ -21,7 +21,7 @@
   border-style: solid;
   opacity: 1;
   border-radius: 50%;
-  animation: ldio-apoyzbf4opq 2.7027027027027026s cubic-bezier(0,0.2,0.8,1) infinite;
+  animation: ldio-apoyzbf4opq 2.7s cubic-bezier(0, 0.2, 0.8, 1) infinite;
 }
 
 .ldio-apoyzbf4opq div:nth-child(1) {
@@ -31,7 +31,7 @@
 
 .ldio-apoyzbf4opq div:nth-child(2) {
   border-color: #5699d2;
-  animation-delay: -1.3513513513513513s;
+  animation-delay: -1.35s;
 }
 
 .loadingio-spinner-ripple-jierxddzni {
@@ -48,11 +48,5 @@
   position: relative;
   transform: translateZ(0) scale(1);
   backface-visibility: hidden;
-  transform-origin: 0 0; /* see note above */
+  transform-origin: 0 0;
 }
-
-.ldio-apoyzbf4opq div {
-  box-sizing: content-box;
-}
-
-/* You can add more styles for your other components here */
