@@ -1,14 +1,21 @@
+.parent-div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* Add any additional styles for the parent div */
+}
+
 @keyframes ldio-apoyzbf4opq {
   0% {
-    top: 300.83px; /* Adjust the top position as per your preference */
-    left: 320.83px; /* Adjust the left position as per your preference */
+    top: 50%;
+    left: 50%;
     width: 0;
     height: 0;
     opacity: 1;
   }
   100% {
-    top: 18.865px; /* Adjust the top position as per your preference */
-    left: 20.865px; /* Adjust the left position as per your preference */
+    top: 50%;
+    left: 50%;
     width: 605.93px;
     height: 605.93px;
     opacity: 0;
@@ -17,6 +24,9 @@
 
 .ldio-apoyzbf4opq div {
   position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   border-width: 7.67px;
   border-style: solid;
   opacity: 1;

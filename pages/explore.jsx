@@ -12,7 +12,7 @@ import { getRooms, getRoom, updateRoom } from "../database/controllerRoom";
 
 import axios from "axios";
 import LoadingAnimation from "@/components/animations/LoadingAnimation";
-import styles from '@/styles/loadingAnimation.module.css';
+import styles from "@/styles/loadingAnimation.module.css";
 
 const formReducer = (state, event) => {
   return {
@@ -347,12 +347,13 @@ export default function Explore() {
       const response = await fetch(`/api/createroom?roomId=${roomId}`, {
         method: "DELETE",
         contentType: "application/json",
-
       });
       if (response.status === 204) {
         // Successful deletion
         // Perform any necessary actions or update the UI accordingly
-        setRequestedRooms((prevRooms) => prevRooms.filter((room) => room._id !== roomId));
+        setRequestedRooms((prevRooms) =>
+          prevRooms.filter((room) => room._id !== roomId)
+        );
         console.log("Room deleted successfully");
       } else {
         // Handle the error or display an error message
@@ -369,7 +370,6 @@ export default function Explore() {
       const response = await fetch(`/api/newroom?roomId=${roomId}`, {
         method: "DELETE",
         contentType: "application/json",
-
       });
       if (response.status === 204) {
         // Successful deletion
@@ -409,31 +409,31 @@ export default function Explore() {
   }, [session?.user?.id]);
 
   return (
-    <div className="w-full pl-[87px] h-screen pb-10 text-gray-700 bg-gradient-to-r bg-cyan-100 from-10% to-indigo-300 to-90%">
+    <div className="w-full pl-[87px] min-h-screen pb-10 text-gray-700 bg-gradient-to-r bg-cyan-100 from-10% to-indigo-300 to-90%">
       <div className="w-full bg-gray-900">
         <div className="px-10 py-3">
           <h1 className="text-2xl font-bold text-white">Find your Ally</h1>
         </div>
       </div>
-      <div className="grid grid-cols-2 gap-6 pr-4">
-        <div className="bg-white  rounded-lg shadow-xl border border-black p-8 w-full m-4">
-          <button
-            data-modal-target="authentication-modal"
-            data-modal-toggle="authentication-modal"
-            type="button"
-            className="relative inline-flex items-center justify-center p-0.5 mb-2 mr-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-green-400 to-blue-600 group-hover:from-green-400 group-hover:to-blue-600 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-green-200 dark:focus:ring-green-800"
-          >
-            <span className="relative px-5 py-2.5 transition-all duration-75  bg-green-400 font-bold rounded-md group-hover:bg-opacity-0">
-              FIND ALLY
-            </span>
-          </button>
+      <div className="grid grid-cols-2 gap-6 pr-4 overflow-auto">
+        <div className={`bg-white rounded-lg justify-center place-content-center shadow-xl border border-gray-400 p-8 w-full m-4 ${styles["parent-div"]}`}>
+        <button
+    data-modal-target="authentication-modal"
+    data-modal-toggle="authentication-modal"
+    type="button"
+    className="absolute top-1/2 z-10 left-1/4 translate-x-5 translate-y-4 inline-flex items-center justify-center p-0.5 mb-2 mr-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-green-400 to-blue-600 group-hover:from-green-400 group-hover:to-blue-600 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-green-200 dark:focus:ring-green-800"
+  >
+    <span className="px-5 py-2.5 transition-all duration-75 bg-green-400 font-bold rounded-md group-hover:bg-opacity-0">
+      FIND ALLY
+    </span>
+  </button>
           {/* <LoadingAnimation /> */}
-          <div className={styles['loadingio-spinner-ripple-jierxddzni']}>
-            <div className={styles['ldio-apoyzbf4opq']}>
-              <div></div>
-              <div></div>
-            </div>
-          </div>
+          <div className={styles["loadingio-spinner-ripple-jierxddzni"]}>
+    <div className={styles["ldio-apoyzbf4opq"]}>
+      <div></div>
+      <div></div>
+    </div>
+  </div>
           <div
             id="authentication-modal"
             tabindex="-1"
@@ -477,7 +477,7 @@ export default function Explore() {
                       <select
                         onChange={updateGoal}
                         id="countries"
-                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-400 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                       >
                         <option selected>Choose a goal</option>
                         <option value="University-Studies">
@@ -502,7 +502,7 @@ export default function Explore() {
                             type="radio"
                             value="Beginner"
                             name="bordered-radio"
-                            className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                            className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-400"
                             onChange={updatePhase}
                             // onClick={setPhase("Beginner")}
                           />
@@ -520,7 +520,7 @@ export default function Explore() {
                             type="radio"
                             value="Intermediate"
                             name="bordered-radio"
-                            className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                            className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-400"
                             onChange={updatePhase}
                             // onClick={setPhase("Intermediate")}
                           />
@@ -537,7 +537,7 @@ export default function Explore() {
                             type="radio"
                             value="Advanced"
                             name="bordered-radio"
-                            className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                            className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-400"
                             onChange={updatePhase}
                             // onClick={setPhase("Advanced")}
                           />
@@ -565,7 +565,7 @@ export default function Explore() {
                           type="radio"
                           value="flexible"
                           name="default-radio"
-                          className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                          className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-400"
                           onChange={updateAvailibility}
                           // onClick={setAvailability("anytime")}
                         />
@@ -582,7 +582,7 @@ export default function Explore() {
                           type="radio"
                           value="weekdays"
                           name="default-radio"
-                          className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                          className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-400"
                           onChange={updateAvailibility}
                           // onClick={setAvailability("weekdays")}
                         />
@@ -599,7 +599,7 @@ export default function Explore() {
                           type="radio"
                           value="weekends"
                           name="default-radio"
-                          className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                          className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-400"
                           onChange={updateAvailibility}
                           // onClick={setAvailability("weekends")}
                         />
@@ -627,7 +627,7 @@ export default function Explore() {
                             type="radio"
                             value="Duo"
                             name="bordered-radio-1"
-                            className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                            className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-400"
                             onChange={updateGroup_or_duo}
                             // onClick={setgroup_or_duo("Duo")}
                           />
@@ -644,7 +644,7 @@ export default function Explore() {
                             type="radio"
                             value="Group"
                             name="bordered-radio-1"
-                            className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                            className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-400"
                             onChange={updateGroup_or_duo}
                             // onClick={setgroup_or_duo("Group")}
                           />
@@ -708,8 +708,57 @@ export default function Explore() {
             </div>
           </div>
         </div>
-        <div className="grid grid-rows-2 gap-4">
-          <div className="bg-white rounded-lg shadow-xl border border-black p-4 w-full mt-4">
+        <div className="grid grid-rows-3 ">
+          <div className="bg-white rounded-lg shadow-xl border border-gray-400 p-4 w-full mt-4">
+            <div className="mb-4">
+              <h1 className="font-semibold text-gray-800">
+                Let’s make this a safe and productive experience
+              </h1>
+            </div>
+            <span className="font-semibold text-gray-800 my-auto">
+              <div className="grid grid-cols-1">
+                <p className="text-sm font-bold text-gray-900 dark:text-gray-300">
+                  1. Be respectful and professional.
+                </p>
+                <p className="text-xs font-medium text-gray-900 dark:text-gray-300 ml-4">
+                  Avoid offensive language and harassment towards others.
+                </p>
+              </div>
+
+              <div className="grid grid-cols-1">
+                <p className="text-sm font-bold text-gray-900 dark:text-gray-300">
+                2. Report inappropriate behavior.
+                </p>
+                <p className="text-xs font-medium text-gray-900 dark:text-gray-300 ml-4">
+                Users should promptly report any inappropriate behavior or messages to the platform administrators.
+                </p>
+              </div>
+
+
+              <div className="grid grid-cols-1">
+                <p className="text-sm font-bold text-gray-900 dark:text-gray-300">
+                3. Use the platform for its intended purpose.
+                </p>
+                <p className="text-xs font-medium text-gray-900 dark:text-gray-300 ml-4">
+                Only use the platform to find study partners and it is not meant for dating or business networking.
+                </p>
+              </div>
+
+
+              <div className="grid grid-cols-1">
+                <p className="text-sm font-bold text-gray-900 dark:text-gray-300">
+                4. Be proactive and communicate.
+                </p>
+                <p className="text-xs font-medium text-gray-900 dark:text-gray-300 ml-4">
+                Communication is key! Keep your allies informed about any changes to your schedule or study plans. Take the lead in scheduling study sessions.
+                </p>
+              </div>
+
+
+            </span>
+          </div>
+
+          <div className="bg-white rounded-lg shadow-xl border border-gray-400 p-4 w-full mt-2">
             <div className="mb-4">
               <h1 className="font-semibold text-gray-800">Your Allies</h1>
             </div>
@@ -737,7 +786,8 @@ export default function Explore() {
                     >
                       Unmatch
                     </button>
-                    <Link href="/report"
+                    <Link
+                      href="/report"
                       className="text-gray-700 mr-2 bg-gray-200 hover:bg-gray-100 p-2 rounded-lg"
                     >
                       Report
@@ -756,7 +806,7 @@ export default function Explore() {
             )}
           </div>
 
-          <div className="bg-white  rounded-lg shadow-xl border border-black p-4 w-full">
+          <div className="bg-white  rounded-lg shadow-xl border border-gray-400 p-4 w-full mt-2">
             <h2 className="mb-2 text-lg font-semibold text-gray-900 dark:text-white">
               Waiting List:
             </h2>
