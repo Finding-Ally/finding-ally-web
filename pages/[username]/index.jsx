@@ -71,7 +71,7 @@ export default function Profile({ userDetails }) {
   // const userId = "645111b866682caf52a4cca5";
 
   const queryClient = useQueryClient();
-  const { isLoading, isError, data, error } = useQuery(["users", userId], () =>
+  const { data, error } = useQuery(["users", userId], () =>
     getUser(userId)
   );
   const UpdateMutation = useMutation((newData) => updateUser(userId, newData), {
@@ -154,6 +154,9 @@ export default function Profile({ userDetails }) {
     
     modal.show();
   };
+
+
+
   // if (isLoading) return <div>
   //   <ul
   //                     className="flex flex-wrap -mb-px text-sm font-medium text-center"
@@ -193,6 +196,7 @@ export default function Profile({ userDetails }) {
   //   </div>;
   // if (isError) return <div>Error : {error}</div>;
 
+  
   if (data){
     let { name, email, age, gender, notifications, about, goals, studyHabits, availibility, interests, major, language } =
     data;
@@ -773,7 +777,7 @@ export default function Profile({ userDetails }) {
                       rows="4"
                       class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                       placeholder="Write your thoughts here..."
-                      // defaultValue={bio}
+                      // defaultValue={about}
                       onChange={updateAboutMe}
                     ></textarea>
                   </div>
