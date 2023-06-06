@@ -41,8 +41,6 @@ const Timer = () => {
       } else {
         setCurrentTime(breakTime);
       }
-
-    //   startTimer();
     }
     return () => {
       clearInterval(intervalId);
@@ -60,69 +58,69 @@ const Timer = () => {
   };
 
   return (
-    <div className="flex flex-row items-center justify-center backdrop-blur-md bg-black/60 rounded-xl p-4 ">
-      <div className="relative w-24 h-24">
+    <div className="flex flex-row items-center justify-center backdrop-blur-md bg-black/80 rounded-2xl p-3">
+      <div className="relative w-20 h-20">
         <div
-          className="absolute w-full h-full rounded-full"
-          style={{
-            background: `conic-gradient(white 0% ${getTimerPercentage()}%, transparent 40% 100%)`,
-            transform: `rotate(${90 - (getTimerPercentage() / 100) * 360}deg)`,
-            border: '2px solid white',
-          }}
+          className="absolute w-full h-full rounded "
+          // style={{
+          //   background: `conic-gradient(white 0% ${getTimerPercentage()}%, transparent 40% 100%)`,
+          //   transform: `rotate(${90 - (getTimerPercentage() / 100) * 360}deg)`,
+          //   border: '2px solid white',
+          // }}
         ></div>
         <div className="absolute flex items-center justify-center w-full h-full">
-          <h1 className="text-3xl font-bold">{formatTime(currentTime)}</h1>
+          <h1 className="text-3xl font-bold text-white">{formatTime(currentTime)}</h1>
         </div>
       </div>
 
-      <div className='flex flex-col ml-4'>
-      <div className="flex space-x-4 mt-4 text-sm">
-        <button
-          className="px-2 py-1 rounded bg-blue-500 text-white focus:outline-none"
-          onClick={isRunning ? pauseTimer : startTimer}
-        >
-          {isRunning ? 'Pause' : 'Start'}
-        </button>
-        <button
-          className="px-2 py-1 rounded bg-red-500 text-white focus:outline-none"
-          onClick={resetTimer}
-        >
-          Reset
-        </button>
-      </div>
-      <div className="flex items-center justify-center mt-4 text-sm">
-        <div className="flex space-x-4">
-          <div className='flex flex-col'>
-          <div className='mb-2'>
-            <label htmlFor="targetTime" className="text-sm font-bold text-white">
-              Target:
-            </label>
-            <input
-              id="targetTime"
-              type="number"
-              className="border rounded px-2 py-1 focus:outline-none"
-              value={targetTime / 60}
-              onChange={(e) => setTargetTime(parseInt(e.target.value) * 60)}
-            />
-          </div>
-          <div>
-            <label htmlFor="breakTime" className="text-sm font-bold text-white" >
-              Break:
-            </label>
-            <input
-              id="breakTime"
-              type="number"
-              className="border rounded px-2 py-1 focus:outline-none"
-              value={breakTime / 60}
-              onChange={(e) => setBreakTime(parseInt(e.target.value) * 60)}
-            />
-          </div>
-          </div>
-          
+      <div className="flex flex-col ml-4">
+        <div className="flex space-x-4 text-sm">
+          <button
+            className="px-2 py-1 rounded bg-blue-500 text-white focus:outline-none"
+            onClick={isRunning ? pauseTimer : startTimer}
+          >
+            {isRunning ? 'Pause' : 'Start'}
+          </button>
+          <button
+            className="px-2 py-1 rounded bg-red-500 text-white focus:outline-none"
+            onClick={resetTimer}
+          >
+            Reset
+          </button>
         </div>
+        {!isRunning && (
+          <div className="flex items-center justify-center mt-4 text-sm">
+            <div className="flex space-x-4">
+              <div className="flex flex-col">
+                <div className="mb-2">
+                  <label htmlFor="targetTime" className="text-sm font-bold text-white">
+                    Target :
+                  </label>
+                  <input
+                    id="targetTime"
+                    type="number"
+                    className="border rounded ml-1.5 px-2 py-1 focus:outline-none"
+                    value={targetTime / 60}
+                    onChange={(e) => setTargetTime(parseInt(e.target.value) * 60)}
+                  />
+                </div>
+                <div className=''>
+                  <label htmlFor="breakTime" className="text-sm font-bold text-white">
+                    Break :
+                  </label>
+                  <input
+                    id="breakTime"
+                    type="number"
+                    className="border rounded ml-2 px-2 py-1 focus:outline-none"
+                    value={breakTime / 60}
+                    onChange={(e) => setBreakTime(parseInt(e.target.value) * 60)}
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
-      </div>
-      
     </div>
   );
 };

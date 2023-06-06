@@ -34,6 +34,39 @@ const PomodoroPage = () => {
     setVolume(volumeValue);
   };
 
+  const [quote, setQuote] = useState([]);
+
+  useEffect(() => {
+    const fetchQuotes = async () => {
+      try {
+        const response = await fetch(`https://type.fit/api/quotes`);
+        if (!response.ok) {
+          throw new Error("Failed to fetch quotes");
+        }
+        const jsonData = await response.json();
+        
+        let randomQuote = null;
+        do {
+          const randomIndex = Math.floor(Math.random() * jsonData.length);
+          randomQuote = jsonData[randomIndex];
+        } while (randomQuote && randomQuote.text.split(' ').length > 12);
+  
+        if (randomQuote) {
+          setQuote(randomQuote);
+        } else {
+          console.error("No quotes found with less than 12 words.");
+        }
+      } catch (error) {
+        console.error("An error occurred while fetching quotes:", error);
+      }
+    };
+  
+    fetchQuotes();
+  }, []);
+  
+  
+
+
   return (
     <div className="w-full pl-[91px] h-min-screen overflow-auto text-gray-700 bg-gradient-to-r from-indigo-300 from-10% via-sky-300 via-30% to-emerald-300 to-90% h-screen flex flex-col items-center justify-center">
       {/* <ReactPlayer url={'./video.mp4'} className="h-screen absolute w-full" controls={true} autoplay muted loop/> */}
@@ -48,6 +81,11 @@ const PomodoroPage = () => {
       <div className="z-40 absolute top-5 left-28">
         <Timer />
         {/* ... */}
+      </div>
+
+      <div className="z-40 absolute top-5 right-5 -translate-x-1/2">
+        <h1 className='text-black font-bold text-xl'>&quot;{quote?.text}&quot; - {quote?.author || "Anonymous"}</h1>
+      
       </div>
       <div className="z-40 absolute top-5 right-5">
         {/* <AudioPlayer tracks={tracks} /> */}
