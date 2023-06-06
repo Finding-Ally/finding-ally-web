@@ -10,6 +10,13 @@ import { Provider } from 'react-redux';
 
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css'
+// import Layout from '@/components/Layout'
+
+
+// export function reportWebVitals(metric) {
+//   console.log(metric);
+// }
+
 
 
 export default function App({
@@ -25,11 +32,11 @@ export default function App({
       <Provider store={store}>
     <SessionProvider session={session}>
     <NextNProgress color="#9577ff" startPosition={0.3} stopDelayMs={200} height={3} showOnShallow={true} />
-
+      {/* <Layout> */}
       <Sidebar/>
       <Component {...pageProps} />
       <ToastContainer/>
-      {/* <Footer/> */}
+      {/* </Layout> */}
     </SessionProvider>
     </Provider>
     </QueryClientProvider>
