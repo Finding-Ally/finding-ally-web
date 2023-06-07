@@ -11,6 +11,10 @@ import React from "react";
 import { IoCaretBackOutline } from "react-icons/io5";
 import {FaUserAlt} from "react-icons/fa";
 
+// import {BiUser} from "react-icons/bi";
+// import {BiSolidFace} from "react-icons/bi";
+// import {BiSolidBarChartSquare} from "react-icons/bi";
+
 
 import { GiTrophy } from "react-icons/gi";
 import { FcParallelTasks } from "react-icons/fc";
@@ -508,7 +512,7 @@ export default function Profile({ userDetails }) {
                           aria-controls="dashboard"
                           aria-selected="false"
                         >
-                          <FaUserAlt className=" mr-2"/>
+                          {/* <BiUser className=" mr-2"/> */}
                           Profile
                           </button>
                       </li>
@@ -522,7 +526,7 @@ export default function Profile({ userDetails }) {
                           aria-controls="clubs"
                           aria-selected="false"
                         >
-                          <FcWorkflow className="text-xl mr-2" />
+                          {/* <BiSolidFace className="text-xl mr-2" /> */}
                           Portfolio
                         </button>
                       </li>
@@ -537,7 +541,7 @@ export default function Profile({ userDetails }) {
                           aria-controls="repositories"
                           aria-selected="false"
                         >
-                          <FcParallelTasks className="text-xl mr-2" />
+                          {/* <BiSolidBarChartSquare className="text-xl mr-2" /> */}
                           Reports
                         </button>
                       </li>
