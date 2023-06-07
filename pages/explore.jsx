@@ -712,13 +712,13 @@ export default function Explore() {
           <div className="bg-white rounded-lg shadow-xl border border-gray-400 p-4 w-full mt-4">
             <div className="mb-4">
               <h1 className="font-semibold text-gray-800">
-                Let’s make this a safe and productive experience
+                Let’s make this a <span className="text-green-600">safe</span>  and <span className=" italic underline text-blue-800">productive</span>  experience
               </h1>
             </div>
             <span className="font-semibold text-gray-800 my-auto">
               <div className="grid grid-cols-1">
                 <p className="text-sm font-bold text-gray-900 dark:text-gray-300">
-                  1. Be respectful and professional.
+                  ✨ Be respectful and professional.
                 </p>
                 <p className="text-xs font-medium text-gray-900 dark:text-gray-300 ml-4">
                   Avoid offensive language and harassment towards others.
@@ -727,7 +727,7 @@ export default function Explore() {
 
               <div className="grid grid-cols-1">
                 <p className="text-sm font-bold text-gray-900 dark:text-gray-300">
-                2. Report inappropriate behavior.
+                  ⚠ Report inappropriate behavior.
                 </p>
                 <p className="text-xs font-medium text-gray-900 dark:text-gray-300 ml-4">
                 Users should promptly report any inappropriate behavior or messages to the platform administrators.
@@ -737,7 +737,7 @@ export default function Explore() {
 
               <div className="grid grid-cols-1">
                 <p className="text-sm font-bold text-gray-900 dark:text-gray-300">
-                3. Use the platform for its intended purpose.
+                  ✅ Use the platform for its intended purpose.
                 </p>
                 <p className="text-xs font-medium text-gray-900 dark:text-gray-300 ml-4">
                 Only use the platform to find study partners and it is not meant for dating or business networking.
@@ -747,7 +747,7 @@ export default function Explore() {
 
               <div className="grid grid-cols-1">
                 <p className="text-sm font-bold text-gray-900 dark:text-gray-300">
-                4. Be proactive and communicate.
+                  🏃‍♀️ Be proactive and communicate.
                 </p>
                 <p className="text-xs font-medium text-gray-900 dark:text-gray-300 ml-4">
                 Communication is key! Keep your allies informed about any changes to your schedule or study plans. Take the lead in scheduling study sessions.
@@ -796,7 +796,7 @@ export default function Explore() {
                 </div>
               ))
             ) : (
-              <div className="flex justify-between items-start mb-2 bg-gray-50 p-2 rounded-xl hover:bg-gray-100 py-10 w-full">
+              <div className="flex justify-between items-start mb-2 bg-gray-50 p-2 rounded-xl hover:bg-gray-100  py-16 w-full">
                 <div className="flex mx-auto text-center w-full">
                   <span className="font-semibold text-gray-800 my-auto mx-auto text-center w-full">
                     No Allies Yet
@@ -845,7 +845,13 @@ export default function Explore() {
                   </li>
                 ))
               ) : (
-                <h1>Rooms Not Found</h1>
+                <div className="flex justify-between items-start mb-2 bg-gray-50 p-2 rounded-xl hover:bg-gray-100 py-16 w-full">
+                <div className="flex mx-auto text-center w-full">
+                  <span className="font-semibold text-gray-800 my-auto mx-auto text-center w-full">
+                    No Waiting List
+                  </span>
+                </div>
+              </div>
               )}
             </ul>
           </div>
