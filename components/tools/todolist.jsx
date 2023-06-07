@@ -41,7 +41,7 @@ function TodoList() {
   useEffect(() => {
     localStorage.setItem("activity", JSON.stringify(list));
     setCurrent(currentId + 1);
-  }, [list]);
+  }, [list, currentId]);
 
   // function when check button pressed
   const checked = (e) => {
