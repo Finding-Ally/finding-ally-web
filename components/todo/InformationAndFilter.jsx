@@ -11,7 +11,7 @@ function InformationAndFilter({
     <>
       {/* additional information  */}
       <div className="flex justify-between w-full h-12 px-3 mt-2 text-sm leading-tight text-gray-700 align-middle bg-white rounded-xl shadow appearance-none dark:bg-input-dark focus:outline-none focus:shadow-outline dark:text-gray-300">
-        <p className="my-auto">{list.length} tasks left</p>
+        <p className="my-auto">{list?.length || 0} tasks</p>
 
         {/* Filer Desktop */}
         {/* <div className="hidden my-auto gap-x-5 sm:flex">

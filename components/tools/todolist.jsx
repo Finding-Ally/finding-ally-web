@@ -2,11 +2,11 @@ import React, { useState, useEffect } from "react";
 
 import styles from "./parts.module.css";
 // import ThemeButton from "../components/ThemeButton";
-import InputArea from "../components/InputArea";
-import ListOfActivity from "../components/ListOfActivity";
-import Filter from "../components/InformationAndFilter";
+import InputArea from "../todo/InputArea";
+import ListOfActivity from "../todo/ListOfActivity";
+import Filter from "../todo/InformationAndFilter";
 
-import { list as data } from "../components/data";
+import { list as data } from "../todo/data";
 
 function TodoList() {
   const [list, setList] = useState(

@@ -7,7 +7,7 @@ function ListOfActivity({ list, filter, checked, removeOne, handleDrag }) {
       <Droppable droppableId="Activity">
         {(provided) => (
           <div {...provided.droppableProps} ref={provided.innerRef}>
-            {list.map((item, idx) => {
+            {list?.map((item, idx) => {
               if (
                 filter === 0 ||
                 (filter === 1 && item.status === "onProgress") ||
