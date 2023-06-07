@@ -1,94 +1,132 @@
-import { useState, useEffect } from 'react';
-import { FaCheckCircle, FaRegCircle, FaTrashAlt } from 'react-icons/fa';
-// import { connectDatabase, getTodoCollection, disconnectDatabase } from '../mongo';
+import React, { useState, useEffect } from "react";
 
-const TodoList = () => {
-  const [todos, setTodos] = useState([]);
-  const [inputValue, setInputValue] = useState('');
+import styles from "./parts.module.css";
+import ThemeButton from "../components/ThemeButton";
+import InputArea from "../components/InputArea";
+import ListOfActivity from "../components/ListOfActivity";
+import Filter from "../components/InformationAndFilter";
 
-//   useEffect(() => {
-//     connectDatabase().then(() => {
-//       fetchTodos();
-//     });
+import { list as data } from "../components/data";
 
-//     return () => {
-//       disconnectDatabase();
-//     };
-//   }, []);
+function TodoList() {
+  const [list, setList] = useState(
+    typeof localStorage !== "undefined"
+      ? JSON.parse(localStorage.getItem("activity")) || data
+      : data
+  );
+  
+  const [filter, setFilter] = useState(0);
 
-  const fetchTodos = async () => {
-    // const collection = getTodoCollection();
-    // const todos = await collection.find().toArray();
-    // setTodos(todos);
+  const [currentId, setCurrent] = useState(1);
+
+  const handleSubmit = (e, input) => {
+    e.preventDefault();
+
+    if (input === "") {
+      return;
+    }
+
+    setList((prev) => {
+      console.log("prev");
+      console.log(prev);
+      return [
+        ...prev,
+        { text: input, status: "onProgress", id: `${currentId + 1}-${input}` },
+      ];
+    });
+
+    console.log(list);
   };
 
-  const addTodo = async () => {
-    // if (!inputValue) return;
+  useEffect(() => {
+    localStorage.setItem("activity", JSON.stringify(list));
+    setCurrent(currentId + 1);
+  }, [list]);
 
-    // const collection = getTodoCollection();
-    // const todo = {
-    //   text: inputValue,
-    //   completed: false,
-    // };
+  // function when check button pressed
+  const checked = (e) => {
+    // let newList = list;
+    let idx = e.currentTarget.dataset.index;
+    let newStatus = "";
 
-    // await collection.insertOne(todo);
-    // setInputValue('');
-    // fetchTodos();
+    if (list[idx].status === "onProgress") {
+      newStatus = "Completed";
+    } else {
+      newStatus = "onProgress";
+    }
+
+    let newList = [...list];
+    newList[idx].status = newStatus;
+
+    // console.log(newList);
+
+    setList(newList);
   };
 
-  const toggleComplete = async (todo) => {
-    // const collection = getTodoCollection();
-    // await collection.updateOne({ _id: todo._id }, { $set: { completed: !todo.completed } });
-    // fetchTodos();
+  // function when x button pressed
+  const removeOne = (e) => {
+    // let newList = list;
+    let idx = e.currentTarget.dataset.index;
+    let newList = [...list];
+    newList.splice(idx, 1);
+
+    console.log(newList);
+
+    setList(newList);
   };
 
-  const deleteTodo = async (todo) => {
-    // const collection = getTodoCollection();
-    // await collection.deleteOne({ _id: todo._id });
-    // fetchTodos();
+  const removeCompleted = () => {
+    let newList = [];
+
+    for (let i = 0; i < list.length; i++) {
+      if (list[i].status === "onProgress") {
+        newList.push(list[i]);
+      }
+    }
+
+    setList(newList);
   };
+
+  function handleDrag(result) {
+    // console.log(result);
+    if (!result.destination) return;
+
+    const items = Array.from(list);
+    const [reordererItem] = items.splice(result.source.index, 1);
+    items.splice(result.destination.index, 0, reordererItem);
+
+    setList(items);
+  }
 
   return (
-    <div className="bg-white p-6 rounded-lg shadow-md">
-      <h2 className="text-2xl font-bold mb-4">Todo List</h2>
-      <div className="flex mb-4">
-        <input
-          className="border border-gray-300 rounded-md py-2 px-4 mr-2 w-full"
-          type="text"
-          value={inputValue}
-          onChange={(e) => setInputValue(e.target.value)}
-          placeholder="Enter a todo..."
+    <div className="relative z-10 flex h-auto max-w-xl px-10 mx-auto bg-yellow-3000 md:mx-auto">
+      <div className="w-full mt-20 text-left ">
+        <div className="flex justify-between align-middle">
+          <h1 className="text-4xl font-bold text-white">T O D O</h1>
+          {/* <ThemeButton /> */}
+        </div>
+        <InputArea handleSubmit={handleSubmit} />
+        {/* Input */}
+        <ListOfActivity
+          list={list}
+          filter={filter}
+          checked={checked}
+          removeOne={removeOne}
+          handleDrag={handleDrag}
         />
-        <button
-          className="bg-blue-500 text-white py-2 px-4 rounded-md"
-          onClick={addTodo}
-        >
-          Add
-        </button>
+        {/* {console.log(list)} */}
+        <Filter
+          list={list}
+          options={options}
+          removeCompleted={removeCompleted}
+          filter={filter}
+          setFilter={setFilter}
+        />
       </div>
-      <ul>
-        {todos.map((todo) => (
-          <li key={todo._id} className="flex items-center mb-2">
-            <span
-              className={`flex items-center cursor-pointer ${todo.completed ? 'text-gray-400 line-through' : 'text-gray-700'}`}
-              onClick={() => toggleComplete(todo)}
-            >
-              {todo.completed ? (
-                <FaCheckCircle className="mr-2" />
-              ) : (
-                <FaRegCircle className="mr-2" />
-              )}
-              {todo.text}
-            </span>
-            <FaTrashAlt
-              className="ml-auto cursor-pointer text-red-500"
-              onClick={() => deleteTodo(todo)}
-            />
-          </li>
-        ))}
-      </ul>
     </div>
   );
-};
+}
 
 export default TodoList;
+
+const options = ["All", "Active", "Completed"];

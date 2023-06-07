@@ -24,6 +24,7 @@ import { useQuery, useMutation, useQueryClient } from "react-query";
 import { toast } from "react-toastify";
 import LoadingScreen from "@/components/animations/loadingScreen";
 import { getUser, getUsers, updateUser } from "../../lib/helper";
+import TodoList from "../../components/tools/todolist";
 
 const formReducer = (state, event) => {
   return {
@@ -539,6 +540,8 @@ export default function Profile({ userDetails }) {
                   </button>
                   )
                 }
+
+                <TodoList />
                
               </div>
             </div>
