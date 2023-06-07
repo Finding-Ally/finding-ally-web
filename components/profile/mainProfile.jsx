@@ -104,12 +104,12 @@ export default function MainProfile({ userDetails }) {
         </div>
 
 
-        <div class="grid col-span-2 items-start rounded-xl bg-gray-100 p-2">
+        {/* <div class="grid col-span-2 items-start rounded-xl bg-gray-100 p-2">
           <div class="ml-4">
             <h2 class="font-semibold text-sm">Longest Streak Day</h2>
             <p class=" font-bold text-gray-900 text-xl">3</p>
           </div>
-        </div>
+        </div> */}
         <div class="grid col-span-2 items-start rounded-xl bg-gray-100 p-2 ">
           <div class="ml-4">
             <h2 class="font-semibold text-sm">Longest Streak Week</h2>

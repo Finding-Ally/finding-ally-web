@@ -416,14 +416,14 @@ export default function Explore() {
         </div>
       </div>
       <div className="grid grid-cols-2 gap-6 pr-4 overflow-auto">
-        <div className={`bg-white rounded-lg justify-center place-content-center shadow-xl border border-gray-400 p-8 w-full m-4 ${styles["parent-div"]}`}>
+        <div className={`bg-white mx-auto flex items-center  rounded-lg justify-center place-content-center shadow-xl border border-gray-400 w-full m-4 ${styles["parent-div"]}`}>
         <button
     data-modal-target="authentication-modal"
     data-modal-toggle="authentication-modal"
     type="button"
-    className="absolute top-1/2 z-10 left-1/4 translate-x-5 translate-y-20 inline-flex items-center justify-center p-0.5 mb-2 mr-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-green-400 to-blue-600 group-hover:from-green-400 group-hover:to-blue-600 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-green-200 dark:focus:ring-green-800"
+    className="absolute z-10 justify-center place-content-center mx-auto w-fit flex items-center p-0.5 mb-2 mr-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-green-400 to-blue-600 group-hover:from-green-400 group-hover:to-blue-600 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-green-200 dark:focus:ring-green-800"
   >
-    <span className="px-5 py-2.5 transition-all duration-75 bg-green-400 font-bold rounded-md group-hover:bg-opacity-0">
+    <span className="px-5 py-2.5 transition-all justify-center place-content-center mx-auto w-fit flex  duration-75 bg-green-400 font-bold rounded-md group-hover:bg-opacity-0">
       FIND ALLY
     </span>
   </button>
