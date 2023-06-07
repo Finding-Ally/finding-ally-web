@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 
 import styles from "./parts.module.css";
-import ThemeButton from "../components/ThemeButton";
+// import ThemeButton from "../components/ThemeButton";
 import InputArea from "../components/InputArea";
 import ListOfActivity from "../components/ListOfActivity";
 import Filter from "../components/InformationAndFilter";
@@ -78,11 +78,11 @@ function TodoList() {
   const removeCompleted = () => {
     let newList = [];
 
-    for (let i = 0; i < list.length; i++) {
-      if (list[i].status === "onProgress") {
-        newList.push(list[i]);
-      }
-    }
+    // for (let i = 0; i < list.length; i++) {
+    //   if (list[i].status === "onProgress") {
+    //     newList.push(list[i]);
+    //   }
+    // }
 
     setList(newList);
   };
@@ -99,11 +99,9 @@ function TodoList() {
   }
 
   return (
-    <div className="relative z-10 flex h-auto max-w-xl px-10 mx-auto bg-yellow-3000 md:mx-auto">
-      <div className="w-full mt-20 text-left ">
+      <div className={`w-full p-2 bg-gray-100 rounded-2xl text-left ${styles.noselect}`}>
         <div className="flex justify-between align-middle">
-          <h1 className="text-4xl font-bold text-white">T O D O</h1>
-          {/* <ThemeButton /> */}
+          <h1 className="text-xl font-bold text-black">TO-DO</h1>
         </div>
         <InputArea handleSubmit={handleSubmit} />
         {/* Input */}
@@ -123,10 +121,10 @@ function TodoList() {
           setFilter={setFilter}
         />
       </div>
-    </div>
   );
 }
 
 export default TodoList;
+
 
 const options = ["All", "Active", "Completed"];

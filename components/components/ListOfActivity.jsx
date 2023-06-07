@@ -1,7 +1,4 @@
 import React from "react";
-import Circle from "../images/circle.svg";
-import Checked from "../images/circle-cheked.svg";
-import Cross from "../images/icon-cross.svg";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 
 function ListOfActivity({ list, filter, checked, removeOne, handleDrag }) {
@@ -25,18 +22,18 @@ function ListOfActivity({ list, filter, checked, removeOne, handleDrag }) {
                         {...provided.dragHandleProps}
                         ref={provided.innerRef}
                         className={
-                          `flex w-full h-16 px-6 text-lg leading-tight text-gray-700 align-middle bg-white dark:bg-input-dark  shadow appearance-none focus:outline-none focus:shadow-outline dark:text-gray-300  ` +
+                          `flex w-full h-16 px-3 text-lg leading-tight text-gray-700 align-middle bg-white dark:bg-input-dark  shadow appearance-none focus:outline-none focus:shadow-outline dark:text-gray-300  ` +
                           (idx === 0 ? " rounded-t-lg" : "")
                         }
                       >
                         <button
                           data-index={idx}
-                          className="w-6 h-6 my-auto mr-6"
+                          className="w-6 h-6 my-auto mr-3"
                           onClick={(e) => checked(e)}
                         >
                           <img
                             src={
-                              item.status === "onProgress" ? Circle : Checked
+                              item.status === "onProgress" ? "../icons/circle.svg" : "../icons/circle-cheked.svg"
                             }
                             alt="LogoCentang"
                           />
@@ -59,7 +56,7 @@ function ListOfActivity({ list, filter, checked, removeOne, handleDrag }) {
                           data-index={idx}
                           onClick={(e) => removeOne(e)}
                         >
-                          <img src={Cross} alt="LogoCross" />
+                          <img src="../icons/icon-cross.svg" alt="LogoCross" />
                         </button>
                       </div>
                     )}

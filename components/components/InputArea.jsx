@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import Circle from "../images/circle.svg";
 // import { list as data } from "./data";
 
 function InputArea({ handleSubmit }) {
@@ -8,10 +7,10 @@ function InputArea({ handleSubmit }) {
   return (
     <div
       id="#input"
-      className="flex w-full h-16 px-6 my-12 text-lg leading-tight text-gray-700 align-middle bg-white rounded shadow appearance-none dark:bg-input-dark focus:outline-none focus:shadow-outline"
+      className="flex w-full h-12 px-3 my-6 text-lg leading-tight text-gray-700 align-middle bg-white rounded shadow appearance-none dark:bg-input-dark focus:outline-none focus:shadow-outline"
     >
       <div>
-        <img src={Circle} alt="LogoCentang" className="mt-5 mr-6" />
+        <img src="../icons/circle.svg" alt="" className="mt-3 mr-3" />
       </div>
 
       <form
@@ -24,7 +23,7 @@ function InputArea({ handleSubmit }) {
         }}
       >
         <input
-          className="w-full h-16 border-none input dark:bg-input-dark dark:text-gray-300"
+          className="w-full h-12 border-none input dark:bg-input-dark dark:text-gray-300 text-lg"
           id="username"
           type="text"
           value={input}

@@ -10,11 +10,11 @@ function InformationAndFilter({
   return (
     <>
       {/* additional information  */}
-      <div className="flex justify-between w-full h-16 px-6 text-sm leading-tight text-gray-700 align-middle bg-white rounded-b-lg shadow appearance-none dark:bg-input-dark focus:outline-none focus:shadow-outline dark:text-gray-300">
-        <p className="my-auto">{list.length} items left</p>
+      <div className="flex justify-between w-full h-12 px-3 mt-2 text-sm leading-tight text-gray-700 align-middle bg-white rounded-xl shadow appearance-none dark:bg-input-dark focus:outline-none focus:shadow-outline dark:text-gray-300">
+        <p className="my-auto">{list.length} tasks left</p>
 
         {/* Filer Desktop */}
-        <div className="hidden my-auto gap-x-5 sm:flex">
+        {/* <div className="hidden my-auto gap-x-5 sm:flex">
           {options.map((item, i) => (
             <p
               className={
@@ -29,13 +29,13 @@ function InformationAndFilter({
               {item}
             </p>
           ))}
-        </div>
+        </div> */}
 
         <p
-          className="my-auto cursor-pointer hover:font-bold"
+          className="my-auto cursor-pointer hover:font-bold bg-gray-200 p-2 rounded-lg"
           onClick={(e) => removeCompleted()}
         >
-          Clear Completed
+          Clear
         </p>
       </div>
       {/* Filter Option Mobile */}

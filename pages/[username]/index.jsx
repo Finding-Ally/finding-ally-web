@@ -311,7 +311,7 @@ export default function Profile({ userDetails }) {
 
   return (
     <>
-      <div className="w-full pl-[87px] h-screen overflow-auto text-gray-700  bg-white">
+      <div className="w-full pl-[87px] h-screen overflow-auto overflow-x-auto text-gray-700  bg-white">
         <div className="w-full backdrop-blur-md bg-white/50">
           <div class="pl-6 py-3">
             <h1 class="md:text-xl text-lg font-bold">
