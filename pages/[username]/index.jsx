@@ -322,9 +322,16 @@ export default function Profile({ userDetails }) {
 
   const [list, setList] = useState(
     typeof localStorage !== "undefined"
-      ? JSON.parse(localStorage.getItem("activity")) || data
+      ? JSON.parse(localStorage.getItem("todolistProfile")) || data
       : data
   );
+
+  // useEffect(() => {
+  //   if (typeof window !== "undefined" && window.localStorage) {
+  //     setList(JSON.parse(localStorage.getItem("activity")))
+  //   }
+
+  // }, [])
   
   const [filter, setFilter] = useState(0);
 
@@ -350,7 +357,7 @@ export default function Profile({ userDetails }) {
   };
 
   useEffect(() => {
-    localStorage.setItem("activity", JSON.stringify(list));
+    localStorage.setItem("todolistProfile", JSON.stringify(list));
     setCurrent(currentId + 1);
   }, [list, currentId]);
 

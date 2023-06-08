@@ -6,12 +6,27 @@ import InputArea from "../todo/InputArea";
 import ListOfActivity from "../todo/ListOfActivity";
 import Filter from "../todo/InformationAndFilter";
 
-import { list as data } from "../todo/data";
+const data = [
+  {
+    text: "Take a bath",
+    status: "Completed",
+    id: "0-Take a bath",
+  },
+  {
+    text: "Cook rice",
+    status: "onProgress",
+    id: "1-Take a bath",
+  },
+];
 
-function TodoList() {
+
+
+function TodoList({roomName}) {
+
+
   const [list, setList] = useState(
     typeof localStorage !== "undefined"
-      ? JSON.parse(localStorage.getItem("activity")) || data
+      ? JSON.parse(localStorage.getItem(`todolist-${roomName}`)) || data
       : data
   );
   
@@ -39,9 +54,9 @@ function TodoList() {
   };
 
   useEffect(() => {
-    localStorage.setItem("activity", JSON.stringify(list));
+    localStorage.setItem(`todolist-${roomName}`, JSON.stringify(list));
     setCurrent(currentId + 1);
-  }, [list, currentId]);
+  }, [list, currentId, roomName]);
 
   // function when check button pressed
   const checked = (e) => {
