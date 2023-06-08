@@ -51,10 +51,6 @@ export default function Profile({ userDetails }) {
 
 
   const { data: session } = useSession();
-
-
-
-
   
   const [userName, setuserName] = useState();
   const [userImage, setuserImage] = useState();

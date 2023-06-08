@@ -718,7 +718,7 @@ export default function Explore() {
             <span className="font-semibold text-gray-800 my-auto">
               <div className="grid grid-cols-1">
                 <p className="text-sm font-bold text-gray-900 dark:text-gray-300">
-                  ✨ Be respectful and professional.
+                ✨ Be respectful and professional.
                 </p>
                 <p className="text-xs font-medium text-gray-900 dark:text-gray-300 ml-4">
                   Avoid offensive language and harassment towards others.
@@ -727,7 +727,7 @@ export default function Explore() {
 
               <div className="grid grid-cols-1">
                 <p className="text-sm font-bold text-gray-900 dark:text-gray-300">
-                  ⚠ Report inappropriate behavior.
+                ⚠️ Report inappropriate behavior.
                 </p>
                 <p className="text-xs font-medium text-gray-900 dark:text-gray-300 ml-4">
                 Users should promptly report any inappropriate behavior or messages to the platform administrators.
@@ -737,7 +737,7 @@ export default function Explore() {
 
               <div className="grid grid-cols-1">
                 <p className="text-sm font-bold text-gray-900 dark:text-gray-300">
-                  ✅ Use the platform for its intended purpose.
+                ✅ Use the platform for its intended purpose.
                 </p>
                 <p className="text-xs font-medium text-gray-900 dark:text-gray-300 ml-4">
                 Only use the platform to find study partners and it is not meant for dating or business networking.
@@ -747,7 +747,7 @@ export default function Explore() {
 
               <div className="grid grid-cols-1">
                 <p className="text-sm font-bold text-gray-900 dark:text-gray-300">
-                  🏃‍♀️ Be proactive and communicate.
+                  🏃🏻‍♀️ Be proactive and communicate.
                 </p>
                 <p className="text-xs font-medium text-gray-900 dark:text-gray-300 ml-4">
                 Communication is key! Keep your allies informed about any changes to your schedule or study plans. Take the lead in scheduling study sessions.
