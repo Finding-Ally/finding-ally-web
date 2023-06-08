@@ -14,9 +14,9 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 
 import Youtube from '../../../components/resources/youtube';
-import ScreenShot from '../../../components/resources/screenshot';
+import GalleryPage from '../../../components/resources/screenshot';
 import Other from '../../../components/resources/other';
-import PDF from '../../../components/resources/pdf';
+import PDFGalleryPage from '../../../components/resources/pdf';
 import HandWritten from '../../../components/resources/handwritten';
 import WebsiteLink from '../../../components/resources/websitelinks';
 import {IoCaretBack} from 'react-icons/io5';
@@ -25,6 +25,9 @@ import {IoCaretBack} from 'react-icons/io5';
 export default function RoomResources({roomDetails}){
 
     const {data: session} = useSession();
+
+    const roomId = roomDetails[0]?._id;
+    console.log(roomId);
 
     
   useEffect(() => {
@@ -289,7 +292,7 @@ export default function RoomResources({roomDetails}){
                       role="tabpanel"
                       aria-labelledby="contacts-tab"
                     >
-                      <PDF/>
+                      <PDFGalleryPage resourceId={roomId}/>
                     </div>
 
                     
@@ -301,7 +304,7 @@ export default function RoomResources({roomDetails}){
                       role="tabpanel"
                       aria-labelledby="screenshot-tab"
                     >
-                      <ScreenShot/>
+                      <GalleryPage resourceId={roomId}/>
                     </div>
                     
                     <div

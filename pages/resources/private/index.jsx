@@ -14,9 +14,9 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 
 import Youtube from '../../../components/resources/youtube';
-import ScreenShot from '../../../components/resources/screenshot';
+import GalleryPage from '../../../components/resources/screenshot';
 import Other from '../../../components/resources/other';
-import PDF from '../../../components/resources/pdf';
+import PDFGalleryPage from '../../../components/resources/pdf';
 import HandWritten from '../../../components/resources/handwritten';
 import WebsiteLink from '../../../components/resources/websitelinks';
 import {IoCaretBack} from 'react-icons/io5';
@@ -25,6 +25,8 @@ import {IoCaretBack} from 'react-icons/io5';
 export default function PrivateDrive(){
 
     const {data: session} = useSession();
+
+    const userId = session?.user?.id;
 
     
   useEffect(() => {
@@ -289,7 +291,7 @@ export default function PrivateDrive(){
                       role="tabpanel"
                       aria-labelledby="contacts-tab"
                     >
-                      <PDF/>
+                      <PDFGalleryPage resourceId={userId}/>
                     </div>
 
                     
@@ -301,7 +303,7 @@ export default function PrivateDrive(){
                       role="tabpanel"
                       aria-labelledby="screenshot-tab"
                     >
-                      <ScreenShot/>
+                      <GalleryPage resourceId={userId}/>
                     </div>
                     
                     <div
