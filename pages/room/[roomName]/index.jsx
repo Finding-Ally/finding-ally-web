@@ -148,8 +148,6 @@ export default function Profile({ roomDetails }) {
     <>
       <div className="w-full pl-[87px] h-screen overflow-auto text-gray-700 bg-gradient-to-r bg-indigo-300 from-10% via-sky-300 via-30% to-emerald-300 to-90%">
       <Head >
-      {/*eslint-disable-next-line @next/next/no-sync-scripts */}
-      <script src="https://meet.jit.si/external_api.js" />
       </Head>
         {/* <div className="w-full backdrop-blur-md bg-white/70">
           <div class="px-10 py-3">

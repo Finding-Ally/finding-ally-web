@@ -111,7 +111,7 @@ const PDFGalleryPage = ({resourceId}) => {
         ))}
       </div>
 
-      <div className="mt-4">
+      {/* <div className="mt-4">
         {selectedPDFs.map((pdf) => (
           <div key={pdf.name}>
             {uploadProgress.hasOwnProperty(pdf.name) && (
@@ -119,7 +119,7 @@ const PDFGalleryPage = ({resourceId}) => {
             )}
           </div>
         ))}
-      </div>
+      </div> */}
     </div>
   );
 };

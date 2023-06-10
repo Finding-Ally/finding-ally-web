@@ -79,6 +79,7 @@ const GalleryPage = ({resourceId}) => {
           type="file"
           id="fileInput"
           className="hidden"
+          accept="image/*"
           multiple
           onChange={handleFileInputChange}
         />
@@ -109,7 +110,7 @@ const GalleryPage = ({resourceId}) => {
         ))}
       </div>
 
-      <div className="mt-4">
+      {/* <div className="mt-4">
         {selectedImages.map((image) => (
           <div key={image.name} className="flex items-center">
             <span className="mr-2">{image.name}</span>
@@ -118,7 +119,7 @@ const GalleryPage = ({resourceId}) => {
             )}
           </div>
         ))}
-      </div>
+      </div> */}
     </div>
   );
 };
