@@ -1,6 +1,9 @@
 import { useState, useEffect } from 'react';
 import { ref, uploadBytesResumable, getDownloadURL, listAll, deleteObject } from 'firebase/storage';
 import { storage } from '../../firebase-config';
+import {FaEye} from "react-icons/fa"
+import {RiDeleteBin6Line} from "react-icons/ri"
+import {AiOutlineUpload} from "react-icons/ai"
 
 const GalleryPage = ({resourceId}) => {
   const [selectedImages, setSelectedImages] = useState([]);
@@ -70,10 +73,11 @@ const GalleryPage = ({resourceId}) => {
   };
 
   return (
-    <div className="container mx-auto backdrop-blur-md bg-white/40 p-4 min-h-screen rounded-xl">
-      <div className="flex justify-end mb-4">
-        <label htmlFor="fileInput" className="mr-2">
-          Upload Images
+    <div className="container mx-auto bg-white p-4 min-h-screen rounded-xl">
+      <div className="flex w-full justify-end place-content-end place-items-end mb-4  ">
+        <div className='flex bg-blue-500 text-white rounded-lg hover:bg-blue-600'>
+        <label htmlFor="fileInput" className="mr-2 flex py-2" >
+        <AiOutlineUpload className='text-xl mx-2' />Upload
         </label>
         <input
           type="file"
@@ -84,26 +88,28 @@ const GalleryPage = ({resourceId}) => {
           onChange={handleFileInputChange}
         />
         <button
-          className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+          className="px-4 flex h-full bg-green-500 py-2 rounded-r-lg text-white hover:bg-green-600"
           onClick={handleUploadImages}
         >
-          Upload
+          Add
         </button>
+          
+          </div>
       </div>
 
       <div className="grid grid-cols-6 gap-4">
         {uploadedImages.map((image) => (
-          <div key={image.name} className="p-2 border rounded">
-            <img src={image.url} alt={image.name} className="w-full h-auto" />
+          <div key={image.name} className="p-2 border rounded bg-gray-100">
+            <img src={image.url} alt={image.name} className="w-full object-cover" />
             <div className="flex justify-between mt-2">
-              <a href={image.url} download={image.name} className="text-blue-500 underline">
-                Download
+              <a href={image.url} download={image.name} className="">
+                <FaEye className="text-xl ml-4" />
               </a>
               <button
-                className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
+                className=""
                 onClick={() => handleDeleteImage(image.name)}
               >
-                Delete
+                <RiDeleteBin6Line className="text-xl mr-4" />
               </button>
             </div>
           </div>

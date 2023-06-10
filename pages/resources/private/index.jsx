@@ -19,7 +19,16 @@ import Other from '../../../components/resources/other';
 import PDFGalleryPage from '../../../components/resources/pdf';
 import HandWritten from '../../../components/resources/handwritten';
 import WebsiteLink from '../../../components/resources/websitelinks';
-import {IoCaretBack} from 'react-icons/io5';
+import {BiArrowBack} from "react-icons/bi"
+
+import {BsLink} from "react-icons/bs"
+import {GoPencil} from "react-icons/go"
+import {SlSocialYoutube} from "react-icons/sl"
+import {BsFiletypePdf} from "react-icons/bs"
+import {MdPhotoSizeSelectActual} from "react-icons/md"
+import {BsFolder} from "react-icons/bs"
+
+
 
 
 export default function PrivateDrive(){
@@ -84,15 +93,15 @@ export default function PrivateDrive(){
   }, []);
 
     return (
-        <div className="w-full pl-[87px] h-screen pb-24 overflow-auto text-gray-700 bg-gradient-to-r bg-purple-300 from-10% to-blue-300 to-90%">
-        <div className="w-full backdrop-blur-md bg-white/70">
-          <div class="pl-6 py-3 flex">
+        <div className="w-full pl-[87px] h-screen pb-24 overflow-auto text-gray-700 bg-[#ebe9f2]">
+        <div className="w-full">
+          <div class="pl-6 pt-3 flex">
             <Link href="/resources">
-            <IoCaretBack className="inline-block text-xl text-gray-200 bg-gray-700 mr-2 rounded" />
+            <BiArrowBack className="inline-block text-2xl mr-2" />
 
             </Link>
             <h1 class="md:text-xl text-lg font-bold">
-              Your Personal Resources
+              My Resources
             </h1>
           </div>
         </div>
@@ -182,7 +191,7 @@ export default function PrivateDrive(){
                           aria-controls="clubs"
                           aria-selected="false"
                         >
-                          <FcWorkflow className="text-xl mr-2" />
+                          <BsLink className="text-xl mr-2" />
                           Website Links
                         </button>
                       </li>
@@ -196,7 +205,7 @@ export default function PrivateDrive(){
                           aria-controls="dashboard"
                           aria-selected="false"
                         >
-                          <FcTemplate className="text-xl mr-2"/>
+                          <GoPencil className="text-xl mr-2"/>
                           Handwritten
                           </button>
                       </li>
@@ -210,7 +219,7 @@ export default function PrivateDrive(){
                           aria-controls="repositories"
                           aria-selected="false"
                         >
-                          <FcParallelTasks className="text-xl mr-2" />
+                          <SlSocialYoutube className="text-xl mr-2" />
                           YouTube Links
                         </button>
                       </li>
@@ -224,7 +233,7 @@ export default function PrivateDrive(){
                           aria-controls="contacts"
                           aria-selected="false"
                         >
-                          <GiTrophy className="text-xl mr-2"/>
+                          <BsFiletypePdf className="text-xl mr-2"/>
                           PDFs
                           </button>
                       </li>
@@ -238,7 +247,7 @@ export default function PrivateDrive(){
                           aria-controls="screenshot"
                           aria-selected="false"
                         >
-                          <GiTrophy className="text-xl mr-2"/>
+                          <MdPhotoSizeSelectActual className="text-xl mr-2"/>
                           Screenshots
                           </button>
                       </li>
@@ -252,7 +261,7 @@ export default function PrivateDrive(){
                           aria-controls="other"
                           aria-selected="false"
                         >
-                          <GiTrophy className="text-xl mr-2"/>
+                          <BsFolder className="text-xl mr-2"/>
                           Other
                           </button>
                       </li>

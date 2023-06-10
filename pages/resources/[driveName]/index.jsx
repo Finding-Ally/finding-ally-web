@@ -19,7 +19,17 @@ import Other from '../../../components/resources/other';
 import PDFGalleryPage from '../../../components/resources/pdf';
 import HandWritten from '../../../components/resources/handwritten';
 import WebsiteLink from '../../../components/resources/websitelinks';
-import {IoCaretBack} from 'react-icons/io5';
+import {BiArrowBack} from "react-icons/bi";
+
+
+import {BsLink} from "react-icons/bs"
+import {GoPencil} from "react-icons/go"
+import {SlSocialYoutube} from "react-icons/sl"
+import {BsFiletypePdf} from "react-icons/bs"
+import {MdPhotoSizeSelectActual} from "react-icons/md"
+import {BsFolder} from "react-icons/bs"
+
+
 
 
 export default function RoomResources({roomDetails}){
@@ -68,9 +78,9 @@ export default function RoomResources({roomDetails}){
     const options = {
       defaultTabId: "repositories",
       activeClasses:
-        "text-gray-200 bg-gray-800 hover:bg-gray-700 hover:text-gray-200 dark:text-gray-100 dark:hover:text-gray-200 border-blue-600 dark:border-blue-500",
+        "text-gray-900 bg-gray-800 hover:text-gray-200 dark:text-gray-100 dark:hover:text-gray-200 border-blue-600 dark:border-blue-500",
       inactiveClasses:
-        "text-gray-700 bg-white hover:bg-gray-100 hover:text-gray-600 dark:text-gray-700 border-gray-100 hover:border-gray-300 dark:border-gray-700 dark:hover:text-gray-900",
+        "text-gray-700 hover:bg-gray-100 hover:text-gray-600 dark:text-gray-700 border-gray-100 hover:border-gray-300 dark:border-gray-700 dark:hover:text-gray-900",
       onShow: () => {
         console.log("tab is shown");
       },
@@ -85,11 +95,12 @@ export default function RoomResources({roomDetails}){
   }, []);
 
     return (
-        <div className="w-full pl-[87px] h-screen pb-24 overflow-auto text-gray-700 bg-gradient-to-r bg-purple-300 from-10% to-blue-300 to-90%">
-        <div className="w-full backdrop-blur-md bg-white/70">
-          <div class="pl-6 py-3 flex">
+        <div className="w-full pl-[87px] h-screen pb-24 overflow-auto text-gray-700 bg-[#ebe9f2]">
+        <div className="w-full">
+          <div class="pl-6 pt-3 flex">
             <Link href="/resources">
-            <IoCaretBack className="inline-block text-xl text-gray-200 bg-gray-700 mr-2 rounded" />
+            <BiArrowBack className="inline-block text-2xl mr-2" />
+
 
             </Link>
             <h1 class="md:text-xl text-lg font-bold">
@@ -175,7 +186,7 @@ export default function RoomResources({roomDetails}){
                     >
                       <li className="mr-2" role="presentation">
                         <button
-                          className="flex flex-row p-3 rounded-lg"
+                          className="flex flex-row p-3 rounded-lg bg-[#e0f0fc] text-black"
                           id="clubs-tab"
                           data-tabs-target="#clubs"
                           type="button"
@@ -183,13 +194,13 @@ export default function RoomResources({roomDetails}){
                           aria-controls="clubs"
                           aria-selected="false"
                         >
-                          <FcWorkflow className="text-xl mr-2" />
+                          <BsLink className="text-xl mr-2" />
                           Website Links
                         </button>
                       </li>
                       <li className="mr-2" role="presentation">
                         <button
-                          className="flex flex-row p-3 rounded-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
+                          className="flex flex-row p-3 rounded-lg bg-[#e6f5e5] hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
                           id="dashboard-tab"
                           data-tabs-target="#dashboard"
                           type="button"
@@ -197,13 +208,13 @@ export default function RoomResources({roomDetails}){
                           aria-controls="dashboard"
                           aria-selected="false"
                         >
-                          <FcTemplate className="text-xl mr-2"/>
+                          <GoPencil className="text-xl mr-2"/>
                           Handwritten
                           </button>
                       </li>
                       <li className="mr-2" role="presentation">
                         <button
-                          className="flex flex-row p-3 rounded-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
+                          className="flex flex-row p-3 rounded-lg bg-[#efcfcf] hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
                           id="repositories-tab"
                           data-tabs-target="#repositories"
                           type="button"
@@ -211,13 +222,13 @@ export default function RoomResources({roomDetails}){
                           aria-controls="repositories"
                           aria-selected="false"
                         >
-                          <FcParallelTasks className="text-xl mr-2" />
+                          <SlSocialYoutube className="text-xl mr-2" />
                           YouTube Links
                         </button>
                       </li>
                       <li className="mr-2"  role="presentation">
                         <button
-                          className="flex flex-row p-3 rounded-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
+                          className="flex flex-row p-3 rounded-lg bg-[#9a8a84] hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
                           id="contacts-tab"
                           data-tabs-target="#contacts"
                           type="button"
@@ -225,13 +236,13 @@ export default function RoomResources({roomDetails}){
                           aria-controls="contacts"
                           aria-selected="false"
                         >
-                          <GiTrophy className="text-xl mr-2"/>
+                          <BsFiletypePdf className="text-xl mr-2"/>
                           PDFs
                           </button>
                       </li>
                       <li className="mr-2" role="presentation">
                         <button
-                          className="flex flex-row p-3 rounded-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
+                          className="flex flex-row p-3 rounded-lg bg-[#fdf3e4] hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
                           id="screenshot-tab"
                           data-tabs-target="#screenshot"
                           type="button"
@@ -239,13 +250,13 @@ export default function RoomResources({roomDetails}){
                           aria-controls="screenshot"
                           aria-selected="false"
                         >
-                          <GiTrophy className="text-xl mr-2"/>
+                          <MdPhotoSizeSelectActual className="text-xl mr-2"/>
                           Screenshots
                           </button>
                       </li>
                       <li role="presentation">
                         <button
-                          className="flex flex-row p-3 rounded-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
+                          className="flex flex-row p-3 rounded-lg bg-[#d7a1dc] hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
                           id="other-tab"
                           data-tabs-target="#other"
                           type="button"
@@ -253,7 +264,7 @@ export default function RoomResources({roomDetails}){
                           aria-controls="other"
                           aria-selected="false"
                         >
-                          <GiTrophy className="text-xl mr-2"/>
+                          <BsFolder className="text-xl mr-2"/>
                           Other
                           </button>
                       </li>

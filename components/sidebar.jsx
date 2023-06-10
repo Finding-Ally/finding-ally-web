@@ -12,12 +12,12 @@ import {BiFolder} from "react-icons/bi"
 import {BiSearchAlt } from "react-icons/bi"
 import {BiHomeHeart} from "react-icons/bi"
 import {BiWalk} from "react-icons/bi"
-
+import {BiBookAlt} from "react-icons/bi"
 
 
 const useActiveLink = () => {
   const router = useRouter();
-  const [activeLink, setActiveLink] = useState('/');
+  const [activeLink, setActiveLink] = useState('');
 
   useEffect(() => {
     const handleRouteChange = (url) => {
@@ -94,7 +94,7 @@ export default function Sidebar() {
                   className="h-14 px-2 flex flex-col justify-center items-center w-full
                      focus:text-gray-700"
                 >
-                  <BiFolder className="text-xl"/>
+                  <BiBookAlt className="text-xl"/>
                   <p className="text-xs font-semibold">Resources</p>
                 </Link>
               </li>

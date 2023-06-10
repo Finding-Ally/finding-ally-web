@@ -83,10 +83,13 @@ const PomodoroPage = () => {
         {/* ... */}
       </div>
 
-      <div className="h-fit flex z-10 mt-4 w-fit justify-center place-content-center ">
+      <div className="h-fit grid z-10 mt-4 w-fit justify-center backdrop-blur-md p-2 bg-white/40 rounded-xl place-content-center ">
         <h1 className="text-black font-bold text-xl">
-          &quot;{quote?.text}&quot; - {quote?.author || "Anonymous"}
+          &quot;{quote?.text}&quot;
         </h1>
+        <p className="text-black font-bold text-sm mx-auto">
+          - {quote?.author || "Anonymous"}
+        </p>
       </div>
       <div className="h-fit flex w-fit mt-4 justify-end place-content-end ">
         <div className="backdrop-blur-md bg-black/80 rounded-2xl p-4">
@@ -137,7 +140,7 @@ const PomodoroPage = () => {
         </div>
         <div className="gif-container mt-4">
           <ReactPlayer
-            url={`./${currentMusic}.mp3`}
+            url={`../${currentMusic}.mp3`}
             playing={isPlaying}
             loop={true}
             volume={volume}

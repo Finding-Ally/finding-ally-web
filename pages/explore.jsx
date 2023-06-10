@@ -409,12 +409,12 @@ export default function Explore() {
   }, [session?.user?.id]);
 
   return (
-    <div className="w-full pl-[87px] min-h-screen pb-10 text-gray-700 bg-gradient-to-r bg-cyan-100 from-10% to-indigo-300 to-90%">
-      <div className="w-full bg-gray-900">
+    <div className="w-full pl-[87px] min-h-screen pb-10 text-gray-700 bg-[#e6f5e5]">
+      {/* <div className="w-full bg-gray-900">
         <div className="px-10 py-3">
           <h1 className="text-2xl font-bold text-white">Find your Ally</h1>
         </div>
-      </div>
+      </div> */}
       <div className="grid grid-cols-2 gap-6 pr-4 overflow-auto">
         <div className={`bg-white mx-auto flex items-center  rounded-lg justify-center place-content-center shadow-xl border border-gray-400 w-full m-4 ${styles["parent-div"]}`}>
         <button
@@ -429,11 +429,11 @@ export default function Explore() {
   </button>
           {/* <LoadingAnimation /> */}
           <div className={styles["loadingio-spinner-ripple-jierxddzni"]}>
-    <div className={styles["ldio-apoyzbf4opq"]}>
-      <div></div>
-      <div></div>
-    </div>
-  </div>
+            <div className={styles["ldio-apoyzbf4opq"]}>
+              <div></div>
+              <div></div>
+            </div>
+          </div>
           <div
             id="authentication-modal"
             tabindex="-1"
