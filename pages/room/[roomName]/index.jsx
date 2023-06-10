@@ -161,7 +161,7 @@ export default function Profile({ roomDetails }) {
         <div className="md:px-4 px-2">
         <div className="w-full mt-4 rounded-xl backdrop-blur-md bg-white/70">
           <div className="flex justify-between">
-          <div class="pl-6 py-3 flex my-auto">
+          <div class="pl-6 py-3 flex flex-row my-auto">
             <Link href="/">
             <IoCaretBack className=" text-lg mt-1 text-gray-200 bg-gray-700 mr-2 rounded" />
 
@@ -192,16 +192,21 @@ export default function Profile({ roomDetails }) {
                   <div id="meet" className="rounded-xl" />
                   </div></div>
 
-                  <div class="w-full h-3/4 bg-gray-300 backdrop-blur-md bg-white/70 rounded-lg">
-                  <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+                  <div class="w-full h-3/4 bg-gray-300 backdrop-blur-md bg-white/70 rounded-lg p-2">
+                  <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
                     <Timer/>
-    <div className="w-fit flex items-center justify-center backdrop-blur-md bg-black/80 rounded-2xl p-3">
-    <p className="text-center flex flex-wrap text-xl -mt-12 mb-6">
-          &quot;{quote?.text}&quot; - {quote?.author || "Anonymous"}
-          </p>
+                    <div className="w-fit flex items-center justify-center bg-black rounded-2xl p-2">
+                      <p className="text-center flex flex-wrap text-sm text-white">
+                        &quot;{quote?.text}&quot; - {quote?.author || "Anonymous"}
+                      </p>
+                    </div>
+                    <div className="w-fit flex items-center justify-center bg-black rounded-2xl p-2">
+                      <p className="text-center flex flex-wrap text-sm text-white">
+                        space space space space space space space
+                      </p>
+                    </div>
                   </div>
-                    <Timer/>
-                  </div>
+
                   </div>
                 </div>
               </div>
