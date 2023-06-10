@@ -38,12 +38,6 @@ const AblyChatComponent = dynamic(
     loading: () => <LoadingScreen />,}
 );
 
-const formReducer = (state, event) => {
-  return {
-    ...state,
-    [event.target.name]: event.target.value,
-  };
-};
 
 export default function Profile({ roomDetails }) {
   console.log(roomDetails);
@@ -98,80 +92,14 @@ export default function Profile({ roomDetails }) {
     // modal.show();
   }, []);
 
-  const { data: session } = useSession();
-
-  const [userName, setuserName] = useState();
-  const [userImage, setuserImage] = useState();
-  const [subjectMajor, setsubjectMajor] = useState();
-  const [studyInterests, setstudyInterests] = useState();
-  const [userAge, setuserAge] = useState();
-  const [userGender, setuserGender] = useState();
-  const [userBio, setuserBio] = useState();
-  const [language, setLanguage] = useState();
-  //  from  form file
-  const [formData, setFormData] = useReducer(formReducer, {});
-  // const formId = useSelector((state) => state.app.client.formId)
-
-  console.log(session);
-
-  // const userId = session?.user?.id;
-  const userId = "645111b866682caf52a4cca5";
-
-  const queryClient = useQueryClient();
-  const { isLoading, isError, data, error } = useQuery(["users", userId], () =>
-    getUser(userId)
-  );
-  const UpdateMutation = useMutation((newData) => updateUser(userId, newData), {
-    onSuccess: async (data) => {
-      // queryClient.setQueryData('users', (old) => [data])
-      queryClient.prefetchQuery("users", getUsers);
-    },
-  });
-
-  // if (isLoading) return <div>
-  //   <ul
-  //                     className="flex flex-wrap -mb-px text-sm font-medium text-center"
-  //                     id="myTab"
-  //                     data-tabs-toggle="#myTabContent"
-  //                     role="tablist"
-  //                   >
-  //                     <li className="mr-2" role="presentation">
-  //                       <button
-  //                         className="flex flex-row p-3 rounded-lg"
-  //                         id="clubs-tab"
-  //                         data-tabs-target="#clubs"
-  //                         type="button"
-  //                         role="tab"
-  //                         aria-controls="clubs"
-  //                         aria-selected="false"
-  //                       >
-  //                         Portfolio
-  //                       </button>
-  //                     </li>
-  //                     <li className="mr-2" role="presentation">
-  //                       <button
-  //                         className="flex flex-row p-3 rounded-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
-  //                         id="repositories-tab"
-  //                         data-tabs-target="#repositories"
-  //                         type="button"
-  //                         role="tab"
-  //                         aria-controls="repositories"
-  //                         aria-selected="false"
-  //                       >
-
-  //                         Reports
-  //                       </button>
-  //                     </li>
-  //                   </ul>
-  //   <LoadingScreen />
-  //   </div>;
-  // if (isError) return <div>Error : {error}</div>;
+  const roomName = roomDetails[0]?.name;
+  console.log(roomName + "roomid");
 
   useEffect(() => {
     const domain = 'meet.jit.si';
     const options = {
-      roomName: 'PickAnAppropriateMeetingNameHere',
-      width: 700,
+      roomName: `${roomName}`,
+      width: 750,
       height: 700,
       parentNode: document.querySelector('#meet')
     };
@@ -180,13 +108,47 @@ export default function Profile({ roomDetails }) {
     return () => {
       api.dispose();
     };
+  }, [roomName]);
+
+
+  const [quote, setQuote] = useState([]);
+
+  useEffect(() => {
+    const fetchQuotes = async () => {
+      try {
+        const response = await fetch(`https://type.fit/api/quotes`);
+        if (!response.ok) {
+          throw new Error("Failed to fetch quotes");
+        }
+        const jsonData = await response.json();
+        
+        let randomQuote = null;
+        do {
+          const randomIndex = Math.floor(Math.random() * jsonData.length);
+          randomQuote = jsonData[randomIndex];
+        } while (randomQuote && randomQuote.text.split(' ').length > 12);
+  
+        if (randomQuote) {
+          setQuote(randomQuote);
+        } else {
+          console.error("No quotes found with less than 12 words.");
+        }
+      } catch (error) {
+        console.error("An error occurred while fetching quotes:", error);
+      }
+    };
+  
+    fetchQuotes();
   }, []);
+  
+  console.log(quote);
 
 
   return (
     <>
       <div className="w-full pl-[87px] h-screen overflow-auto text-gray-700 bg-gradient-to-r bg-indigo-300 from-10% via-sky-300 via-30% to-emerald-300 to-90%">
       <Head >
+      {/*eslint-disable-next-line @next/next/no-sync-scripts */}
       <script src="https://meet.jit.si/external_api.js" />
       </Head>
         {/* <div className="w-full backdrop-blur-md bg-white/70">
@@ -224,24 +186,23 @@ export default function Profile({ roomDetails }) {
             <div className="grid md:grid-cols-5 md:gap-5">
               <div className="md:col-span-3 rounded-2xl p-4">
               <div class="grid relative">
-                <div className="backdrop-blur-md static bg-white/80 p-4 py-40 rounded-xl mb-4">
+                <div className="backdrop-blur-md static bg-white/80 p-4 rounded-xl mb-4">
+
                   <div class="w-full h-1/4 ">
-                  <img
-                    className="w-40 mx-auto rounded-full border-2 border-gray-400 bg-gray-200"
-                    src={`https://robohash.org/${roomDetails[0]?.email}}`}
-                    alt=""
-                  />
+                  <div id="meet" className="rounded-xl" />
                   </div></div>
-                  <div class="w-full h-3/4 bg-gray-300 static backdrop-blur-md bg-white/70 p-16 rounded-lg">
+
+                  <div class="w-full h-3/4 bg-gray-300 backdrop-blur-md bg-white/70 rounded-lg">
+                  <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+                    <Timer/>
+    <div className="w-fit flex items-center justify-center backdrop-blur-md bg-black/80 rounded-2xl p-3">
+    <p className="text-center flex flex-wrap text-xl -mt-12 mb-6">
+          &quot;{quote?.text}&quot; - {quote?.author || "Anonymous"}
+          </p>
+                  </div>
                     <Timer/>
                   </div>
-                  <div class="w-full h-3/4 bg-gray-300 static backdrop-blur-md bg-white/70 p-16 rounded-lg">
-                    <iframe src="https://video.technologyrss.com/" allow="camera;microphone" height="600px" width="500px" />
-                    
-                    <div id="meet" />
                   </div>
-                </div><div className="relative">
-                  
                 </div>
               </div>
               <div className="md:col-span-2 w-full mt-4 rounded-2xl mx-auto  md:pb-10 pb-0 ">

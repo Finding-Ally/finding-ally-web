@@ -58,7 +58,7 @@ const Timer = () => {
   };
 
   return (
-    <div className="flex flex-row items-center justify-center backdrop-blur-md bg-black/80 rounded-2xl p-3">
+    <div className="w-fit flex flex-row items-center justify-center backdrop-blur-md bg-black/80 rounded-2xl p-3">
       <div className="relative w-20 h-20">
         <div
           className="absolute w-full h-full rounded "
