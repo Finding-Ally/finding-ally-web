@@ -5,33 +5,10 @@ import Timer from "../components/tools/timer";
 import { FaMusic } from "react-icons/fa";
 import AudioPlayer from "../components/tools/AudioPlayer";
 import tracks from "../components/tools/tracks";
+import AudioComponent from "../components/tools/Audio";
 
 const PomodoroPage = () => {
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [currentMusic, setCurrentMusic] = useState("lofi");
-  const [volume, setVolume] = useState(0.5);
-
-  useEffect(() => {
-    const storedMusic = localStorage.getItem("currentMusic");
-    if (storedMusic) {
-      setCurrentMusic(storedMusic);
-    }
-  }, []);
-
-  const togglePlay = () => {
-    setIsPlaying(!isPlaying);
-  };
-
-  const changeMusic = (music) => {
-    setCurrentMusic(music);
-    localStorage.setItem("currentMusic", music);
-  };
-
-  const handleVolumeChange = (event) => {
-    const volumeValue = parseFloat(event.target.value);
-    setVolume(volumeValue);
-  };
-
+ 
   const [quote, setQuote] = useState([]);
 
   useEffect(() => {
@@ -92,62 +69,7 @@ const PomodoroPage = () => {
         </p>
       </div>
       <div className="h-fit flex w-fit mt-4 justify-end place-content-end ">
-        <div className="backdrop-blur-md bg-black/80 rounded-2xl p-4">
-          <button
-            onClick={() => changeMusic("birds")}
-            className={`${
-              currentMusic === "birds" ? "bg-blue-600" : "bg-gray-700"
-            } px-2 py-2 mx-2 rounded text-white focus:outline-none`}
-          >
-            Birds
-          </button>
-          <button
-            onClick={() => changeMusic("campfire")}
-            className={`${
-              currentMusic === "campfire" ? "bg-blue-600" : "bg-gray-700"
-            } px-2 py-2 mx-2 rounded text-white focus:outline-none`}
-          >
-            Campfire
-          </button>
-          <button
-            onClick={() => changeMusic("forest")}
-            className={`${
-              currentMusic === "forest" ? "bg-blue-600" : "bg-gray-700"
-            } px-2 py-2 mx-2 rounded text-white focus:outline-none`}
-          >
-            Forest
-          </button>
-          <button
-            onClick={() => changeMusic("rain")}
-            className={`${
-              currentMusic === "rain" ? "bg-blue-600" : "bg-gray-700"
-            } px-2 py-2 mx-2 rounded text-white focus:outline-none`}
-          >
-            Rain
-          </button>
-          <div className="flex my-6">
-            <FaMusic className="music-icon text-white" />
-            <input
-              type="range"
-              min="0"
-              max="1"
-              step="0.1"
-              value={volume}
-              onChange={handleVolumeChange}
-              className="mx-2"
-            />
-          </div>
-        </div>
-        <div className="gif-container mt-4">
-          <ReactPlayer
-            url={`../${currentMusic}.mp3`}
-            playing={isPlaying}
-            loop={true}
-            volume={volume}
-            width="100%"
-            height="100%"
-          />
-        </div>
+        <AudioComponent />
       </div>
     </div>
   );
