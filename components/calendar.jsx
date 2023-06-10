@@ -2,7 +2,7 @@
 export default function Calendar(){
 
   
-  const days = [
+  const days2 = [
     {
     date: 1,
     events: [
@@ -79,6 +79,25 @@ export default function Calendar(){
     },
     ];
     
+
+      // Get current local time
+      const currentDate = new Date();
+      const currentYear = currentDate.getFullYear();
+      const currentMonth = currentDate.getMonth();
+
+      // Define month names
+      const monthNames = [
+        'January', 'February', 'March', 'April', 'May', 'June',
+        'July', 'August', 'September', 'October', 'November', 'December'
+      ];
+
+      // Calculate the total number of days in the given month
+      const totalDays = new Date(currentYear, currentMonth + 1, 0).getDate();
+
+      // Generate an array of days for the month
+      const days = [...Array(totalDays).keys()].map(day => day + 1);
+
+
     
     return (
     <>
@@ -87,24 +106,8 @@ export default function Calendar(){
     <div className="wrapper bg-gray-100 rounded shadow w-full ">
       <div className="header flex p-2 mb-4">
         <span className="text-sm font-bold text-black   border border-gray-600 p-1 rounded cursor-pointer">
-          2023 March
+          {monthNames[currentMonth]} {currentYear}
         </span>
-        <div class="flex items-center mx-4">
-            <input defaultChecked id="meetings-checkbox" type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"/>
-            <label for="meetings-checkbox" class="ml-2 text-sm font-medium text-gray-900 ">Filter 1</label>
-        </div>
-        <div class="flex items-center mr-4">
-            <input id="tasks-checkbox" type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"/>
-            <label for="tasks-checkbox" class="ml-2 text-sm font-medium text-gray-900 ">Filter 2</label>
-        </div>
-        <div class="flex items-center mr-4">
-            <input id="dates-checkbox" type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"/>
-            <label for="dates-checkbox" class="ml-2 text-sm font-medium text-gray-900 ">Filter 3</label>
-        </div>
-        {/* <div class="flex items-center mr-4">
-            <input id="events-checkbox" type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"/>
-            <label for="events-checkbox" class="ml-2 text-sm font-medium text-gray-900 ">Events</label>
-        </div> */}
        
       </div>
       <table className="w-full">

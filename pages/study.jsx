@@ -63,7 +63,7 @@ const PomodoroPage = () => {
   }, []);
 
   return (
-    <div className="w-full pl-[91px] h-min-screen overflow-auto text-gray-700 bg-gradient-to-r from-indigo-300 from-10% via-sky-300 via-30% to-emerald-300 to-90% h-screen flex flex-col items-center justify-center">
+    <div className="w-full justify-around h-min-screen overflow-auto text-gray-700 bg-gradient-to-r from-indigo-300 from-10% via-sky-300 via-30% to-emerald-300 to-90% h-screen flex">
       {/* <ReactPlayer url={'./video.mp4'} className="h-screen absolute w-full" controls={true} autoplay muted loop/> */}
       <Head>
         <title>Selft Study</title>
@@ -73,22 +73,22 @@ const PomodoroPage = () => {
         autoPlay={true}
         muted={true}
         loop={true}
-        className="h-screen z-30 fixed object-cover w-screen"
+        className="h-full fixed object-cover w-full z-0"
       >
         <source src="./train.mp4" type="video/mp4" />
       </video>
 
-      <div className="z-40 absolute top-5 left-28">
+      <div className="h-fit flex ml-24 mt-4 w-fit justify-end place-content-end">
         <Timer />
         {/* ... */}
       </div>
 
-      <div className="z-50 absolute top-5 left-5 translate-x-2/3">
+      <div className="h-fit flex z-10 mt-4 w-fit justify-center place-content-center ">
         <h1 className="text-black font-bold text-xl">
           &quot;{quote?.text}&quot; - {quote?.author || "Anonymous"}
         </h1>
       </div>
-      {/* <div className="z-40 absolute top-5 right-5">
+      <div className="h-fit flex w-fit mt-4 justify-end place-content-end ">
         <div className="backdrop-blur-md bg-black/80 rounded-2xl p-4">
           <button
             onClick={() => changeMusic("birds")}
@@ -145,7 +145,7 @@ const PomodoroPage = () => {
             height="100%"
           />
         </div>
-      </div> */}
+      </div>
     </div>
   );
 };

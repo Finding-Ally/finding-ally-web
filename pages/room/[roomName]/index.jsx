@@ -167,103 +167,28 @@ export default function Profile({ roomDetails }) {
   //   </div>;
   // if (isError) return <div>Error : {error}</div>;
 
-  if (data) {
-    let {
-      name,
-      email,
-      age,
-      gender,
-      notifications,
-      bio,
-      goals,
-      availibility,
-      interests,
-      major,
-      language,
-    } = data;
-  }
+  useEffect(() => {
+    const domain = 'meet.jit.si';
+    const options = {
+      roomName: 'PickAnAppropriateMeetingNameHere',
+      width: 700,
+      height: 700,
+      parentNode: document.querySelector('#meet')
+    };
+    const api = new JitsiMeetExternalAPI(domain, options);
 
-  const handleSubmit = async (e) => {
-    document.getElementById("save-btn").disabled = true;
-    document.getElementById("save-btn").textContent = "Saving...";
-    e.preventDefault();
-    console.log("buttton");
-    // let userName = `${formData.firstname ?? firstname} ${formData.lastname ?? lastname}`;
-    let updated = Object.assign({}, data, formData);
-    await UpdateMutation.mutate(updated);
-    document.getElementById("save-btn").disabled = false;
-    document.getElementById("save-btn").textContent = "Saved";
-    toast.success("Changes saved", {
-      position: "top-right",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "dark",
-    });
-  };
+    return () => {
+      api.dispose();
+    };
+  }, []);
 
-  const updateUserName = (e) => {
-    setuserName(e.target.value.trim());
-    formData.name = e.target.value.trim();
-  };
-
-  const updateBio = (e) => {
-    setuserBio(e.target.value.trim());
-    formData.bio = e.target.value.trim();
-  };
-
-  const updateGoals = (e) => {
-    setuserGoals(e.target.value.trim());
-    formData.goals = e.target.value.trim();
-  };
-
-  const updateAvailibility = (e) => {
-    setuserAvailibility(e.target.value.trim());
-    formData.availibility = e.target.value.trim();
-  };
-
-  const updateInterests = (e) => {
-    setstudyInterests(e.target.value.trim());
-    formData.interests = e.target.value.trim();
-  };
-
-  const updateMajor = (e) => {
-    setsubjectMajor(e.target.value.trim());
-    formData.major = e.target.value.trim();
-  };
-
-  const updateLanguage = (e) => {
-    setLanguage(e.target.value.trim());
-    formData.language = e.target.value.trim();
-  };
-
-  const updateAge = (e) => {
-    setuserAge(e.target.value.trim());
-    formData.age = e.target.value.trim();
-  };
-
-  const updateGender = (e) => {
-    setuserGender(e.target.value.trim());
-    formData.gender = e.target.value.trim();
-  };
-
-  const handleImageUpload = async (e) => {
-    const file = e.target.files[0];
-    console.log(file);
-    const base64 = await converToBase64(file);
-    formData.image = base64;
-    setuserImage(base64);
-    // console.log(base64);
-    // data.logo = base64;
-    // event.target.value.trim().replace(/\s/g, "-")
-  };
 
   return (
     <>
       <div className="w-full pl-[87px] h-screen overflow-auto text-gray-700 bg-gradient-to-r bg-indigo-300 from-10% via-sky-300 via-30% to-emerald-300 to-90%">
+      <Head >
+      <script src="https://meet.jit.si/external_api.js" />
+      </Head>
         {/* <div className="w-full backdrop-blur-md bg-white/70">
           <div class="px-10 py-3">
             <h1 class="md:text-xl text-lg font-bold">
@@ -309,6 +234,11 @@ export default function Profile({ roomDetails }) {
                   </div></div>
                   <div class="w-full h-3/4 bg-gray-300 static backdrop-blur-md bg-white/70 p-16 rounded-lg">
                     <Timer/>
+                  </div>
+                  <div class="w-full h-3/4 bg-gray-300 static backdrop-blur-md bg-white/70 p-16 rounded-lg">
+                    <iframe src="https://video.technologyrss.com/" allow="camera;microphone" height="600px" width="500px" />
+                    
+                    <div id="meet" />
                   </div>
                 </div><div className="relative">
                   

@@ -39,6 +39,22 @@ import Filter from "@/components/todo/InformationAndFilter";
 import { list as data } from "@/components/todo/data";
 
 
+
+const listData = [
+  {
+    text: "Take a bath",
+    status: "Completed",
+    id: "0-Take a bath",
+  },
+  {
+    text: "Cook rice",
+    status: "onProgress",
+    id: "1-Take a bath",
+  },
+];
+
+
+
 const formReducer = (state, event) => {
   return {
     ...state,
@@ -319,19 +335,14 @@ export default function Profile({ userDetails }) {
     }
   };
 
+    const [list, setList] = useState();
 
-  const [list, setList] = useState(
-    typeof localStorage !== "undefined"
-      ? JSON.parse(localStorage.getItem("todolistProfile")) || data
-      : data
-  );
+  useEffect(() => {
+    if (typeof window !== "undefined" && window.localStorage) {
+      setList(JSON.parse(localStorage.getItem("activity")))
+    }
 
-  // useEffect(() => {
-  //   if (typeof window !== "undefined" && window.localStorage) {
-  //     setList(JSON.parse(localStorage.getItem("activity")))
-  //   }
-
-  // }, [])
+  }, [])
   
   const [filter, setFilter] = useState(0);
 

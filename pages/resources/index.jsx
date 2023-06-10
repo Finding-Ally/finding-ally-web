@@ -35,7 +35,7 @@ export default function Resources(){
 
 
     return (
-        <div className="w-full pl-[87px] h-screen pb-24 overflow-auto text-gray-700 bg-gradient-to-r bg-purple-100 from-10% to-blue-300 to-90%">
+        <div className="w-full pl-[87px] h-screen overflow-auto text-gray-700 bg-gradient-to-r bg-purple-100 from-10% to-blue-300 to-90%">
 
 <div className="px-10 mt-4">
         <div className="flex items-center flex-shrink-0 h-10">
@@ -152,16 +152,6 @@ export default function Resources(){
           <Link href={`/resources/private`}
             className="relative flex flex-col items-start p-4 py-4 mt-3 bg-white rounded-lg bg-opacity-90 group hover:bg-opacity-100"
           >
-            <button className="absolute top-0 right-0 items-center justify-center hidden w-5 h-5 mt-3 mr-2 text-gray-500 rounded hover:bg-gray-200 hover:text-gray-700 group-hover:flex">
-              <svg
-                className="w-4 h-4 fill-current"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-              >
-                <path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z" />
-              </svg>
-            </button>
             <span className="text-lg font-bold mt-2 ">
               {session?.user?.name}
             </span>
