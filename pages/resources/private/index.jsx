@@ -76,9 +76,9 @@ export default function PrivateDrive(){
     const options = {
       defaultTabId: "repositories",
       activeClasses:
-        "text-gray-200 bg-gray-800 hover:bg-gray-700 hover:text-gray-200 dark:text-gray-100 dark:hover:text-gray-200 border-blue-600 dark:border-blue-500",
+        "bg-gray-800 text-gray-100 hover:text-gray-200 border-blue-600",
       inactiveClasses:
-        "text-gray-700 bg-white hover:bg-gray-100 hover:text-gray-600 dark:text-gray-700 border-gray-100 hover:border-gray-300 dark:border-gray-700 dark:hover:text-gray-900",
+        "text-gray-700 hover:bg-gray-100 hover:text-gray-600 dark:text-gray-700 border-gray-100 hover:border-gray-300 dark:border-gray-700 dark:hover:text-gray-900",
       onShow: () => {
         console.log("tab is shown");
       },
@@ -93,7 +93,10 @@ export default function PrivateDrive(){
   }, []);
 
     return (
-        <div className="w-full pl-[87px] h-screen pb-24 overflow-auto text-gray-700 bg-[#ebe9f2]">
+      <div className='pb-6 pt-4 md:ml-[79px] ml-0 pr-4 bg-white  overflow-auto'>
+
+   
+        <div className="w-full  rounded-2xl pb-8 text-gray-700 bg-[#ebe9f2]">
         <div className="w-full">
           <div class="pl-6 pt-3 flex">
             <Link href="/resources">
@@ -183,7 +186,7 @@ export default function PrivateDrive(){
                     >
                       <li className="mr-2" role="presentation">
                         <button
-                          className="flex flex-row p-3 rounded-lg"
+                          className="flex flex-row p-3 rounded-lg bg-[#e0f0fc] text-black"
                           id="clubs-tab"
                           data-tabs-target="#clubs"
                           type="button"
@@ -197,7 +200,7 @@ export default function PrivateDrive(){
                       </li>
                       <li className="mr-2" role="presentation">
                         <button
-                          className="flex flex-row p-3 rounded-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
+                          className="flex flex-row p-3 rounded-lg bg-[#e6f5e5] hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
                           id="dashboard-tab"
                           data-tabs-target="#dashboard"
                           type="button"
@@ -211,7 +214,7 @@ export default function PrivateDrive(){
                       </li>
                       <li className="mr-2" role="presentation">
                         <button
-                          className="flex flex-row p-3 rounded-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
+                          className="flex flex-row p-3 rounded-lg bg-[#efcfcf] hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
                           id="repositories-tab"
                           data-tabs-target="#repositories"
                           type="button"
@@ -225,7 +228,7 @@ export default function PrivateDrive(){
                       </li>
                       <li className="mr-2"  role="presentation">
                         <button
-                          className="flex flex-row p-3 rounded-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
+                          className="flex flex-row p-3 rounded-lg bg-[#9a8a84] hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
                           id="contacts-tab"
                           data-tabs-target="#contacts"
                           type="button"
@@ -239,7 +242,7 @@ export default function PrivateDrive(){
                       </li>
                       <li className="mr-2" role="presentation">
                         <button
-                          className="flex flex-row p-3 rounded-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
+                          className="flex flex-row p-3 rounded-lg bg-[#fdf3e4] hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
                           id="screenshot-tab"
                           data-tabs-target="#screenshot"
                           type="button"
@@ -253,7 +256,7 @@ export default function PrivateDrive(){
                       </li>
                       <li role="presentation">
                         <button
-                          className="flex flex-row p-3 rounded-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
+                          className="flex flex-row p-3 rounded-lg bg-[#d7a1dc] hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
                           id="other-tab"
                           data-tabs-target="#other"
                           type="button"
@@ -328,6 +331,7 @@ export default function PrivateDrive(){
               </div>
           </div>
         </div>
+      </div>
       </div>
     )
 }

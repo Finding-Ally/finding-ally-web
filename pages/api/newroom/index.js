@@ -27,7 +27,9 @@ export default async function handler(req, res) {
             ...fetchOptions,
             body: JSON.stringify({
               ...fetchBody,
-              filter: { 'adminUser.id': userId },
+              filter: { 
+              "members": {$elemMatch: {id: userId}}
+            },
             }),
           });
           const readDataJson = await readData.json();
@@ -79,13 +81,13 @@ export default async function handler(req, res) {
       case 'DELETE':
             // Handle the DELETE request to delete a room by room ID
             const roomId = req.query.roomId;
-            console.log("request roomId", roomId);
+            console.log("delete roomId here", roomId);
 
             const deleteData = await fetch(`${baseUrl}/deleteOne`, {
               ...fetchOptions,
               body: JSON.stringify({
                 ...fetchBody,
-                filter: { _id: { $oid: roomId } },
+                filter: { _id: roomId },
               }),
             });
             const deleteDataJson = await deleteData.json();

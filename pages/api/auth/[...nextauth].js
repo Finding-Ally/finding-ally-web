@@ -21,6 +21,14 @@ export const authOptions = {
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      authorization: {
+        params: {
+          prompt: "consent",
+          access_type: "offline",
+          response_type: "code",
+          login: "email.split('@')[0]", // Add your custom parameter here
+        },
+      },
     }),
     // EmailProvider({
     // 	server: {
@@ -111,23 +119,22 @@ export const authOptions = {
       }
       return session;
     },
-    async signIn({ user: User, profile: profile }) {
+    async signIn({ user: User }) {
       // define client
       const client = await clientPromise;
 
       // define database
       const db = client.db("database");
 
-      console.log("User details here " + User);
-      console.log("profile details here " + profile);
 
       try {
         // get user data
-        const insertDocument = { User };
+        const insertDocument = { ...User, login:User.email.split("@")[0] };
+        console.log("insertDocument", insertDocument);
         // @ts-ignore
         const dataUsers = await db
-          .collection("users")
-          .updateOne({ _id: User.id }, { $set: insertDocument });
+          .collection("users").updateMany({"_id":User.id}, {$setOnInsert: insertDocument});
+
         if (dataUsers) {
           console.log("Added " + String(User.id) + " to database!");
           this.session.user.login = dataUsers.login;
@@ -135,7 +142,6 @@ export const authOptions = {
         }
         return this.session;
       } catch (error) {
-        // const dataUsers = await db.collection("users").findOne(_id== `${User.id}`)
         console.log(
           "User could not be added to database due to an error or either existing"
         );

@@ -21,15 +21,23 @@ export default function Reports() {
             }
             ]
         },
+        options: {
+            scales: {
+            y: {
+                beginAtZero: true
+            }
+            }
+        }
+        
     });
 }, [])
 
 
   return (
     <>
-    <div className="w-full rounded-2xl p-4">
-    <h1 className="w-full mx-auto mb-6 text-xl font-semibold capitalize ">Weekly Report</h1>
-            <div className="w-[1000px] h-fit flex mx-auto my-auto">
+    <div className="w-full rounded-2xl md:p-4 grid place-content-center place-items-center justify-center mb-4">
+    <h1 className="w-full mx-auto md:mb-6 mb-2 text-xl font-semibold capitalize ">Weekly Report</h1>
+            <div className="xl:w-[1000px] lg:w-[800px] md:w-[600px] w-[300px]  h-fit flex mx-auto my-auto">
                 <div className='border border-gray-400 pt-0 rounded-xl  w-full h-fit my-auto  shadow-xl'>
                     <canvas id='myChart'></canvas>
                 </div>

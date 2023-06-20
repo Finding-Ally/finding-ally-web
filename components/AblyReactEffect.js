@@ -7,6 +7,10 @@ export function useChannel(channelName, callbackOnMessage) {
     const channel = ably.channels.get(channelName);
 
     const onMount = () => {
+        channel.attach();
+        channel.once('attached', () => {
+            console.log('Channel attached');
+        });
         channel.subscribe(msg => { callbackOnMessage(msg); });
     }
 

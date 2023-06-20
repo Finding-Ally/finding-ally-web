@@ -28,7 +28,7 @@ function ListOfActivity({ list, filter, checked, removeOne, handleDrag }) {
                       >
                         <button
                           data-index={idx}
-                          className="w-6 h-6 my-auto mr-3"
+                          className="w-6 h-6 my-auto mr-2"
                           onClick={(e) => checked(e)}
                         >
                           <img
@@ -36,6 +36,7 @@ function ListOfActivity({ list, filter, checked, removeOne, handleDrag }) {
                               item.status === "onProgress" ? "../icons/circle.svg" : "../icons/circle-cheked.svg"
                             }
                             alt="LogoCentang"
+                            className="h-4 w-4"
                           />
                         </button>
                         <p

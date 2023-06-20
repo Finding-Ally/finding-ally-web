@@ -2,119 +2,13 @@ import { Modal } from "flowbite";
 import { ModalOptions, ModalInterface } from "flowbite";
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
-import { useReducer } from "react";
-import Link from "next/link";
-import { useQuery, useMutation, useQueryClient } from "react-query";
 
 import { toast } from "react-toastify";
-import LoadingScreen from "@/components/animations/loadingScreen";
-import { getRooms, getRoom, updateRoom } from "../database/controllerRoom";
-
-import axios from "axios";
-import LoadingAnimation from "@/components/animations/LoadingAnimation";
 import styles from "@/styles/loadingAnimation.module.css";
 
-const formReducer = (state, event) => {
-  return {
-    ...state,
-    [event.target.name]: event.target.value,
-  };
-};
+
 
 export default function Explore() {
-  var [userEmail, setEmail] = useState();
-  var [Subject, setSubject] = useState();
-  var [Message, setMessage] = useState();
-
-  const emailUpdate = (event) => {
-    // Dealing with name field changes to update our state
-    setEmail(event.target.value);
-  };
-  const subjectUpdate = (event) => {
-    // Dealing with name field changes to update our state
-
-    setSubject(event.target.value);
-  };
-  const messageUpdate = (event) => {
-    // Dealing with name field changes to update our state
-
-    setMessage(event.target.value);
-  };
-
-  const handleFormView = () => {
-    const $modalElement = document.querySelector("#authentication-modal");
-
-    const modalOptions = {
-      placement: "bottom-center",
-      backdrop: "dynamic",
-      backdropClasses:
-        "bg-gray-900 bg-opacity-50 dark:bg-opacity-80 fixed inset-0 z-40",
-      closable: true,
-      onHide: () => {
-        console.log("modal is hidden");
-      },
-      onShow: () => {
-        console.log("modal is shown");
-      },
-      onToggle: () => {
-        console.log("modal has been toggled");
-      },
-    };
-
-    const modal = new Modal($modalElement, modalOptions);
-
-    modal.show();
-  };
-
-  const handleReportFormView = () => {
-    const $modalElement2 = document.querySelector("#report-modal");
-
-    const modalOptions2 = {
-      placement: "bottom-center",
-      backdrop: "dynamic",
-      backdropClasses:
-        "bg-gray-900 bg-opacity-50 dark:bg-opacity-80 fixed inset-0 z-40",
-      closable: true,
-      onHide: () => {
-        console.log("modal is hidden");
-      },
-      onShow: () => {
-        console.log("modal is shown");
-      },
-      onToggle: () => {
-        console.log("modal has been toggled");
-      },
-    };
-
-    const modal2 = new Modal($modalElement2, modalOptions2);
-
-    modal2.show();
-  };
-
-  const handleMaxRoomFormView = () => {
-    const $modalElement3 = document.querySelector("#maxrooms-modal");
-
-    const modalOptions3 = {
-      placement: "bottom-center",
-      backdrop: "dynamic",
-      backdropClasses:
-        "bg-gray-900 bg-opacity-50 dark:bg-opacity-80 fixed inset-0 z-40",
-      closable: true,
-      onHide: () => {
-        console.log("modal is hidden");
-      },
-      onShow: () => {
-        console.log("modal is shown");
-      },
-      onToggle: () => {
-        console.log("modal has been toggled");
-      },
-    };
-
-    const modal3 = new Modal($modalElement3, modalOptions3);
-
-    modal3.show();
-  };
 
   const { data: session } = useSession();
 
@@ -129,7 +23,7 @@ export default function Explore() {
   const [userBio, setuserBio] = useState();
   const [language, setLanguage] = useState();
 
-  const [goal, setGoal] = useState();
+  const [goal, setGoal] = useState("University-Studies");
   const [phase, setPhase] = useState("Intermediate");
   const [availability, setAvailability] = useState("Anytime");
   const [group_or_duo, setgroup_or_duo] = useState("duo");
@@ -196,8 +90,8 @@ export default function Explore() {
         room?.goal === data?.goal &&
         room?.gender === data?.gender &&
         room?.group_or_duo === data?.group_or_duo &&
-        room?.phase === data?.phase &&
-        room?.location === data?.location
+        room?.phase === data?.phase 
+        // room?.location === data?.location
       );
     });
 
@@ -258,8 +152,6 @@ export default function Explore() {
           {
             name: session?.user?.name,
             id: session?.user?.id,
-            email: session?.user?.email,
-            login: session?.user?.login || session?.user?.email.split("@")[0],
             image: session?.user?.image,
             age: session?.user?.age,
             major: session?.user?.major,
@@ -286,7 +178,8 @@ export default function Explore() {
 
       if (response.ok) {
         console.log("Document created successfully");
-        toast.success("🔮 Room Created Successfully", {
+        setCurrentUserRooms([ currentUserRooms, newData]);
+        toast.success(" Room Created Successfully", {
           position: "top-right",
           autoClose: 5000,
           hideProgressBar: false,
@@ -294,15 +187,40 @@ export default function Explore() {
           pauseOnHover: true,
           draggable: true,
           progress: undefined,
-          theme: "dark",
+          
         });
+
+        try {
+          const response = await fetch(`/api/createroom?roomId=${matchedRoomId}`, {
+            method: "DELETE",
+            contentType: "application/json",
+          });
+          if (response.status === 204) {
+            // Successful deletion
+            // Perform any necessary actions or update the UI accordingly
+            setRequestedRooms((prevRooms) =>
+              prevRooms.filter((room) => room._id !== roomId)
+            );
+            console.log("Room deleted successfully");
+          } else {
+            // Handle the error or display an error message
+            console.error("Failed to delete room");
+          }
+        } catch (error) {
+          // Handle the error or display an error message
+          console.error("Error deleting room:", error);
+        }
+        
         // Reset form fields
       } else {
         console.error("Failed to create document");
       }
 
+
       document.getElementById("save-btn").disabled = false;
       document.getElementById("save-btn").textContent = "Saved";
+
+      handleFindAllyFormToggle();
 
       return;
     } else {
@@ -319,7 +237,8 @@ export default function Explore() {
 
         if (response.ok) {
           console.log("Document created successfully");
-          toast.success("🔮 Request initiated...", {
+          setRequestedRooms([...requestedRooms, data]);
+          toast.success(" Request initiated...", {
             position: "top-right",
             autoClose: 5000,
             hideProgressBar: false,
@@ -327,7 +246,7 @@ export default function Explore() {
             pauseOnHover: true,
             draggable: true,
             progress: undefined,
-            theme: "dark",
+            
           });
           // Reset form fields
         } else {
@@ -337,7 +256,7 @@ export default function Explore() {
         console.error("An error occurred:", error);
       }
     }
-
+    handleFindAllyFormToggle();
     document.getElementById("save-btn").disabled = false;
     document.getElementById("save-btn").textContent = "Saved";
   };
@@ -345,6 +264,32 @@ export default function Explore() {
   const updateGoal = (e) => {
     setGoal(e.target.value.trim());
   };
+
+
+  const [isFindAllyFormOpen, setIsFindAllyFormOpen] = useState(false);
+
+  const handleFindAllyFormToggle = () => {
+    setIsFindAllyFormOpen(!isFindAllyFormOpen);
+  };
+
+  const [isReportFormOpen, setIsReportFormOpen] = useState(false);
+
+  const handleReportFormToggle = () => {
+    setIsReportFormOpen(!isReportFormOpen);
+  };
+
+
+  const [isMaxFormOpen, setIsMaxFormOpen] = useState(false);
+
+  const handleMaxFormToggle = () => {
+    setIsMaxFormOpen(!isMaxFormOpen);
+
+  };
+
+
+
+
+
 
   const updatePhase = (e) => {
     setPhase(e.target.value.trim());
@@ -358,20 +303,18 @@ export default function Explore() {
     setgroup_or_duo(e.target.value.trim());
   };
 
-  // const handleImageUpload = async (e) => {
-  //   const file = e.target.files[0];
-  //   console.log(file);
-  //   const base64 = await converToBase64(file);
-  //   formData.image = base64;
-  //   setuserImage(base64);
-  //   // console.log(base64);
-  //   // data.logo = base64;
-  //   // event.target.value.trim().replace(/\s/g, "-")
-  // };
+  const [reportReason, setReportReason] = useState("Other");
+  const [reportReasonText, setReportReasonText] = useState("");
 
-  // Fetch the Request rooms of the current user
+  const updateReportReason = (e) => {
+    setReportReason(e.target.value.trim());
+  };
 
-  // Initialize a state to store the fetched data
+
+  const updateReportReasonText = (e) => {
+    setReportReasonText(e.target.value.trim());
+  };
+
   const [requestedRooms, setRequestedRooms] = useState([]);
 
   // Fetch data from MongoDB using useEffect
@@ -424,6 +367,9 @@ export default function Explore() {
       if (response.status === 204) {
         // Successful deletion
         // Perform any necessary actions or update the UI accordingly
+        setCurrentUserRooms((prevRooms) =>
+          prevRooms.filter((room) => room._id !== roomId)
+        );
         console.log("Room deleted successfully");
       } else {
         // Handle the error or display an error message
@@ -433,6 +379,90 @@ export default function Explore() {
       // Handle the error or display an error message
       console.error("Error deleting room:", error);
     }
+  };
+
+
+  const handleSubmitReport = async (roomId) => {
+    document.getElementById("report-btn").disabled = true;
+    document.getElementById("report-btn").textContent = "Reporting...";
+    const data = {
+      userId: session?.user?.id,
+      reportedAt: new Date().toISOString(),
+      type: reportReason,
+      reportReason: reportReasonText,
+      reportedRoomId: roomId,
+      ReportedUser: currentUserRooms[0].adminName,
+    };
+
+    const response = await fetch("/api/forms/report", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+
+    if (response.ok) {
+
+      toast.success(" Reported User", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+
+      try {
+        const response = await fetch(`/api/createroom?newroom=${reportedRoomId}`, {
+          method: "DELETE",
+          contentType: "application/json",
+        });
+        if (response.status === 204) {
+          // Successful deletion
+          // Perform any necessary actions or update the UI accordingly
+          toast.success(" Room Removed", {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+
+          setRequestedRooms((prevRooms) =>
+            prevRooms.filter((room) => room._id !== roomId)
+          );
+          console.log("Room deleted successfully");
+        } else {
+          // Handle the error or display an error message
+          console.error("Failed to delete room");
+        }
+      } catch (error) {
+        // Handle the error or display an error message
+        console.error("Error deleting room:", error);
+      }
+
+
+      document.getElementById("report-btn").disabled = true;
+      document.getElementById("report-btn").textContent = "Reported";
+      handleReportFormToggle();
+      return;
+
+
+    } else {
+      console.error("Failed to create document");
+    }
+
+    handleReportFormToggle();
+    return;
+    // // setReportModal(false);
+    // setCurrentUserRooms((prevRooms) =>
+    // prevRooms.filter((room) => room._id !== roomId)
+    // )
   };
 
   // Fetch the Request rooms of the current user
@@ -458,26 +488,28 @@ export default function Explore() {
     fetchData();
   }, [session?.user?.id]);
 
-  const userRooms = currentUserRooms?.length + requestedRooms?.length;
+  const [userRoomsLength, setUserRoomsLength] = useState();
 
-  console.log(userRooms);
+  useEffect(() => {
+    setUserRoomsLength(currentUserRooms.length + requestedRooms?.length);
+  }, [currentUserRooms, requestedRooms]);
+
 
   return (
-    <div className="w-full pl-[87px] min-h-screen pb-10 text-gray-700 bg-[#e6f5e5]">
+    <div className="pb-6 pt-4 md:ml-[79px] md:pl-0 pl-2 pr-4 bg-white  overflow-auto">
+    <div className="w-full rounded-2xl p-4 text-gray-700 bg-[#e6f5e5]">
       {/* <div className="w-full bg-gray-900">
         <div className="px-10 py-3">
           <h1 className="text-2xl font-bold text-white">Find your Ally</h1>
         </div>
       </div> */}
-      <div className="grid grid-cols-2 gap-6 pr-4 overflow-auto">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pr-4">
         <div
-          className={`bg-white mx-auto flex items-center  rounded-lg justify-center place-content-center shadow-xl border border-gray-400 w-full m-4 ${styles["parent-div"]}`}
+          className={`bg-white mx-auto h-full flex items-center  rounded-lg justify-center place-content-center border border-gray-300 w-full ${styles["parent-div"]}`}
         >
-          {userRooms == 3 ? (
+          {userRoomsLength >= 3 ? (
             <button
-              data-modal-target="maxrooms-modal"
-              data-modal-toggle="maxrooms-modal"
-              onClick={handleMaxRoomFormView}
+              onClick={handleMaxFormToggle}
               type="button"
               className="absolute z-10 justify-center place-content-center mx-auto w-fit flex items-center p-0.5 mb-2 mr-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-green-400 to-blue-600 group-hover:from-green-400 group-hover:to-blue-600 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-green-200 dark:focus:ring-green-800"
             >
@@ -487,9 +519,7 @@ export default function Explore() {
             </button>
           ) : (
             <button
-              data-modal-target="authentication-modal"
-              data-modal-toggle="authentication-modal"
-              onClick={handleFormView}
+              onClick={handleFindAllyFormToggle}
               type="button"
               className="absolute z-10 justify-center place-content-center mx-auto w-fit flex items-center p-0.5 mb-2 mr-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-green-400 to-blue-600 group-hover:from-green-400 group-hover:to-blue-600 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-green-200 dark:focus:ring-green-800"
             >
@@ -499,17 +529,20 @@ export default function Explore() {
             </button>
           )}
 
-          {/* max rooms code */}
 
-          <div
-            id="maxrooms-modal"
-            tabindex="-1"
-            aria-hidden="true"
-            className="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full"
-          >
-            <div className="relative w-full max-w-3xl max-h-full">
+          {
+            isMaxFormOpen && (
+              <div className="bg-gray-700 bg-opacity-50 dark:bg-opacity-80 fixed inset-0 z-20 backdrop-blur-sm bg-black/30 grid place-content-center justify-center w-screen h-screen ">
+            <div
+              id="maxrooms-modal"
+              tabindex="-1"
+              class="z-20 w-screen h-[calc(100%-1rem)] grid justify-center mb-4 p-4 overflow-x-hidden overflow-y-auto"
+            >
+              
+            <div className="relative w-full max-w-xl max-h-full">
               <div className="relative bg-white rounded-lg shadow dark:bg-gray-700">
                 <button
+                onClick={handleMaxFormToggle}
                   type="button"
                   className="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-800 dark:hover:text-white"
                   data-modal-hide="report-modal"
@@ -529,10 +562,7 @@ export default function Explore() {
                   </svg>
                   <span className="sr-only">Close modal</span>
                 </button>
-                <div className="px-6 py-6 lg:px-8">
-                  <h3 className="mb-4 text-xl font-medium text-gray-900 dark:text-white">
-                    Tell us about your Goal
-                  </h3>
+                <div className="px-3 py-3">
                   <div class="p-6 text-center">
                     <svg
                       aria-hidden="true"
@@ -550,27 +580,32 @@ export default function Explore() {
                       ></path>
                     </svg>
                     <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
-                      Are you sure you want to delete this product?
+                       Maximum rooms reached, delete a room to create a new one
                     </h3>
-                    <button
-                      data-modal-hide="popup-modal"
+                    {/* <button
+                      data-modal-hide="maxrooms-modal"
                       type="button"
                       class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center mr-2"
                     >
                       Yes, Im sure
-                    </button>
+                    </button> */}
                     <button
-                      data-modal-hide="popup-modal"
+                      onClick={handleMaxFormToggle}
                       type="button"
                       class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600"
                     >
-                      No, cancel
+                      Ok, got it
                     </button>
                   </div>
                 </div>
               </div>
             </div>
           </div>
+          </div>
+            )
+          }
+
+         
 
           {/* <LoadingAnimation /> */}
           <div className={styles["loadingio-spinner-ripple-jierxddzni"]}>
@@ -579,18 +614,21 @@ export default function Explore() {
               <div></div>
             </div>
           </div>
-          <div
-            id="authentication-modal"
-            tabindex="-1"
-            aria-hidden="true"
-            className="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full"
-          >
-            <div className="relative w-full max-w-3xl max-h-full">
+
+          {
+            isFindAllyFormOpen && (
+              <div className="bg-gray-700 bg-opacity-50 dark:bg-opacity-80 fixed inset-0 z-20 backdrop-blur-sm bg-black/30 grid place-content-center justify-center w-screen h-screen ">
+            <div
+              id="authentication-modal"
+              tabindex="-1"
+              class="z-20 w-screen h-[calc(100%-1rem)] grid justify-center mb-4 p-4 overflow-x-hidden overflow-y-auto"
+            >
+            <div className="relative w-full max-w-4xl max-h-full">
               <div className="relative bg-white rounded-lg shadow dark:bg-gray-700">
                 <button
+                  onClick={handleFindAllyFormToggle}
                   type="button"
                   className="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-800 dark:hover:text-white"
-                  data-modal-hide="authentication-modal"
                 >
                   <svg
                     aria-hidden="true"
@@ -614,18 +652,18 @@ export default function Explore() {
                   <form className="space-y-6" action="#">
                     <div>
                       <label
-                        for="countries"
+                        for="goals"
                         className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                       >
                         Select an option
                       </label>
                       <select
                         onChange={updateGoal}
-                        id="countries"
+                        id="goals" 
+                        required
                         className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-400 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                       >
-                        <option selected>Choose a goal</option>
-                        <option value="University-Studies">
+                        <option selected value="University-Studies">
                           University Studies
                         </option>
                         <option value="IIT-JEE">IIT-JEE</option>
@@ -640,7 +678,7 @@ export default function Explore() {
                       >
                         What level are you on for your Goal?
                       </label>
-                      <div className="grid grid-cols-3 gap-4">
+                      <div className="grid grid-cols-3 gap-2">
                         <div className="flex items-center pl-4 border border-gray-200 rounded dark:border-gray-700">
                           <input
                             id="bordered-radio-1"
@@ -854,8 +892,13 @@ export default function Explore() {
             </div>
           </div>
         </div>
+
+            )
+          }
+          
+        </div>
         <div className="grid grid-rows-3 ">
-          <div className="bg-white rounded-lg shadow-xl border border-gray-400 p-4 w-full mt-4">
+          <div className="bg-white rounded-lg border border-gray-300 p-4 w-full">
             <div className="mb-4">
               <h1 className="font-semibold text-gray-800">
                 Let’s make this a <span className="text-green-600">safe</span>{" "}
@@ -909,7 +952,7 @@ export default function Explore() {
             </span>
           </div>
 
-          <div className="bg-white rounded-lg shadow-xl border border-gray-400 p-4 w-full mt-2">
+          <div className="bg-white rounded-lg border border-gray-300   p-4 w-full mt-2">
             <div className="mb-4">
               <h1 className="font-semibold text-gray-800">Your Allies</h1>
             </div>
@@ -922,8 +965,8 @@ export default function Explore() {
                 >
                   <div className="flex">
                     <img
-                      className="w-12 h-12 rounded-full mr-4 border border-gray-100 shadow-sm"
-                      src={room?.members[1]?.image}
+                      className="w-12 h-12 rounded-full mr-4 border border-gray-100 bg-gray-300 shadow-sm"
+                      src={`https://robohash.org/${room?.members[1]?.id}}`}
                       alt=""
                     />
                     <span className="font-semibold text-gray-800 my-auto">
@@ -938,22 +981,26 @@ export default function Explore() {
                       Unmatch
                     </button>
                     <button
-                      onClick={handleReportFormView}
+                      onClick={handleReportFormToggle}
                       className="text-gray-700 mr-2 bg-gray-200 hover:bg-gray-100 p-2 rounded-lg"
                     >
                       Report
                     </button>
                   </div>
 
-                  <div
-                    id="report-modal"
-                    tabindex="-1"
-                    aria-hidden="true"
-                    className="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full"
-                  >
-                    <div className="relative w-full max-w-3xl max-h-full">
+
+                  {
+                    isReportFormOpen && (
+                      <div className="bg-gray-700 bg-opacity-50 dark:bg-opacity-80 fixed inset-0 z-20 backdrop-blur-sm bg-black/30 grid place-content-center justify-center w-screen h-screen ">
+            <div
+              id="report-modal"
+              tabindex="-1"
+              class="z-20 w-screen h-[calc(100%-1rem)] grid justify-center mb-4 p-4 overflow-x-hidden overflow-y-auto"
+            >
+                    <div className="relative w-full max-w-xl max-h-full">
                       <div className="relative bg-white rounded-lg shadow dark:bg-gray-700">
                         <button
+                        onClick={handleReportFormToggle}
                           type="button"
                           className="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-800 dark:hover:text-white"
                           data-modal-hide="report-modal"
@@ -974,251 +1021,123 @@ export default function Explore() {
                           <span className="sr-only">Close modal</span>
                         </button>
                         <div className="px-6 py-6 lg:px-8">
-                          <h3 className="mb-4 text-xl font-medium text-gray-900 dark:text-white">
-                            Tell us about your Goal
+                          <h3 className="mb-4 text-xl font-bold text-gray-900 dark:text-white">
+                            Report user
                           </h3>
                           <form className="space-y-6" action="#">
-                            <div>
-                              <label
-                                for="countries"
-                                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                              >
-                                Select an option
-                              </label>
-                              <select
-                                onChange={updateGoal}
-                                id="countries"
-                                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-400 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                              >
-                                <option selected>Choose a goal</option>
-                                <option value="University-Studies">
-                                  University Studies
-                                </option>
-                                <option value="IIT-JEE">IIT-JEE</option>
-                                <option value="GATE">GATE</option>
-                                <option value="UPSC-MPSC">UPSC-MPSC</option>
-                              </select>
-                            </div>
-                            <div>
-                              <label
-                                for="password"
-                                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                              >
-                                What level are you on for your Goal?
-                              </label>
-                              <div className="grid grid-cols-3 gap-4">
-                                <div className="flex items-center pl-4 border border-gray-200 rounded dark:border-gray-700">
-                                  <input
-                                    id="bordered-radio-1"
-                                    type="radio"
-                                    value="Beginner"
-                                    name="bordered-radio"
-                                    className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-400"
-                                    onChange={updatePhase}
-                                    // onClick={setPhase("Beginner")}
-                                  />
-                                  <label
-                                    for="bordered-radio-1"
-                                    className="w-full py-4 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                                  >
-                                    Beginner
-                                  </label>
-                                </div>
-                                <div className="flex items-center pl-4 border border-gray-200 rounded dark:border-gray-700">
-                                  <input
-                                    defaultChecked
-                                    id="bordered-radio-2"
-                                    type="radio"
-                                    value="Intermediate"
-                                    name="bordered-radio"
-                                    className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-400"
-                                    onChange={updatePhase}
-                                    // onClick={setPhase("Intermediate")}
-                                  />
-                                  <label
-                                    for="bordered-radio-2"
-                                    className="w-full py-4 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                                  >
-                                    Intermediate
-                                  </label>
-                                </div>
-                                <div className="flex items-center pl-4 border border-gray-200 rounded dark:border-gray-700">
-                                  <input
-                                    id="bordered-radio-3"
-                                    type="radio"
-                                    value="Advanced"
-                                    name="bordered-radio"
-                                    className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-400"
-                                    onChange={updatePhase}
-                                    // onClick={setPhase("Advanced")}
-                                  />
-                                  <label
-                                    for="bordered-radio-3"
-                                    className="w-full py-4 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                                  >
-                                    Advanced
-                                  </label>
-                                </div>
-                              </div>
-                            </div>
 
                             <div>
                               <label
-                                for="default-radio"
-                                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                                className="block mb-2 text-sm font-bold text-gray-900 dark:text-white"
                               >
-                                What is your availability?
+                                Explain why you are reporting this user
                               </label>
                               <div className="flex items-center mb-4">
                                 <input
                                   defaultChecked
-                                  id="default-radio-2"
+                                  id="default-1"
                                   type="radio"
-                                  value="flexible"
+                                  value="Inappropriate-behaviour"
                                   name="default-radio"
                                   className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-400"
-                                  onChange={updateAvailibility}
+                                  onChange={updateReportReason}
                                   // onClick={setAvailability("anytime")}
                                 />
                                 <label
-                                  for="default-radio-2"
+                                  for="default-1"
                                   className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
                                 >
-                                  I’m flexible / I’m available all the time
+                                  Inappropriate behaviour
                                 </label>
                               </div>
                               <div className="flex items-center mb-4">
                                 <input
-                                  id="default-radio-1"
+                                  id="default-2"
                                   type="radio"
-                                  value="weekdays"
+                                  value="Abusive-Language"
                                   name="default-radio"
                                   className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-400"
-                                  onChange={updateAvailibility}
+                                  onChange={updateReportReason}
                                   // onClick={setAvailability("weekdays")}
                                 />
                                 <label
-                                  for="default-radio-1"
+                                  for="default-2"
                                   className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
                                 >
-                                  Weekdays
+                                  Abusive Language
+                                </label>
+                              </div>
+                              <div className="flex items-center mb-4">
+                                <input
+                                  id="default-3"
+                                  type="radio"
+                                  value="Spam-or-Phishing"
+                                  name="default-radio"
+                                  className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-400"
+                                  onChange={updateReportReason}
+                                  // onClick={setAvailability("weekends")}
+                                />
+                                <label
+                                  for="default-3"
+                                  className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                                >
+                                  Spam or Phishing
                                 </label>
                               </div>
                               <div className="flex items-center ">
                                 <input
-                                  id="default-radio-3"
+                                  id="default-4"
                                   type="radio"
-                                  value="weekends"
+                                  value="Other"
                                   name="default-radio"
                                   className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-400"
-                                  onChange={updateAvailibility}
+                                  onChange={updateReportReason}
                                   // onClick={setAvailability("weekends")}
                                 />
                                 <label
-                                  for="default-radio-3"
+                                  for="default-4"
                                   className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
                                 >
-                                  Weekends
+                                  Other
                                 </label>
                               </div>
                             </div>
 
                             <div>
-                              <label
-                                for="password"
-                                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                              >
-                                Duo or Group?
-                              </label>
-                              <div className="grid grid-cols-3 gap-4">
-                                <div className="flex items-center pl-4 border border-gray-200 rounded dark:border-gray-700">
-                                  <input
-                                    defaultChecked
-                                    id="bordered-radio-4"
-                                    type="radio"
-                                    value="Duo"
-                                    name="bordered-radio-1"
-                                    className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-400"
-                                    onChange={updateGroup_or_duo}
-                                    // onClick={setgroup_or_duo("Duo")}
-                                  />
-                                  <label
-                                    for="bordered-radio-4"
-                                    className="w-full py-4 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                                  >
-                                    Duo
-                                  </label>
-                                </div>
-                                <div className="flex items-center pl-4 border border-gray-200 rounded dark:border-gray-700">
-                                  <input
-                                    id="bordered-radio-5"
-                                    type="radio"
-                                    value="Group"
-                                    name="bordered-radio-1"
-                                    className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-400"
-                                    onChange={updateGroup_or_duo}
-                                    // onClick={setgroup_or_duo("Group")}
-                                  />
-                                  <label
-                                    for="bordered-radio-5"
-                                    className="w-full py-4 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                                  >
-                                    Group
-                                  </label>
-                                </div>
-                              </div>
-                              <label className="block my-2 text-xs font-medium text-gray-900 dark:text-white">
-                                *you can switch from duo to group later if
-                                required
-                              </label>
-                            </div>
-                            {/* <div className="flex justify-between">
-                      <div className="flex items-start">
-                        <div className="flex items-center h-5">
-                          <input
-                            id="remember"
-                            type="checkbox"
-                            value=""
-                            className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 dark:bg-gray-600 dark:border-gray-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800"
-                            required
-                          />
-                        </div>
-                        <label
-                          for="remember"
-                          className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                        >
-                          Remember me
-                        </label>
-                      </div>
-                      <a
-                        href="#"
-                        className="text-sm text-blue-700 hover:underline dark:text-blue-500"
-                      >
-                        Lost Password?
-                      </a>
-                    </div> */}
+                            <label
+                              for="aboutMe"
+                              class="block mb-2 text-sm font-bold text-gray-900 dark:text-white"
+                            >
+                              Relevant Information (Optional)
+                            </label>
+                            <textarea
+                              id="aboutMe"
+                              rows="4"
+                              class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                              placeholder="Anything else you want to add?"
+                              onChange={updateReportReasonText}
+                            ></textarea>
+                          </div>
+
+                            {/* updateReportReasonText */}
+
                             <button
-                              onClick={handleSubmit}
-                              id="save-btn"
+                              onClick={() => handleSubmitReport(room?.members[1]?.id)}
+                              id="report-btn"
                               type="submit"
                               className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                             >
-                              Find Now
+                              Report User
                             </button>
-                            {/* <div className="text-sm font-medium text-gray-500 dark:text-gray-300">
-                      Not registered?{" "}
-                      <a
-                        href="#"
-                        className="text-blue-700 hover:underline dark:text-blue-500"
-                      >
-                        Create account
-                      </a>
-                    </div> */}
                           </form>
                         </div>
                       </div>
                     </div>
                   </div>
+                </div>
+                    )
+                  }
+                  
                 </div>
               ))
             ) : (
@@ -1232,7 +1151,7 @@ export default function Explore() {
             )}
           </div>
 
-          <div className="bg-white  rounded-lg shadow-xl border border-gray-400 p-4 w-full mt-2">
+          <div className="bg-white  rounded-lg border border-gray-300  p-4 w-full mt-2">
             <h2 className="mb-2 text-lg font-semibold text-gray-900 dark:text-white">
               Waiting List:
             </h2>
@@ -1283,6 +1202,7 @@ export default function Explore() {
           </div>
         </div>
       </div>
+    </div>
     </div>
   );
 }

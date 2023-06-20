@@ -78,7 +78,7 @@ export default function RoomResources({roomDetails}){
     const options = {
       defaultTabId: "repositories",
       activeClasses:
-        "text-gray-900 bg-gray-800 hover:text-gray-200 dark:text-gray-100 dark:hover:text-gray-200 border-blue-600 dark:border-blue-500",
+        "bg-gray-800 text-gray-100 hover:text-gray-200 border-blue-600",
       inactiveClasses:
         "text-gray-700 hover:bg-gray-100 hover:text-gray-600 dark:text-gray-700 border-gray-100 hover:border-gray-300 dark:border-gray-700 dark:hover:text-gray-900",
       onShow: () => {
@@ -95,7 +95,10 @@ export default function RoomResources({roomDetails}){
   }, []);
 
     return (
-        <div className="w-full pl-[87px] h-screen pb-24 overflow-auto text-gray-700 bg-[#ebe9f2]">
+      <div className='pb-6 pt-4 md:ml-[79px] ml-0 pr-4 bg-white  overflow-auto'>
+
+   
+      <div className="w-full  rounded-2xl pb-8 text-gray-700 bg-[#ebe9f2]">
         <div className="w-full">
           <div class="pl-6 pt-3 flex">
             <Link href="/resources">
@@ -331,6 +334,7 @@ export default function RoomResources({roomDetails}){
               </div>
           </div>
         </div>
+      </div>
       </div>
     )
 }

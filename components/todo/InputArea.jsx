@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 // import { list as data } from "./data";
+import {AiOutlineEnter  } from "react-icons/ai";
+
 
 function InputArea({ handleSubmit }) {
   const [input, setInput] = useState("");
@@ -7,14 +9,10 @@ function InputArea({ handleSubmit }) {
   return (
     <div
       id="#input"
-      className="flex w-full h-12 px-3 my-6 text-lg leading-tight text-gray-700 align-middle bg-white rounded shadow appearance-none dark:bg-input-dark focus:outline-none focus:shadow-outline"
+      className="flex w-full h-12 px-3 my-3 text-lg leading-tight text-gray-700 align-middle bg-white rounded shadow appearance-none dark:bg-input-dark focus:outline-none focus:shadow-outline"
     >
-      <div>
-        <img src="../icons/circle.svg" alt="" className="mt-3 mr-3" />
-      </div>
-
       <form
-        className="flex-1"
+        className=""
         onSubmit={(e) => {
           {
             handleSubmit(e, input);
@@ -22,14 +20,19 @@ function InputArea({ handleSubmit }) {
           }
         }}
       >
+        <div className="flex justify-between my-auto">
         <input
-          className="w-full h-12 border-none input dark:bg-input-dark dark:text-gray-300 text-lg"
+          className="border-none mt-2 input dark:bg-input-dark dark:text-gray-300 text-lg"
           id="username"
           type="text"
           value={input}
           onChange={(e) => setInput(e.target.value)}
           placeholder="What to do ?"
         />
+        <button className=" p-2 border-none cursor-default place-content-center mx-auto" type="submit">
+          <AiOutlineEnter className="text-2xl pt-2"/>
+        </button>
+        </div>
       </form>
     </div>
   );

@@ -4,20 +4,8 @@ import styles from "./parts.module.css";
 // import ThemeButton from "../components/ThemeButton";
 import InputArea from "../todo/InputArea";
 import ListOfActivity from "../todo/ListOfActivity";
-import Filter from "../todo/InformationAndFilter";
 
-const data = [
-  {
-    text: "Take a bath",
-    status: "Completed",
-    id: "0-Take a bath",
-  },
-  {
-    text: "Cook rice",
-    status: "onProgress",
-    id: "1-Take a bath",
-  },
-];
+const data = [];
 
 
 
@@ -25,7 +13,7 @@ function TodoList({roomName}) {
 
 
   const [list, setList] = useState(
-    typeof localStorage !== "undefined"
+    typeof localStorage !== "undefined" && localStorage.getItem(`todolist-${roomName}`)
       ? JSON.parse(localStorage.getItem(`todolist-${roomName}`)) || data
       : data
   );
@@ -49,14 +37,15 @@ function TodoList({roomName}) {
         { text: input, status: "onProgress", id: `${currentId + 1}-${input}` },
       ];
     });
-
+    localStorage.setItem(`todolist-${roomName}`, JSON.stringify(list));
     console.log(list);
   };
 
-  useEffect(() => {
-    localStorage.setItem(`todolist-${roomName}`, JSON.stringify(list));
-    setCurrent(currentId + 1);
-  }, [list, currentId, roomName]);
+  // useEffect(() => {
+  //   localStorage.setItem(`todolist-${roomName}`, JSON.stringify(list));
+  //   // setCurrent(currentId + 1);
+  // }, [list, roomName]);
+
 
   // function when check button pressed
   const checked = (e) => {
@@ -114,9 +103,9 @@ function TodoList({roomName}) {
   }
 
   return (
-      <div className={`w-full p-2 bg-gray-100 rounded-2xl text-left ${styles.noselect}`}>
+      <div className={`w-full p-2 bg-black rounded-2xl text-left ${styles.noselect}`}>
         <div className="flex justify-between align-middle">
-          <h1 className="text-xl font-bold text-black">TO-DO</h1>
+          <h1 className=" font-bold text-white">To-Do</h1>
         </div>
         <InputArea handleSubmit={handleSubmit} />
         {/* Input */}
@@ -128,13 +117,13 @@ function TodoList({roomName}) {
           handleDrag={handleDrag}
         />
         {/* {console.log(list)} */}
-        <Filter
+        {/* <Filter
           list={list}
           options={options}
           removeCompleted={removeCompleted}
           filter={filter}
           setFilter={setFilter}
-        />
+        /> */}
       </div>
   );
 }

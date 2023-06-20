@@ -11,7 +11,7 @@ import Reports from "@/components/profile/reports";
 import Timer from '@/components/tools/timer';
 import TodoList from "../../../components/tools/todolist";
 import {IoCaretBack} from "react-icons/io5";
-import {MdOutlineLibraryBooks} from "react-icons/md";
+import {BiBookAlt} from "react-icons/bi";
 import {IoVideocamOutline} from "react-icons/io5";
 import {IoEllipsisVerticalOutline} from "react-icons/io5";
 
@@ -33,11 +33,13 @@ import Head from "next/head";
 import dynamic from "next/dynamic";
 import AudioComponent from "../../../components/tools/Audio";
 
-const AblyChatComponent = dynamic(
-  () => import("@/components/AblyChatComponent"),
-  { ssr: false,
-    loading: () => <LoadingScreen />,}
-);
+// const AblyChatComponent = dynamic(
+//   () => import("@/components/AblyChatComponent"),
+//   { ssr: false,
+//     loading: () => <LoadingScreen />,}
+// );
+
+import AblyChatComponent from "@/components/AblyChatComponent";
 
 
 export default function Profile({ roomDetails }) {
@@ -93,15 +95,21 @@ export default function Profile({ roomDetails }) {
     // modal.show();
   }, []);
 
-  const roomName = roomDetails[0]?.name;
+  const [roomName, setRoomName] = useState("");
+
+  useEffect(() => {
+
+  setRoomName(roomDetails[0]?.name);
   console.log(roomName + "roomid");
+  
+  }, [roomName, roomDetails]);
 
   useEffect(() => {
     const domain = 'meet.jit.si';
     const options = {
       roomName: `${roomName}`,
-      width: 750,
-      height: 700,
+      width: '100%',
+      height: '100%',
       parentNode: document.querySelector('#meet')
     };
     const api = new JitsiMeetExternalAPI(domain, options);
@@ -147,16 +155,8 @@ export default function Profile({ roomDetails }) {
 
   return (
     <>
-      <div className="w-full pl-[87px] h-screen overflow-auto text-gray-700 bg-gradient-to-r bg-indigo-300 from-10% via-sky-300 via-30% to-emerald-300 to-90%">
-      <Head >
-      </Head>
-        {/* <div className="w-full backdrop-blur-md bg-white/70">
-          <div class="px-10 py-3">
-            <h1 class="md:text-xl text-lg font-bold">
-              Room Name
-            </h1>
-          </div>
-        </div> */}
+      <div className="w-full md:pl-[79px] pl-2  ml-0 h-screen overflow-auto text-gray-700  bg-indigo-300 ">
+
         <div className="md:px-4 px-2">
         <div className="w-full mt-4 rounded-xl backdrop-blur-md bg-white/70">
           <div className="flex justify-between">
@@ -172,7 +172,7 @@ export default function Profile({ roomDetails }) {
           <div className="flex justify-end my-auto">
             <button className="flex flex-row p-3 rounded-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300">
             <Link href={`/resources/${roomDetails[0]?.name}`}>
-              <MdOutlineLibraryBooks className="text-4xl p-2 mt-1 text-gray-200 bg-gray-700 mr-2 rounded" />
+              <BiBookAlt className="text-4xl p-2 mt-1 text-gray-200 bg-gray-700 mr-2 rounded" />
               </Link>
               <IoVideocamOutline className="text-4xl p-2 mt-1 text-gray-200 bg-gray-700 mr-2 rounded" />
               {/* <IoEllipsisVerticalOutline className="text-lg text-gray-200 bg-gray-700 mr-2 rounded" /> */}
@@ -182,16 +182,14 @@ export default function Profile({ roomDetails }) {
           
         </div>
         <div>
-            <div className="grid md:grid-cols-5 md:gap-5">
+            <div className="grid md:grid-cols-5 md:gap-2">
               <div className="md:col-span-3 rounded-2xl p-4">
               <div class="grid relative">
-                <div className="backdrop-blur-md static bg-white/80 p-4 rounded-xl mb-4">
+                <div id="meet" style={{ overflow: 'hidden' }} className="backdrop-blur-md h-screen bg-white/80  rounded-xl mb-4">
 
-                  <div class="w-full h-1/4 ">
-                  <div id="meet" className="rounded-xl" />
-                  </div></div>
+                  </div>
 
-                  <div class="w-full h-3/4 bg-gray-300 backdrop-blur-md bg-white/70 rounded-lg p-2">
+                  <div class="w-full h-3/4  rounded-lg p-2">
                   <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
                     <Timer/>
                     <div className="w-full flex items-center justify-center bg-black rounded-2xl p-2">
@@ -199,23 +197,52 @@ export default function Profile({ roomDetails }) {
                         &quot;{quote?.text}&quot; - {quote?.author || "Anonymous"}
                       </p>
                     </div>
-                      <AudioComponent />
+                    <div className="w-full flex items-center justify-center bg-black rounded-2xl ">
+                    <AudioComponent />
+                    </div>
+                      
                   </div>
 
                   </div>
                 </div>
               </div>
-              <div className="md:col-span-2 w-full mt-4 rounded-2xl mx-auto  md:pb-10 pb-0 ">
-                <div class="grid relative">
-                  <div class="w-full h-1/6 backdrop-blur-md bg-white/60 ">
-                  <TodoList />
+              <div className="md:col-span-2 w-full mt-4 mx-auto  md:pb-10 pb-0 ">
+                <div class="grid bg-black rounded-2xl overflow-hidden ">
+                
+                  <div class="w-full h-1/6 pb-2 bg-black">
+                  <div className="grid md:grid-cols-5 md:gap-2">
+                 <div className="md:col-span-3 rounded-2xl p-4">
+                  <TodoList roomName={roomName} />
                   </div>
-                  <div class="w-full h-fit backdrop-blur-md bg-white/60  top-40 mt-4">
-                    <h1 className="text-black backdrop-blur-md bg-white/90 p-2 rounded-xl">
+                  <div className="md:col-span-2 rounded-2xl p-4">
+
+                    <div className="grid justify-start">
+                  <h1 className="text-white font-bold pl-2  p-2">
+                      Completed
+                    </h1>
+                    <h1 className="text-green-600 text-6xl font-bold pl-2  p-2">
+                      3
+                    </h1>
+
+                    <h1 className="text-white font-bold pl-2  p-2">
+                      Left
+                    </h1>
+
+                    <h1 className="text-white text-6xl font-bold pl-2  p-2">
+                      0
+                    </h1>
+                      
+                      </div>
+                  </div>
+                  </div>
+                  </div>
+                  <div class="w-full h-fit ">
+                    <h1 className="text-white font-bold pl-2 bg-gray-900 p-2">
                       Room Chat
                     </h1>
                   <AblyChatComponent roomId={roomDetails[0]?.id} />
                   </div>
+                  
                 </div>
               </div>
             </div>
@@ -291,5 +318,5 @@ export async function getStaticPaths() {
     params: { roomName: userPath.name },
   }));
 
-  return { paths, fallback: false };
+  return { paths, fallback: true };
 }

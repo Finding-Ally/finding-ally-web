@@ -1,10 +1,27 @@
 import { Modal } from "flowbite";
 import { ModalOptions, ModalInterface } from "flowbite";
-import {FaStar} from "react-icons/fa";
-
-
+import React, { useState, useEffect } from "react";
+import { FaStar, FaLock } from "react-icons/fa";
 
 export default function MainProfile({ userDetails }) {
+  const [usersData, setUsersData] = useState(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch("api/users");
+        const responseData = await response.json();
+        setUsersData(responseData);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  console.log(usersData);
+
   return (
     <div className="w-full rounded-2xl p-4">
       <div class=" grid grid-cols-2 gap-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
@@ -74,13 +91,10 @@ export default function MainProfile({ userDetails }) {
             <p class=" text-bold text-gray-900">5 hr</p>
           </div>
         </div>
-        
       </div>
 
-
-        <h1 class="text-xl font-bold my-2 mt-8">Weekly Streak</h1>
+      <h1 class="text-xl font-bold my-2 mt-8">Weekly Streak</h1>
       <div class=" grid grid-cols-3 gap-2 sm:grid-cols-4 lg:grid-cols-7 xl:grid-cols-12 bg-white rounded-xl  p-2 shadow-lg">
-       
         <div class="flex items-start rounded-xl bg-white p-4">
           <FaStar className="h-12 w-12 text-yellow-400" />
         </div>
@@ -102,7 +116,6 @@ export default function MainProfile({ userDetails }) {
         <div class="flex items-start rounded-xl bg-white  p-4">
           <FaStar className="h-12 w-12 text-yellow-400" />
         </div>
-
 
         {/* <div class="grid col-span-2 items-start rounded-xl bg-gray-100 p-2">
           <div class="ml-4">
@@ -112,67 +125,130 @@ export default function MainProfile({ userDetails }) {
         </div> */}
         <div class="grid col-span-2 items-start rounded-xl bg-gray-100 p-2 ">
           <div class="ml-4">
-            <h2 class="font-semibold text-sm">Longest Streak Week</h2>
+            <h2 class="font-semibold text-sm">Longest Streak</h2>
             <p class=" font-bold text-gray-900 text-xl">5</p>
           </div>
         </div>
-        
       </div>
 
-
-      <h1 class="text-xl font-bold my-2 mt-8">Stickers</h1>
-      <div class=" grid grid-cols-3 gap-2 sm:grid-cols-4 lg:grid-cols-7 xl:grid-cols-12  bg-white rounded-xl  p-2 shadow-lg">
-       
-        <div class="flex items-start rounded-xl bg-gray-100  p-4 ">
-          <FaStar className="h-12 w-12 text-yellow-400" />
-        </div>
-        <div class="flex items-start rounded-xl bg-gray-100  p-4 ">
-          <FaStar className="h-12 w-12 text-yellow-400" />
-        </div>
-        <div class="flex items-start rounded-xl bg-gray-100  p-4 ">
-          <FaStar className="h-12 w-12 text-yellow-400" />
-        </div>
-        <div class="flex items-start rounded-xl bg-gray-100  p-4  ">
-          <FaStar className="h-12 w-12 text-yellow-400" />
-        </div>
-        <div class="flex items-start rounded-xl bg-gray-100  p-4 ">
-          <FaStar className="h-12 w-12 text-yellow-400" />
-        </div>
-        <div class="flex items-start rounded-xl bg-gray-100  p-4 ">
-          <FaStar className="h-12 w-12 text-yellow-400" />
-        </div>
-        <div class="flex items-start rounded-xl bg-gray-100  p-4 ">
-          <FaStar className="h-12 w-12 text-yellow-400" />
+      <div>
+        <h1 className="text-xl font-bold my-2 mt-8">Stickers</h1>
+        <div className="grid gap-2 grid-cols-4 lg:grid-cols-7 xl:grid-cols-12 bg-white rounded-xl p-2 shadow-lg">
+          {/* Replace the star icon with image tags */}
+          
+          <div class="relative flex items-start rounded-xl bg-gray-100">
+          <img
+            src="./stickers/Awesome.png"
+            alt=""
+            class="w-full h-full overflow-hidden"
+          />
+          <div class="absolute bottom-0 left-0 right-0 top-0 h-full rounded-2xl overflow-hidden bg-black bg-fixed opacity-30"></div>
+          <FaLock className="absolute inset-0 m-auto text-4xl text-gray-100" />
         </div>
 
-        <div class="flex items-start rounded-xl bg-gray-100  p-4 ">
-          <FaStar className="h-12 w-12 text-yellow-400" />
+
+        <div class="relative flex items-start rounded-xl bg-gray-100">
+          <img
+            src="./stickers/Blush.png"
+            alt=""
+            class="w-full h-full overflow-hidden"
+          />
+          <div class="absolute bottom-0 left-0 right-0 top-0 h-full rounded-2xl overflow-hidden bg-black bg-fixed opacity-30"></div>
+          <FaLock className="absolute inset-0 m-auto text-4xl text-gray-100" />
         </div>
 
-        <div class="flex items-start rounded-xl bg-gray-100  p-4 ">
-          <FaStar className="h-12 w-12 text-yellow-400" />
+
+        <div class="relative flex items-start rounded-xl bg-gray-100">
+          <img
+            src="./stickers/Danger.png"
+            alt=""
+            class="w-full h-full overflow-hidden"
+          />
+          <div class="absolute bottom-0 left-0 right-0 top-0 h-full rounded-2xl overflow-hidden bg-black bg-fixed opacity-30"></div>
+          <FaLock className="absolute inset-0 m-auto text-4xl text-gray-100" />
         </div>
 
-        
+
+        <div class="relative flex items-start rounded-xl bg-gray-100">
+          <img
+            src="./stickers/Eyes.png"
+            alt=""
+            class="w-full h-full overflow-hidden"
+          />
+          <div class="absolute bottom-0 left-0 right-0 top-0 h-full rounded-2xl overflow-hidden bg-black bg-fixed opacity-30"></div>
+          <FaLock className="absolute inset-0 m-auto text-4xl text-gray-100" />
+        </div>
+
+        <div class="relative flex items-start rounded-xl bg-gray-100">
+          <img
+            src="./stickers/Heart.png"
+            alt=""
+            class="w-full h-full "
+          />
+          <div class="absolute bottom-0 left-0 right-0 top-0 h-full rounded-2xl overflow-hidden bg-black bg-fixed opacity-30"></div>
+          <FaLock className="absolute inset-0 m-auto text-4xl text-gray-100" />
+        </div>
+
+        <div class="relative flex items-start rounded-xl bg-gray-100">
+          <img
+            src="https://media.tarkett-image.com/large/TH_24567081_24594081_24596081_24601081_24563081_24565081_24588081_001.jpg"
+            alt=""
+            class="w-full h-full overflow-hidden rounded-2xl"
+          />
+          <div class="absolute bottom-0 left-0 right-0 top-0 h-full rounded-2xl overflow-hidden bg-black bg-fixed opacity-30"></div>
+          <FaLock className="absolute inset-0 m-auto text-4xl text-gray-100" />
+        </div>
+
+        <div class="relative flex items-start rounded-xl bg-gray-100">
+          <img
+            src="https://media.tarkett-image.com/large/TH_24567081_24594081_24596081_24601081_24563081_24565081_24588081_001.jpg"
+            alt=""
+            class="w-full h-full overflow-hidden rounded-2xl"
+          />
+          <div class="absolute bottom-0 left-0 right-0 top-0 h-full rounded-2xl overflow-hidden bg-black bg-fixed opacity-30"></div>
+          <FaLock className="absolute inset-0 m-auto text-4xl text-gray-100" />
+        </div>
+
+
+        <div class="relative flex items-start rounded-xl bg-gray-100">
+          <img
+            src="https://media.tarkett-image.com/large/TH_24567081_24594081_24596081_24601081_24563081_24565081_24588081_001.jpg"
+            alt=""
+            class="w-full h-full overflow-hidden rounded-2xl"
+          />
+          <div class="absolute bottom-0 left-0 right-0 top-0 h-full rounded-2xl overflow-hidden bg-black bg-fixed opacity-30"></div>
+          <FaLock className="absolute inset-0 m-auto text-4xl text-gray-100" />
+        </div>
+
+
+        <div class="relative flex items-start rounded-xl bg-gray-100">
+          <img
+            src="https://media.tarkett-image.com/large/TH_24567081_24594081_24596081_24601081_24563081_24565081_24588081_001.jpg"
+            alt=""
+            class="w-full h-full overflow-hidden rounded-2xl"
+          />
+          <div class="absolute bottom-0 left-0 right-0 top-0 h-full rounded-2xl overflow-hidden bg-black bg-fixed opacity-30"></div>
+          <FaLock className="absolute inset-0 m-auto text-4xl text-gray-100" />
+        </div>
+          
+        </div>
       </div>
 
-        
-        <h1 class="text-xl font-bold my-2 mt-8">FA Cash</h1>
-        <div class="flex items-start rounded-xl max-w-sm bg-white py-12 shadow-lg">
-          <div class="mx-auto text-center place-content-center place-items-center grid">
-            <h2 class="font-semibold text-sm">1 Hour = 10 FAC</h2>
-            <p class=" text-bold text-gray-900"><span className="text-6xl font-bold">60</span> FAC</p>
+      <h1 class="text-xl font-bold my-2 mt-8">FA Cash</h1>
+      <div class="flex items-start rounded-xl max-w-sm bg-white py-12 shadow-lg">
+        <div class="mx-auto text-center place-content-center place-items-center grid">
+          <h2 class="font-semibold text-sm">1 Hour = 10 FAC</h2>
+          <p class=" text-bold text-gray-900">
+            <span className="text-6xl font-bold">60</span> FAC
+          </p>
 
-            {/* add button heree */}
-            <button class="bg-green-500 mt-4 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full flex">
+          {/* add button heree */}
+          <button class="bg-green-500 mt-4 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full flex">
             <FaStar className="h-6 w-6 text-yellow-400 mr-4" />
             FA Market
-            </button>
-          </div>
+          </button>
         </div>
-
-
-
+      </div>
     </div>
   );
 }

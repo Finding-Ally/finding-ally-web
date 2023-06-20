@@ -11,7 +11,7 @@ export default function AudioComponent(){
       const storedMusic = localStorage.getItem("currentMusic");
       setCurrentMusic(storedMusic);
     
-      let audio = new Audio(`./${storedMusic}.mp3`);
+      let audio = new Audio(`../music/${storedMusic}.mp3`);
       audio.play();
     
       return () => {
@@ -41,39 +41,81 @@ export default function AudioComponent(){
 
 
     return (
-<div className="backdrop-blur-md bg-black rounded-2xl p-4">
+<div className="backdrop-blur-md grid-cols-4 gap-3 grid bg-black rounded-2xl p-4">
           <button
             onClick={() => changeMusic("birds")}
             className={`${
-              currentMusic === "birds" ? "bg-blue-600" : "bg-gray-700"
-            } px-2 py-2 mx-2 rounded text-white focus:outline-none`}
+              currentMusic === "birds" ? "bg-gray-200" : "bg-gray-400"
+            } p-0.5 mx-2 rounded-full text-white focus:outline-none`}
           >
-            Birds
+            <img src="../audioImages/Bird.png" alt="" className="w-8 h-8 rounded-full" />
           </button>
+
           <button
             onClick={() => changeMusic("campfire")}
             className={`${
-              currentMusic === "campfire" ? "bg-blue-600" : "bg-gray-700"
-            } px-2 py-2 mx-2 rounded text-white focus:outline-none`}
+              currentMusic === "campfire" ? "bg-gray-200" : "bg-gray-400"
+            } p-0.5 mx-2 rounded-full text-white focus:outline-none`}
           >
-            Campfire
+            <img src="../audioImages/Bonfire.png" alt="" className="w-8 h-8 rounded-full" />
           </button>
+
           <button
             onClick={() => changeMusic("forest")}
             className={`${
-              currentMusic === "forest" ? "bg-blue-600" : "bg-gray-700"
-            } px-2 py-2 mx-2 rounded text-white focus:outline-none`}
+              currentMusic === "forest" ? "bg-gray-200" : "bg-gray-400"
+            } p-0.5 mx-2 rounded-full text-white focus:outline-none`}
           >
-            Forest
+            <img src="../audioImages/Forest.png" alt="" className="w-8 h-8 rounded-full" />
           </button>
+
+          <button
+            onClick={() => changeMusic("library-audio")}
+            className={`${
+              currentMusic === "library-audio" ? "bg-gray-200" : "bg-gray-400"
+            } p-0.5 mx-2 rounded-full text-white focus:outline-none`}
+          >
+            <img src="../audioImages/LibraryBuilding.png" alt="" className="w-8 h-8 rounded-full" />
+          </button>
+
+          <button
+            onClick={() => changeMusic("Morning-Routine-audio")}
+            className={`${
+              currentMusic === "Morning-Routine-audio" ? "bg-gray-200" : "bg-gray-400"
+            } p-0.5 mx-2 rounded-full text-white focus:outline-none`}
+          >
+            <img src="../audioImages/MorningNews.png" alt="" className="w-8 h-8 rounded-full" />
+          </button>
+
+          <button
+            onClick={() => changeMusic("cafe-audio")}
+            className={`${
+              currentMusic === "cafe-audio" ? "bg-gray-200" : "bg-gray-400"
+            } p-0.5 mx-2 rounded-full text-white focus:outline-none`}
+          >
+            <img src="../audioImages/Music.png" alt="" className="w-8 h-8 rounded-full" />
+          </button>
+
+
           <button
             onClick={() => changeMusic("rain")}
             className={`${
-              currentMusic === "rain" ? "bg-blue-600" : "bg-gray-700"
-            } px-2 py-2 mx-2 rounded text-white focus:outline-none`}
+              currentMusic === "rain" ? "bg-gray-200" : "bg-gray-400"
+            } p-0.5 mx-2 rounded-full text-white focus:outline-none`}
           >
-            Rain
+            <img src="../audioImages/Rain.png" alt="" className="w-8 h-8 rounded-full" />
           </button>
+
+
+          <button
+            onClick={() => changeMusic("study-alone")}
+            className={`${
+              currentMusic === "study-alone" ? "bg-gray-200" : "bg-gray-400"
+            } p-0.5 mx-2 rounded-full text-white focus:outline-none`}
+          >
+            <img src="../audioImages/ReadingUnicorn.png" alt="" className="w-8 h-8 rounded-full" />
+          </button>
+
           {/* <div className="flex my-6">
             <FaMusic className="music-icon text-white" />
             <input

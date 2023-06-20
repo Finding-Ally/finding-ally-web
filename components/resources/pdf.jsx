@@ -81,7 +81,7 @@ const PDFGalleryPage = ({resourceId}) => {
 
 <div className="flex w-full justify-end place-content-end place-items-end mb-4  ">
         <div className='flex bg-blue-500 text-white rounded-lg hover:bg-blue-600'>
-        <label htmlFor="fileInput" className="mr-2 flex py-2" >
+        <label htmlFor="pdfInput" className="mr-2 flex py-2" >
         <AiOutlineUpload className='text-xl mx-2' />Upload
         </label>
         <input

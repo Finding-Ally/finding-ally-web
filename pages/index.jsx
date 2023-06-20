@@ -6,7 +6,7 @@ import Calendar from "@/components/calendar";
 import {useDate} from "@/hooks/useDate";
 import Link from "next/link";
 // const inter = Inter({ subsets: ['latin'] })
-
+import {LuArrowRight} from "react-icons/lu";
 
 export default function Home() {
   const { data: session } = useSession();
@@ -107,20 +107,21 @@ export default function Home() {
 
 
   return (
-    <div className="flex flex-col w-full pl-[87px] pb-24 h-screen overflow-auto text-gray-700 bg-gradient-to-r bg-violet-100 from-10% via-sky-300 via-30% to-emerald-300 to-90%">
-      <div className="w-full bg-yellow-100">
-        <div className="h-fit w-fit rounded-xl bg-white py-1 pl-4 pr-8 shadow ml-4 my-2">
-          <div className="text-lg font-bold ">{date}</div>
+    <div className="pb-6 pt-4 md:ml-[79px] ml-0 pl-2 md:pl-0 pr-2 bg-white  overflow-auto">
+    <div className="w-full rounded-2xl pb-4 text-gray-700 bg-violet-100 ">
+      <div className="w-full bg-yellow-100 rounded-t-2xl p-1">
+        <div className="h-fit grid w-fit rounded-xl bg-white py-1 pl-4 pr-8 m-2 shadow place-content-start place-items-start justify-start">
+          <div className="md:text-lg text-sm font-bold ">{date}</div>
           {/* {wish} */}
-          <div className="text-sm font-medium ">{time}</div>
+          <div className="md:text-sm text-xs font-medium ">{time}</div>
         </div>
-        <div className="h-full">
-          <p className="text-center text-xl -mt-12 mb-6">
+        <div className="h-full flex place-content-center place-items-center justify-center">
+          <p className="text-center text-sm md:text-xl md:-mt-14 mb-6">
           &quot;{quote?.text}&quot; - {quote?.author || "Anonymous"}
           </p>
         </div>
       </div>
-      <div className="px-10 mt-4">
+      <div className="md:px-10 px-2 mt-4">
         <div className="flex items-center flex-shrink-0 h-10">
           <span className="block text-xl font-bold">Your Ally Rooms</span>
           <span className="flex items-center justify-center w-5 h-5 ml-2 text-sm font-semibold text-indigo-500 bg-white rounded bg-opacity-30">
@@ -147,7 +148,7 @@ export default function Home() {
 
           {currentUserRooms.length > 0 ? currentUserRooms.map((room) => ( 
 
-          <Link href={`/room/${room?.name}`} key={room?._id}
+          <a href={`/room/${room?.name}`} key={room?._id}
             className="relative flex flex-col items-start p-4 py-4 mt-3 bg-white rounded-lg bg-opacity-90 group hover:bg-opacity-100"
           >
             {/* <button className="absolute top-0 right-0 items-center justify-center hidden w-5 h-5 mt-3 mr-2 text-gray-500 rounded hover:bg-gray-200 hover:text-gray-700 group-hover:flex">
@@ -170,31 +171,21 @@ export default function Home() {
             <div className="flex">
               {room?.members?.map((member) => (
                 <img key={member?._id}
-                className="w-8 h-8 ml-auto rounded-full"
-                src={member?.image}
+                className="w-8 h-8 ml-auto bg-gray-300 mr-1 rounded-full"
+                src={`https://robohash.org/${member?.id}}`}
               />
               )) 
               }
               </div>
               <div className="flex items-center ">
-                <svg
-                  className="w-4 h-4 text-gray-300 fill-current"
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-                <span className="ml-1 leading-none">Dec 12</span>
+                <div className="flex items-center ">
+                <span className="ml-1 leading-none"><LuArrowRight  className="text-2xl"/></span>
+              </div>
               </div>
               
               
             </div>
-          </Link>
+          </a>
 
           )): <div className="relative flex flex-col items-start p-4 py-8 mt-3 bg-white rounded-lg bg-opacity-90 group hover:bg-opacity-100"
         >
@@ -229,7 +220,7 @@ export default function Home() {
         <span className="block text-xl mb-4 font-bold">Calendar</span>
         <Calendar />
       </div>
-        
+      </div>
     </div>
   );
 }

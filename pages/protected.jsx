@@ -7,7 +7,7 @@ const Protected = () => {
 	const { data: session, status } = useSession({
 		required: true,
 		onUnauthenticated: () => {
-			push('/signin')
+			push('/join')
 		},
 	})
 

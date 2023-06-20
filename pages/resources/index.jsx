@@ -3,7 +3,7 @@ import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import {LuArrowRight} from "react-icons/lu"
-
+import {IoEarth}  from "react-icons/io5"
 
 
 export default function Resources(){
@@ -37,9 +37,10 @@ export default function Resources(){
 
 
     return (
-        <div className="w-full pl-[87px] h-screen overflow-auto text-gray-700 bg-gradient-to-r bg-purple-100 from-10% to-blue-300 to-90%">
+      <div className="pb-6 pt-2 md:ml-[79px] ml-0 md:pl-0 pl-2 pr-2 h-screen bg-white  overflow-auto">
+        <div className="w-full rounded-2xl h-[97%] text-gray-700 bg-purple-100 ">
 
-<div className="px-10 mt-4">
+<div className="px-10 mt-4 pt-2">
         <div className="flex items-center flex-shrink-0 h-10">
           <span className="block text-xl font-bold">Shared Resources</span>
           <span className="flex items-center justify-center w-5 h-5 ml-2 text-sm font-semibold text-indigo-500 bg-white rounded bg-opacity-30">
@@ -69,16 +70,9 @@ export default function Resources(){
           <Link href={`/resources/${room?.name}`} key={room?._id}
             className="relative flex flex-col items-start p-4 py-4 mt-3 bg-white rounded-lg bg-opacity-90 group hover:bg-opacity-100"
           >
-            {/* <button className="absolute top-0 right-0 items-center justify-center hidden w-5 h-5 mt-3 mr-2 text-gray-500 rounded hover:bg-gray-200 hover:text-gray-700 group-hover:flex">
-              <svg
-                className="w-4 h-4 fill-current"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-              >
-                <path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z" />
-              </svg>
-            </button> */}
+            <button className="absolute cursor-default top-4 right-4 items-center justify-center w-5 h-5 mt-3 mr-2 text-gray-500 hover:text-gray-700 flex">
+            <IoEarth  className="text-2xl"/>
+            </button>
             <span className="text-lg font-bold mt-2 ">
               {room?.name}
             </span>
@@ -87,10 +81,10 @@ export default function Resources(){
             </h4>
             <div className="flex justify-between items-center mb-2 w-full mt-3 text-xs font-medium text-gray-400 pt-6">
             <div className="flex">
-              {room?.members?.map((member) => (
+            {room?.members?.map((member) => (
                 <img key={member?._id}
-                className="w-8 h-8 ml-auto rounded-full"
-                src={member?.image}
+                className="w-8 h-8 ml-auto bg-gray-300 mr-1 rounded-full"
+                src={`https://robohash.org/${member?.id}}`}
               />
               )) 
               }
@@ -152,7 +146,7 @@ export default function Resources(){
             <div className="flex">
               <img
                 className="w-8 h-8 ml-auto bg-gray-300 rounded-full"
-                src={`https://robohash.org/${session?.user?.email}}`}
+                src={`https://robohash.org/${session?.user?.id}}`}
               />
               {/* <img
                 className="w-8 h-8 ml-auto rounded-full"
@@ -174,6 +168,7 @@ export default function Resources(){
         </div>
       </div>
         
+        </div>
         </div>
     )
 }

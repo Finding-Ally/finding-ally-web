@@ -52,25 +52,26 @@ const GalleryPage = ({resourceId}) => {
   };
 
   useEffect(() => {
+    const fetchUploadedImages = async () => {
+      try {
+        const folderRef = ref(storage, `SharedResources/IMAGES/${resourceId}`);
+        const files = await listAll(folderRef);
+  
+        const imagePromises = files.items.map(async (file) => {
+          const url = await getDownloadURL(file);
+          return { name: file.name, url };
+        });
+  
+        const images = await Promise.all(imagePromises);
+        setUploadedImages(images);
+      } catch (error) {
+        console.error('Error fetching uploaded images:', error);
+      }
+    };
     fetchUploadedImages();
-  }, []);
+  }, [resourceId]);
 
-  const fetchUploadedImages = async () => {
-    try {
-      const folderRef = ref(storage, `SharedResources/IMAGES/${resourceId}`);
-      const files = await listAll(folderRef);
-
-      const imagePromises = files.items.map(async (file) => {
-        const url = await getDownloadURL(file);
-        return { name: file.name, url };
-      });
-
-      const images = await Promise.all(imagePromises);
-      setUploadedImages(images);
-    } catch (error) {
-      console.error('Error fetching uploaded images:', error);
-    }
-  };
+  
 
   return (
     <div className="container mx-auto bg-white p-4 min-h-screen rounded-xl">
