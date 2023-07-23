@@ -76,6 +76,14 @@ const GalleryPage = ({resourceId}) => {
   return (
     <div className="container mx-auto bg-white p-4 min-h-screen rounded-xl">
       <div className="flex w-full justify-end place-content-end place-items-end mb-4  ">
+      {selectedImages.map((image) => (
+          <div key={image.name} className="flex items-center">
+            <span className="mr-2">{image.name}</span>
+            {/* {uploadProgress[image.name] !== undefined && (
+              <progress value={uploadProgress[image.name]} max={100} className="w-64"></progress>
+            )} */}
+          </div>
+        ))}
         <div className='flex bg-blue-500 text-white rounded-lg hover:bg-blue-600'>
         <label htmlFor="fileInput" className="mr-2 flex py-2" >
         <AiOutlineUpload className='text-xl mx-2' />Upload
@@ -98,12 +106,12 @@ const GalleryPage = ({resourceId}) => {
           </div>
       </div>
 
-      <div className="grid grid-cols-6 gap-4">
+      <div className="grid xl:grid-cols-6 md:grid-cols-3 grid-cols-1 gap-4">
         {uploadedImages.map((image) => (
           <div key={image.name} className="p-2 border rounded bg-gray-100">
-            <img src={image.url} alt={image.name} className="w-full object-cover" />
+            <img src={image.url} alt={image.name} className="w-full h-48 object-cover" />
             <div className="flex justify-between mt-2">
-              <a href={image.url} download={image.name} className="">
+              <a href={image.url} rel="noopener" target='_blank' download={image.name} className="">
                 <FaEye className="text-xl ml-4" />
               </a>
               <button

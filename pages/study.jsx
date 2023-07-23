@@ -85,10 +85,10 @@ const PomodoroPage = () => {
       </div>
 
       <div className="h-fit grid mx-auto z-10 mt-4 w-fit justify-center backdrop-blur-md p-2 bg-white/40 rounded-xl place-content-center ">
-        <h1 className="text-black font-bold text-xl">
+        <h1 className="text-black font-bold md:text-xl text-sm">
           &quot;{quote?.text}&quot;
         </h1>
-        <p className="text-black font-bold text-sm mx-auto">
+        <p className="text-black font-bold md:text-sm text-xs mx-auto">
           - {quote?.author || "Anonymous"}
         </p>
       </div>
@@ -98,13 +98,13 @@ const PomodoroPage = () => {
           className=""
           onClick={() => changeVideoSource("previous")}
         >
-          <GrFormPreviousLink className="backdrop-blur-md bg-white/60 hover:bg-gray-400 text-white  text-2xl rounded-l" />
+          <GrFormPreviousLink className="backdrop-blur-md bg-white/60 hover:bg-gray-400 text-white  md:text-2xl text-xl rounded-l" />
         </button>
         <button
           className=""
           onClick={() => changeVideoSource("next")}
         >
-          <GrFormNextLink className="backdrop-blur-md bg-white/60 hover:bg-gray-400 text-white  text-2xl rounded-r" />
+          <GrFormNextLink className="backdrop-blur-md bg-white/60 hover:bg-gray-400 text-white  md:text-2xl text-xl rounded-r" />
         </button>
       </div>
 

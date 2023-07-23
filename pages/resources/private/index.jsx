@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useId } from 'react';
 import {useSession} from 'next-auth/react';
 // import useSWR from "swr";
 import { Tabs } from "flowbite";
@@ -13,12 +13,12 @@ import { FcWorkflow } from "react-icons/fc";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 
-import Youtube from '../../../components/resources/youtube';
+import Youtube from '../../../components/resources/private/youtube';
 import GalleryPage from '../../../components/resources/screenshot';
-import Other from '../../../components/resources/other';
+import Other from '../../../components/resources/private/other';
 import PDFGalleryPage from '../../../components/resources/pdf';
-import HandWritten from '../../../components/resources/handwritten';
-import WebsiteLink from '../../../components/resources/websitelinks';
+import HandWritten from '../../../components/resources/private/handwritten';
+import WebsiteLink from '../../../components/resources/private/websitelinks';
 import {BiArrowBack} from "react-icons/bi"
 
 import {BsLink} from "react-icons/bs"
@@ -30,12 +30,17 @@ import {BsFolder} from "react-icons/bs"
 
 
 
-
 export default function PrivateDrive(){
 
     const {data: session} = useSession();
+    const [userId, setUserId] = useState();
+    const [userDetails, setUserDetails] = useState();
 
-    const userId = session?.user?.id;
+    useEffect(() => {
+        if (!session?.user) return;
+        setUserId(session.user.id);
+        setUserDetails(session.user);
+    }, [session?.user]);
 
     
   useEffect(() => {
@@ -93,7 +98,7 @@ export default function PrivateDrive(){
   }, []);
 
     return (
-      <div className='pb-6 pt-4 md:ml-[79px] ml-0 pr-4 bg-white  overflow-auto'>
+      <div className='pb-6 pt-4 md:ml-[79px] min-h-screen ml-0 pr-4 bg-white  overflow-auto'>
 
    
         <div className="w-full  rounded-2xl pb-8 text-gray-700 bg-[#ebe9f2]">
@@ -279,7 +284,9 @@ export default function PrivateDrive(){
                       role="tabpanel"
                       aria-labelledby="clubs-tab"
                     >
-                       <WebsiteLink />
+                      {
+                        userDetails && <WebsiteLink userDetails={userDetails} />
+                      }
                     </div>
                     <div
                       className="hidden  "
@@ -287,15 +294,19 @@ export default function PrivateDrive(){
                       role="tabpanel"
                       aria-labelledby="dashboard-tab"
                     >
-                     <HandWritten/>
+                      {
+                        userDetails && <HandWritten userDetails={userDetails} />
+                      }
                     </div>
                     <div
-                      className="hidden "
+                      className="hidden"
                       id="repositories"
                       role="tabpanel"
                       aria-labelledby="repositories-tab"
                     >
-                        <Youtube />
+                      {
+                        userDetails && <Youtube userDetails={userDetails} />
+                      }
                     </div>
                     <div
                       className="hidden"
@@ -303,11 +314,11 @@ export default function PrivateDrive(){
                       role="tabpanel"
                       aria-labelledby="contacts-tab"
                     >
-                      <PDFGalleryPage resourceId={userId}/>
+                      {
+                        userId && <PDFGalleryPage resourceId={userId}/>
+                      }
+                      
                     </div>
-
-                    
-
 
                     <div
                       className="hidden"
@@ -315,7 +326,9 @@ export default function PrivateDrive(){
                       role="tabpanel"
                       aria-labelledby="screenshot-tab"
                     >
-                      <GalleryPage resourceId={userId}/>
+                      {
+                        userId && <GalleryPage resourceId={userId}/>
+                      }
                     </div>
                     
                     <div
@@ -324,7 +337,9 @@ export default function PrivateDrive(){
                       role="tabpanel"
                       aria-labelledby="other-tab"
                     >
-                      <Other/>
+                      {
+                        userDetails && <Other userDetails={userDetails} />
+                      }
                     </div>
                   </div>
                 </div>

@@ -10,7 +10,7 @@ export default function Document() {
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet" />
 
       {/*eslint-disable-next-line @next/next/no-sync-scripts */}
-      <script src="https://meet.jit.si/external_api.js" />
+      <script src="https://8x8.vc/vpaas-magic-cookie-224b35e3518242828587c97247bc13c2/external_api.js" />
 <title>FindAlly</title>
       </Head>
       <body>

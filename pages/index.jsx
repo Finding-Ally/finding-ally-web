@@ -9,14 +9,17 @@ import Link from "next/link";
 import {LuArrowRight} from "react-icons/lu";
 
 export default function Home() {
-  const { data: session } = useSession();
-
-  const userId = session?.user?.id;
-
+  
   const { date, time, wish } = useDate(); // custom hook
-
+  
   const { push, asPath } = useRouter();
-
+  const { data: session, status } = useSession({
+    required: true,
+		onUnauthenticated: () => {
+      push('/join')
+		},
+	})
+  const userId = session?.user?.id;
   const handleSignOut = async () => {
     const data = await signOut({ redirect: false, callbackUrl: "/join" });
 
@@ -40,8 +43,7 @@ export default function Home() {
   // 		</>
   // 	)}
   // </div>
-
-
+	
   // Fetch the Request rooms of the current user
 
   // Initialize a state to store the fetched data
@@ -82,7 +84,7 @@ export default function Home() {
         do {
           const randomIndex = Math.floor(Math.random() * jsonData.length);
           randomQuote = jsonData[randomIndex];
-        } while (randomQuote && randomQuote.text.split(' ').length > 12);
+        } while (randomQuote && randomQuote.text.split(' ').length > 8);
   
         if (randomQuote) {
           setQuote(randomQuote);
@@ -98,29 +100,42 @@ export default function Home() {
   }, []);
   
   
-  
-  
+  const currentHour = new Date().getHours();
+  console.log(currentHour + "current Hour")
 
-  console.log(quote);
-  
-
+  let backgroundImage;
+  if (currentHour >= 5 && currentHour < 12) {
+    backgroundImage = '/banner/sunrise.png';
+  } else if (currentHour >= 12 && currentHour < 18) {
+    backgroundImage = '/banner/sunset.png';
+  } else {
+    backgroundImage = '/banner/night.png';
+  }
 
 
   return (
-    <div className="pb-6 pt-4 md:ml-[79px] ml-0 pl-2 md:pl-0 pr-2 bg-white  overflow-auto">
-    <div className="w-full rounded-2xl pb-4 text-gray-700 bg-violet-100 ">
-      <div className="w-full bg-yellow-100 rounded-t-2xl p-1">
-        <div className="h-fit grid w-fit rounded-xl bg-white py-1 pl-4 pr-8 m-2 shadow place-content-start place-items-start justify-start">
-          <div className="md:text-lg text-sm font-bold ">{date}</div>
-          {/* {wish} */}
-          <div className="md:text-sm text-xs font-medium ">{time}</div>
-        </div>
-        <div className="h-full flex place-content-center place-items-center justify-center">
-          <p className="text-center text-sm md:text-xl md:-mt-14 mb-6">
-          &quot;{quote?.text}&quot; - {quote?.author || "Anonymous"}
-          </p>
-        </div>
+    <div className="pb-6 pt-4 md:ml-[79px] ml-0 pl-2 md:pl-0 pr-2 bg-white min-h-screen  overflow-auto">
+    <div className="w-full rounded-2xl pb-4 text-gray-700 min-h-screen bg-violet-100 ">
+    <div className="w-full bg-yellow-100 md:pb-0 pb-4 rounded-t-2xl p-1">
+      
+      <div className="h-fit grid w-fit rounded-xl bg-white py-1 pl-4 pr-8 m-2 shadow place-content-start place-items-start justify-start">
+        <div className="md:text-lg text-sm font-bold">{date}</div>
+        {/* {wish} */}
+        <div className="md:text-sm text-xs font-medium">{time}</div>
       </div>
+      <div className="h-full flex place-content-center place-items-center justify-center relative">
+        <p className="text-center text-sm md:text-lg md:-mt-14 mb-6">
+          &quot;{quote?.text}&quot; - {quote?.author || "Anonymous"}
+        </p>
+      </div>
+      <div className="h-full md:-mt-20 -mt-28 flex place-content-end place-items-end justify-end relative">
+      <img
+      className="object-cover object-right w-20 h-20 object-no-repeat"
+      src={backgroundImage}
+      alt="Time of Day"
+    />
+      </div>
+    </div>
       <div className="md:px-10 px-2 mt-4">
         <div className="flex items-center flex-shrink-0 h-10">
           <span className="block text-xl font-bold">Your Ally Rooms</span>
@@ -170,9 +185,9 @@ export default function Home() {
             <div className="flex justify-between items-center mb-2 w-full mt-3 text-xs font-medium text-gray-400 pt-6">
             <div className="flex">
               {room?.members?.map((member) => (
-                <img key={member?._id}
+                <img key={member?.id}
                 className="w-8 h-8 ml-auto bg-gray-300 mr-1 rounded-full"
-                src={`https://robohash.org/${member?.id}}`}
+                src={`https://robohash.org/${member?.id}`}
               />
               )) 
               }
@@ -216,9 +231,9 @@ export default function Home() {
         </div>
 
 
-        <br />
+        {/* <br />
         <span className="block text-xl mb-4 font-bold">Calendar</span>
-        <Calendar />
+        <Calendar /> */}
       </div>
       </div>
     </div>

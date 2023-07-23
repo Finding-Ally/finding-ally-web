@@ -80,6 +80,14 @@ const PDFGalleryPage = ({resourceId}) => {
     <div className="container mx-auto bg-white p-4 min-h-screen rounded-xl">
 
 <div className="flex w-full justify-end place-content-end place-items-end mb-4  ">
+{selectedPDFs.map((pdf) => (
+          <div key={pdf.name}>
+            {uploadProgress.hasOwnProperty(pdf.name) && (
+              <span className='text-xs mr-4'>{pdf.name}</span>
+              // <progress value={uploadProgress[pdf.name]} max={100} className="w-48"></progress>
+            )}
+          </div>
+        ))}
         <div className='flex bg-blue-500 text-white rounded-lg hover:bg-blue-600'>
         <label htmlFor="pdfInput" className="mr-2 flex py-2" >
         <AiOutlineUpload className='text-xl mx-2' />Upload

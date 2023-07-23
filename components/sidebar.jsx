@@ -8,7 +8,6 @@ import {BiHomeHeart} from "react-icons/bi"
 import {BiWalk} from "react-icons/bi"
 import {BiBookAlt} from "react-icons/bi"
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 
 export default function Sidebar() {
   const { data: session } = useSession();
@@ -27,84 +26,75 @@ export default function Sidebar() {
     setActiveLink(asPath);
   }, [asPath]);
 
-
+  
+  const [timeData, setTimeData] = useState([]);
   const [userProfile, setUserProfile] = useState('');
-
-  
   const [userId, setUserId] = useState('');
-  
-  const [streaks, setStreaks] = useState([]);
-
   
   useEffect(() => {
     setUserProfile(session?.user?.email.split("@")[0]);
     setUserId(session?.user?.id);
-    setStreaks(session?.user?.streaks);
-      }, [session]);
-    
-      const [timeData, setTimeData] = useState([]);
-
+    setTimeData(session?.user?.streaks || []); // Set initial timeData to an empty array if it's undefined
+  }, [session]);
+  
   useEffect(() => {
-    // Fetch previous array data from localStorage or API
-    const fetchTimeData = async () => {
-      try {
-        // Fetch the previous array data from localStorage or API
-        const previousData = await fetchPreviousTimeData(); // Implement this function according to your requirements
-        setTimeData(previousData);
-      } catch (error) {
-        console.error('Error fetching previous time data:', error);
-      }
-    };
-
-    fetchTimeData();
-  }, []);
-
-  useEffect(() => {
-    const updateTimer = setInterval(() => {
+    async function updateData() {
       const currentDate = new Date();
-      // const currentTime = currentDate.getTime();
-      const updatedData = timeData.map((item) => {
-        if (item.date === currentDate.toDateString()) {
-          // Update the time counter by 5 minutes
-          return {
-            date: item.date,
-            time: item.time + 1,
-          };
-        }
-        return item;
-      });
-
-      const data = {
-        ...session?.user,
-        streaks: updatedData,
-      };
-
-      // Make a POST call to the backend's user collection
-      axios.put(`/api/users/${userId}`, { data })
-        .then((response) => {
-          console.log('Time data updated successfully');
-        })
-        .catch((error) => {
-          console.error('Error updating time data:', error);
+      let updatedData = [...timeData]; // Create a copy of timeData
+      
+      const todayIndex = updatedData.findIndex(item => item.date === currentDate.toDateString());
+      
+      if (todayIndex !== -1) {
+        // Update the time for today's date
+        updatedData[todayIndex] = {
+          date: currentDate.toDateString(),
+          time: updatedData[todayIndex].time + 1,
+        };
+      } else {
+        // Add a new element for today's date
+        updatedData.push({
+          date: currentDate.toDateString(),
+          time: 1,
         });
-
+      }
+      
+  
+      const postURL = `/api/updateuser?userId=${userId}`;
+      await fetch(postURL, {
+        method: "PUT",
+        headers: {
+          "Accept": "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          streaks: updatedData,
+        }),
+      });
+  
       setTimeData(updatedData);
       console.log(updatedData);
       console.log('Time data updated');
-    }, 1 * 60 * 1000); // 5 minutes in milliseconds
-
+    }
+  
+    const updateTimer = setInterval(updateData, 1 * 60 * 1000);
+  
     return () => clearInterval(updateTimer);
-  }, [timeData, userId]);
+  }, [timeData, userId, session?.user]);
+  
+  
 
 
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const  handleLogOutForm = () => {
+    setIsModalOpen(!isModalOpen);
+  }
 
   if(activeLink.includes('join')){
     return (
-      <div></div>
+      <></>
     )
-  }
-
-  
+  } 
 
   return (
     <>
@@ -237,30 +227,27 @@ export default function Sidebar() {
                      focus:text-gray-700"
                 >
                   <img
-                    src={`https://robohash.org/${userId}}`}
+                    src={`https://robohash.org/${userId}`}
                     className="rounded-full w-9 h-9 bg-gray-300"
                     alt=""
                   />
                   <p className="text-xs font-semibold">Profile</p>
                 </Link>
               </div>
-              <div className="hover:bg-gray-200 rounded-xl w-full">
-                <Link
-                  onClick={handleSignOut}
-                  href="join"
-                  className="h-14 px-2 flex flex-col justify-center items-center 
+              <div className="hover:bg-gray-200 rounded-l-2xl w-full">
+                <button
+                  onClick={handleLogOutForm}
+                  className="h-14 px-2 flex flex-col mx-auto justify-center items-center 
                      focus:text-gray-700"
                 >
                   <BiWalk className="text-xl" />
                   <p className="text-xs font-semibold">Logout</p>
-                </Link>
+                </button>
               </div>
             </div>
           </aside>
         </div>
-
-
-            <ul className="fixed bottom-0 md:hidden grid w-full grid-cols-6  bg-white items-center p-1  text-gray-700 z-50 w-full">
+            <ul className="fixed bottom-0 md:hidden grid w-full grid-cols-6  bg-white items-center p-1  text-gray-700 z-50 ">
               <li className={`${activeLink === '/' || activeLink.includes('/room') ? 'bg-indigo-300 ' : ''} hover:bg-indigo-300 mr-1 rounded-xl`}>
                 <Link
                   href="/"
@@ -312,7 +299,7 @@ export default function Sidebar() {
                      focus:text-gray-700"
                 >
                   <img
-                    src={`https://robohash.org/${userId}}`}
+                    src={`https://robohash.org/${userId}`}
                     className="rounded-full md:w-9 md:h-9 h-8 w-8 bg-gray-300"
                     alt=""
                   />
@@ -320,17 +307,47 @@ export default function Sidebar() {
                 </Link>
               </li>
               <li className="hover:bg-gray-200 rounded-xl w-full">
-                <Link
-                  onClick={handleSignOut}
-                  href="join"
-                  className="h-14 px-2 flex flex-col justify-center items-center 
+                <button
+                  onClick={handleLogOutForm}
+                  href="/join"
+                  className="h-14 px-2 flex flex-col mx-auto justify-center items-center 
                      focus:text-gray-700"
                 >
                   <BiWalk className="text-xl" />
                   <p className="text-xs font-semibold">Logout</p>
-                </Link>
+                </button>
               </li>
             </ul>
+
+            {
+              isModalOpen && (
+                <div className="bg-gray-700 bg-opacity-50 dark:bg-opacity-80 fixed inset-0 z-20 backdrop-blur-sm bg-black/30 grid place-content-center justify-center w-screen h-screen ">
+                <div
+                  id="popup-modal"
+                  tabindex="-1"
+                  className="z-20 w-screen h-[calc(100%-1rem)] grid justify-center mb-4 p-4 overflow-x-hidden overflow-y-auto"
+                >
+                <div className="relative w-full max-w-md max-h-full">
+                    <div className="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                        <button onClick={handleLogOutForm} type="button" className="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-800 dark:hover:text-white" data-modal-hide="popup-modal">
+                            <svg aria-hidden="true" className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+                            <span className="sr-only">Close modal</span>
+                        </button>
+                        <div className="p-6 text-center">
+                            <svg aria-hidden="true" className="mx-auto mb-4 text-gray-400 w-14 h-14 dark:text-gray-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">You wish to log out?</h3>
+                            <Link
+                            onClick={handleSignOut}
+                            href="/join"  data-modal-hide="popup-modal" type="button" className="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-xl border-2 border-gray-400 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10  mr-2">
+                                Yes, Until next time! 😉
+                            </Link>
+                            <button onClick={handleLogOutForm} data-modal-hide="popup-modal" type="button" className=" bg-green-500 hover:bg-green-600 focus:ring-4 focus:outline-none focus:ring-green-200 rounded-xl border border-gray-200 text-sm font-medium px-5 py-2.5 text-gray-900 focus:z-10 ">No, I&apos;ll stay 😬</button>
+                        </div>
+                    </div>
+                </div>
+            </div></div>
+              )
+            }
 
     </>
   );

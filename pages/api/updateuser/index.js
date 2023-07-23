@@ -11,7 +11,7 @@ export default async function handler(req, res) {
   const fetchBody = {
     dataSource: process.env.MONGODB_DATA_SOURCE,
     database: 'database',
-    collection: 'rooms',
+    collection: 'users',
   };
   const baseUrl = `${process.env.MONGODB_DATA_API_URL}/action`;
 
@@ -79,26 +79,26 @@ export default async function handler(req, res) {
       //   res.status(200).json(updateDataJson);
       //   break;
       case "PUT":
-      const roomIdPut = req.query.roomIdPut;
-      console.log("roomIdPut", roomIdPut);
-        const updateData = await fetch(`${baseUrl}/updateOne`, {
-          ...fetchOptions,
-          body: JSON.stringify({
-            ...fetchBody,
-            filter: { _id: roomIdPut},
-            update: {
-              $set: {
-                handWrittenNotes: req.body.handWrittenNotes,
-                otherNotes: req.body.otherNotes,
-                websiteLinks: req.body.websiteLinks,
-                youtubeLinks: req.body.youtubeLinks,
-                messages: req.body.messages,
-              }
-            },
-          }),
-        });
-        const updateDataJson = await updateData.json();
-        res.status(200).json(updateDataJson);
+      const userId = req.query.userId;
+      console.log(userId)
+      const updateData = await fetch(`${baseUrl}/updateOne`, {
+        ...fetchOptions,
+        body: JSON.stringify({
+          ...fetchBody,
+          filter: { _id: {$oid: userId}},
+          update: {
+            $set: {
+              handWrittenNotes: req.body.handWrittenNotes,
+              otherNotes: req.body.otherNotes,
+              websiteLinks: req.body.websiteLinks,
+              youtubeLinks: req.body.youtubeLinks,
+              streaks: req.body.streaks,
+            }
+          },
+        }),
+      });
+      const updateDataJson = await updateData.json();
+      res.status(200).json(updateDataJson);
       break;
 
       case 'DELETE':

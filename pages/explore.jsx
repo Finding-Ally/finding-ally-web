@@ -23,7 +23,8 @@ export default function Explore() {
   const [userBio, setuserBio] = useState();
   const [language, setLanguage] = useState();
 
-  const [goal, setGoal] = useState("University-Studies");
+  const [category, setCategory] = useState("");
+  const [subtopic, setSubtopic] = useState("");
   const [phase, setPhase] = useState("Intermediate");
   const [availability, setAvailability] = useState("Anytime");
   const [group_or_duo, setgroup_or_duo] = useState("duo");
@@ -68,7 +69,7 @@ export default function Explore() {
         interests: session?.user?.interests,
       },
       members: [],
-      goal: goal,
+      subtopic: subtopic,
       phase: phase,
       availability: availability,
       group_or_duo: group_or_duo,
@@ -87,11 +88,10 @@ export default function Explore() {
     const matchedRooms = fetchRooms.filter((room) => {
       if (room.adminUser.id === userId) return false;
       return (
-        room?.goal === data?.goal &&
+        room?.subtopic === data?.subtopic &&
         room?.gender === data?.gender &&
         room?.group_or_duo === data?.group_or_duo &&
-        room?.phase === data?.phase 
-        // room?.location === data?.location
+        room?.location === data?.location
       );
     });
 
@@ -99,9 +99,9 @@ export default function Explore() {
     const calculateMatchingScore = (formData, room) => {
       let score = 0;
 
-      // Compare the goal
-      if (formData.goal === room.goal) {
-        score += 10; // Increment score if goal matches
+      // Compare the subtopic
+      if (formData.subtopic === room.subtopic) {
+        score += 10; // Increment score if subtopic matches
       }
 
       // Compare the availability
@@ -113,8 +113,6 @@ export default function Explore() {
         score += 5;
       }
 
-      // Compare other criteria and update the score accordingly
-      // Add more conditions and assign appropriate scores based on your matching logic
 
       return score;
     };
@@ -145,22 +143,14 @@ export default function Explore() {
 
       const newData = {
         ...matchedRoom,
-        name: matchedRoom.goal + "-" + matchedRoom.adminUser.id.slice(-6),
+        name: matchedRoom.subtopic + "-" + matchedRoom.adminUser.id.slice(-6),
         members: [
-          ...matchedRoom.members,
           matchedRoom.adminUser,
           {
             name: session?.user?.name,
             id: session?.user?.id,
-            image: session?.user?.image,
-            age: session?.user?.age,
-            major: session?.user?.major,
-            goals: session?.user?.goals,
-            bio: session?.user?.bio,
-            availability: session?.user?.availability,
-            language: session?.user?.language,
-            interests: session?.user?.interests,
-          },
+            email: session?.user?.email
+          }
         ],
         isMatched: true,
       };
@@ -178,7 +168,7 @@ export default function Explore() {
 
       if (response.ok) {
         console.log("Document created successfully");
-        setCurrentUserRooms([ currentUserRooms, newData]);
+        setCurrentUserRooms([ ...currentUserRooms, newData]);
         toast.success(" Room Created Successfully", {
           position: "top-right",
           autoClose: 5000,
@@ -199,7 +189,7 @@ export default function Explore() {
             // Successful deletion
             // Perform any necessary actions or update the UI accordingly
             setRequestedRooms((prevRooms) =>
-              prevRooms.filter((room) => room._id !== roomId)
+              prevRooms.filter((room) => room._id !== matchedRoomId)
             );
             console.log("Room deleted successfully");
           } else {
@@ -261,8 +251,12 @@ export default function Explore() {
     document.getElementById("save-btn").textContent = "Saved";
   };
 
-  const updateGoal = (e) => {
-    setGoal(e.target.value.trim());
+  const updateCategory = (e) => {
+    setCategory(e.target.value.trim());
+  };
+
+  const updateSubtopic = (e) => {
+    setSubtopic(e.target.value.trim());
   };
 
 
@@ -358,7 +352,20 @@ export default function Explore() {
     }
   };
 
+  const [isUnmatchReportFormOpen, setIsUnmatchReportFormOpen] = useState(false);
+
+  const [selectedRoomId, setSelectedRoomId] = useState();
+
+  const handleUnmatchReportFormToggle = (roomId) => {
+    setSelectedRoomId(roomId);
+    console.log("selectedRoomId", selectedRoomId); 
+    setIsUnmatchReportFormOpen(!isUnmatchReportFormOpen);
+    // handleDeleteRoomConnected(roomId);
+  };
+
+
   const handleDeleteRoomConnected = async (roomId) => {
+    // if (!selectedRoomId?.length>0) return;
     try {
       const response = await fetch(`/api/newroom?roomId=${roomId}`, {
         method: "DELETE",
@@ -370,6 +377,16 @@ export default function Explore() {
         setCurrentUserRooms((prevRooms) =>
           prevRooms.filter((room) => room._id !== roomId)
         );
+        toast.success("Room deleted", {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+  
         console.log("Room deleted successfully");
       } else {
         // Handle the error or display an error message
@@ -379,10 +396,12 @@ export default function Explore() {
       // Handle the error or display an error message
       console.error("Error deleting room:", error);
     }
+
+    handleUnmatchReportFormToggle('');
   };
 
 
-  const handleSubmitReport = async (roomId) => {
+  const handleSubmitReport = async (room) => {
     document.getElementById("report-btn").disabled = true;
     document.getElementById("report-btn").textContent = "Reporting...";
     const data = {
@@ -390,7 +409,7 @@ export default function Explore() {
       reportedAt: new Date().toISOString(),
       type: reportReason,
       reportReason: reportReasonText,
-      reportedRoomId: roomId,
+      reportedRoomId: room?._id,
       ReportedUser: currentUserRooms[0].adminName,
     };
 
@@ -416,13 +435,22 @@ export default function Explore() {
       });
 
       try {
-        const response = await fetch(`/api/createroom?newroom=${reportedRoomId}`, {
+        const response = await fetch(`/api/newroom?roomId=${room?._id}`, {
           method: "DELETE",
           contentType: "application/json",
         });
-        if (response.status === 204) {
+        const response2 = await fetch(`/api/createroom?roomId=${room?._id}`, {
+          method: "DELETE",
+          contentType: "application/json",
+        });
+        console.log("deleted room id", room?._id)
+
+        if (response.status === 204 || response2.status === 204) {
           // Successful deletion
           // Perform any necessary actions or update the UI accordingly
+          setCurrentUserRooms((prevRooms) =>
+          prevRooms.filter((oldrooms) => oldrooms._id !== room?._id)
+        );
           toast.success(" Room Removed", {
             position: "top-right",
             autoClose: 5000,
@@ -496,16 +524,16 @@ export default function Explore() {
 
 
   return (
-    <div className="pb-6 pt-4 md:ml-[79px] md:pl-0 pl-2 pr-4 bg-white  overflow-auto">
-    <div className="w-full rounded-2xl p-4 text-gray-700 bg-[#e6f5e5]">
+    <div className="pb-6 pt-4 min-h-screen md:ml-[79px] md:pl-0 pl-2 pr-4 bg-white  overflow-auto">
+    <div className="w-full rounded-2xl p-4  text-gray-700 min-h-screen h-full bg-[#e6f5e5]">
       {/* <div className="w-full bg-gray-900">
         <div className="px-10 py-3">
           <h1 className="text-2xl font-bold text-white">Find your Ally</h1>
         </div>
       </div> */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pr-4">
+      <div className="grid grid-cols-1 min-h-screen h-full md:grid-cols-2 gap-4 pr-4">
         <div
-          className={`bg-white mx-auto h-full flex items-center  rounded-lg justify-center place-content-center border border-gray-300 w-full ${styles["parent-div"]}`}
+          className={`bg-white mx-auto flex items-center  rounded-lg justify-center place-content-center border border-gray-300 w-full ${styles["parent-div"]}`}
         >
           {userRoomsLength >= 3 ? (
             <button
@@ -536,7 +564,7 @@ export default function Explore() {
             <div
               id="maxrooms-modal"
               tabindex="-1"
-              class="z-20 w-screen h-[calc(100%-1rem)] grid justify-center mb-4 p-4 overflow-x-hidden overflow-y-auto"
+              className="z-20 w-screen h-[calc(100%-1rem)] grid justify-center mb-4 p-4 overflow-x-hidden overflow-y-auto"
             >
               
             <div className="relative w-full max-w-xl max-h-full">
@@ -563,10 +591,10 @@ export default function Explore() {
                   <span className="sr-only">Close modal</span>
                 </button>
                 <div className="px-3 py-3">
-                  <div class="p-6 text-center">
+                  <div className="p-6 text-center">
                     <svg
                       aria-hidden="true"
-                      class="mx-auto mb-4 text-gray-400 w-14 h-14 dark:text-gray-200"
+                      className="mx-auto mb-4 text-gray-400 w-14 h-14 dark:text-gray-200"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -579,20 +607,20 @@ export default function Explore() {
                         d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
                       ></path>
                     </svg>
-                    <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
+                    <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
                        Maximum rooms reached, delete a room to create a new one
                     </h3>
                     {/* <button
                       data-modal-hide="maxrooms-modal"
                       type="button"
-                      class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center mr-2"
+                      className="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center mr-2"
                     >
                       Yes, Im sure
                     </button> */}
                     <button
                       onClick={handleMaxFormToggle}
                       type="button"
-                      class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600"
+                      className="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600"
                     >
                       Ok, got it
                     </button>
@@ -605,7 +633,61 @@ export default function Explore() {
             )
           }
 
-         
+
+
+
+{
+            isUnmatchReportFormOpen && (
+              <div className="bg-gray-700 bg-opacity-50 dark:bg-opacity-80 fixed inset-0 z-20 backdrop-blur-sm bg-black/30 grid place-content-center justify-center w-screen h-screen ">
+            <div
+              id="unmatch-modal"
+              tabindex="-1"
+              className="z-20 w-screen h-[calc(100%-1rem)] grid justify-center mb-4 p-4 overflow-x-hidden overflow-y-auto"
+            >
+              
+            <div className="relative w-full max-w-xl max-h-full">
+              <div className="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                <button
+                onClick={() => handleUnmatchReportFormToggle('')}
+                  type="button"
+                  className="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-800 dark:hover:text-white"
+                  data-modal-hide="report-modal"
+                >
+                  <svg
+                    aria-hidden="true"
+                    className="w-5 h-5"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                      clip-rule="evenodd"
+                    ></path>
+                  </svg>
+                  <span className="sr-only">Close modal</span>
+                </button>
+                <div className="px-3 py-3">
+                  <div className="p-6 text-center">
+                  <svg class="mx-auto mb-4 text-gray-400 w-12 h-12 dark:text-gray-200" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+                </svg>
+                <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">Are you sure you want to delete this room?</h3>
+                <button onClick={() => handleDeleteRoomConnected(selectedRoomId)} data-modal-hide="popup-modal" type="button" class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center mr-2">
+                    Yes, I&apos;m sure
+                </button>
+                <button onClick={() => handleUnmatchReportFormToggle('')} data-modal-hide="popup-modal" type="button" class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">No, cancel</button>
+           
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          </div>
+            )
+          }
+
 
           {/* <LoadingAnimation /> */}
           <div className={styles["loadingio-spinner-ripple-jierxddzni"]}>
@@ -617,13 +699,13 @@ export default function Explore() {
 
           {
             isFindAllyFormOpen && (
-              <div className="bg-gray-700 bg-opacity-50 dark:bg-opacity-80 fixed inset-0 z-20 backdrop-blur-sm bg-black/30 grid place-content-center justify-center w-screen h-screen ">
+              <div className="bg-gray-700 w-screen bg-opacity-50 dark:bg-opacity-80 fixed inset-0 z-20 backdrop-blur-sm bg-black/30 grid place-content-center justify-center h-screen ">
             <div
               id="authentication-modal"
               tabindex="-1"
-              class="z-20 w-screen h-[calc(100%-1rem)] grid justify-center mb-4 p-4 overflow-x-hidden overflow-y-auto"
+              className="z-20 w-screen h-[calc(100%-1rem)] grid justify-center mb-4 p-4 overflow-x-hidden overflow-y-auto"
             >
-            <div className="relative w-full max-w-4xl max-h-full">
+            <div className="relative max-w-6xl max-h-full">
               <div className="relative bg-white rounded-lg shadow dark:bg-gray-700">
                 <button
                   onClick={handleFindAllyFormToggle}
@@ -650,27 +732,178 @@ export default function Explore() {
                     Tell us about your Goal
                   </h3>
                   <form className="space-y-6" action="#">
+                  {/* onChange={updateGoal}
+                        id="goals" 
+                        required */}
+
+                    <div>
+                    <label
+                      htmlFor="categories"
+                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    >
+                      Select a category
+                    </label>
+                    <select
+                      onChange={updateCategory}
+                      id="categories" 
+                      required
+                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-400 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    >
+                      <option value="">Select a category</option>
+                      <option value="Exams">Exams</option>
+                      <option value="University Studies">University/College Studies</option>
+                      <option value="Placement Preparation">Placement Preparation</option>
+                      {/* <option value="Accountability Partner">Accountability Partner</option> */}
+                      <option value="Project Partner">Project Partner</option>
+                    </select>
+                  </div>
+
+                  {category === 'Exams' && (
                     <div>
                       <label
-                        for="goals"
-                        className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                        htmlFor="exams"
+                        className="block mt-4 mb-2 text-sm font-medium text-gray-900 dark:text-white"
                       >
-                        Select an option
+                        Select a subtopic
                       </label>
                       <select
-                        onChange={updateGoal}
-                        id="goals" 
+                        onChange={updateSubtopic}
+                        id="exams"
                         required
                         className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-400 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                       >
-                        <option selected value="University-Studies">
-                          University Studies
-                        </option>
-                        <option value="IIT-JEE">IIT-JEE</option>
+                        <option value="">Select a subtopic</option>
+                        <option value="JEE">JEE</option>
+                        <option value="NEET">NEET</option>
+                        <option value="UPSC">UPSC</option>
+                        <option value="CAT">CAT</option>
                         <option value="GATE">GATE</option>
-                        <option value="UPSC-MPSC">UPSC-MPSC</option>
+                        <option value="CLAT">CLAT</option>
+                        <option value="CA">CA</option>
+                        <option value="CMA">CMA</option>
+                        <option value="CS">CS</option>
+                        <option value="UGC NET">UGC NET</option>
+                        <option value="SSC">SSC</option>
                       </select>
                     </div>
+                  )}
+
+                  {category === 'University Studies' && (
+                    <div>
+                      <label
+                        htmlFor="universityStudies"
+                        className="block mt-4 mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                      >
+                        Select a subtopic
+                      </label>
+                      <select
+                        onChange={updateSubtopic}
+                        id="universityStudies"
+                        required
+                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-400 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                      >
+                        <option value="">Select a subtopic</option>
+                        <option value="Mathematics and Statistics">Mathematics and Statistics</option>
+                        <option value="Physics">Physics</option>
+                        <option value="Chemistry">Chemistry</option>
+                        <option value="Biology">Biology</option>
+                        <option value="Economics">Economics</option>
+                        <option value="History">History</option>
+                        <option value="Geography">Geography</option>
+                        <option value="Political Science">Political Science</option>
+                        <option value="Literature and Language Arts">Literature and Language Arts</option>
+                        <option value="Philosophy">Philosophy</option>
+                        <option value="Psychology">Psychology</option>
+                        <option value="Sociology">Sociology</option>
+                        <option value="Environmental Science">Environmental Science</option>
+                        <option value="Computer Science and Programming">Computer Science and Programming</option>
+                        <option value="Business and Entrepreneurship">Business and Entrepreneurship</option>
+                        <option value="Finance and Accounting">Finance and Accounting</option>
+                        <option value="Marketing and Advertising">Marketing and Advertising</option>
+                        <option value="Human Resource Management">Human Resource Management</option>
+                        <option value="Communication Skills">Communication Skills</option>
+                        <option value="Critical Thinking and Problem Solving">Critical Thinking and Problem Solving</option>
+                        <option value="Time Management and Study Skills">Time Management and Study Skills</option>
+                        <option value="Public Speaking and Presentation Skills">Public Speaking and Presentation Skills</option>
+                        <option value="Art and Design">Art and Design</option>
+                        <option value="Music Theory and Composition">Music Theory and Composition</option>
+                        <option value="Health and Nutrition">Health and Nutrition</option>
+                        <option value="Cultural Studies">Cultural Studies</option>
+                        <option value="Film Studies">Film Studies</option>
+                        <option value="Creative Writing">Creative Writing</option>
+                        <option value="Fashion Design and Textiles">Fashion Design and Textiles</option>
+                      </select>
+                    </div>
+                  )}
+
+                  {category === 'Placement Preparation' && (
+                    <div>
+                      <label
+                        htmlFor="placementPreparation"
+                        className="block mt-4 mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                      >
+                        Select a subtopic
+                      </label>
+                      <select
+                        onChange={updateSubtopic}
+                        id="placementPreparation"
+                        required
+                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-400 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                      >
+                        <option value="">Select a subtopic</option>
+                        <option value="DSA/CP/Coding">DSA/CP/Coding</option>
+                        <option value="Development">Development</option>
+                      </select>
+                    </div>
+                  )}
+
+                  {category === 'Project Partner' && (
+                    <div>
+                      <label
+                        htmlFor="projectPartner"
+                        className="block mt-4 mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                      >
+                        Select a subtopic
+                      </label>
+                      <select
+                        onChange={updateSubtopic}
+                        id="projectPartner"
+                        required
+                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-400 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                      >
+                        <option value="">Select a subtopic</option>
+                        <option value="Web Development and Design">Web Development and Design</option>
+                        <option value="Mobile App Development">Mobile App Development</option>
+                        <option value="Game Development">Game Development</option>
+                        <option value="Artificial Intelligence and Machine Learning">Artificial Intelligence and Machine Learning</option>
+                        <option value="Data Science and Analytics">Data Science and Analytics</option>
+                        <option value="Internet of Things (IoT)">Internet of Things (IoT)</option>
+                        <option value="Robotics">Robotics</option>
+                        <option value="Augmented Reality (AR) and Virtual Reality (VR)">Augmented Reality (AR) and Virtual Reality (VR)</option>
+                        <option value="Blockchain and Cryptocurrency">Blockchain and Cryptocurrency</option>
+                        <option value="Social Entrepreneurship and Non-Profit Projects">Social Entrepreneurship and Non-Profit Projects</option>
+                        <option value="Environmental Sustainability Projects">Environmental Sustainability Projects</option>
+                        <option value="Creative Writing and Blogging">Creative Writing and Blogging</option>
+                        <option value="Graphic Design and Visual Arts">Graphic Design and Visual Arts</option>
+                        <option value="Music Production and Composition">Music Production and Composition</option>
+                        <option value="Film and Video Production">Film and Video Production</option>
+                        <option value="Photography and Photo Editing">Photography and Photo Editing</option>
+                        <option value="Social Media Marketing and Influencer Projects">Social Media Marketing and Influencer Projects</option>
+                        <option value="Community Building and Networking Platforms">Community Building and Networking Platforms</option>
+                        <option value="Health and Fitness Apps or Services">Health and Fitness Apps or Services</option>
+                        <option value="Education Technology (EdTech) Solutions">Education Technology (EdTech) Solutions</option>
+                        <option value="E-commerce and Online Marketplace Development">E-commerce and Online Marketplace Development</option>
+                        <option value="User Experience (UX) and User Interface (UI) Design">User Experience (UX) and User Interface (UI) Design</option>
+                        <option value="Cybersecurity and Ethical Hacking">Cybersecurity and Ethical Hacking</option>
+                        <option value="Open-Source Software Contributions">Open-Source Software Contributions</option>
+                        <option value="Renewable Energy and Green Technology Projects">Renewable Energy and Green Technology Projects</option>
+                      </select>
+                    </div>
+                  )}
+
+
+
+
                     <div>
                       <label
                         for="password"
@@ -691,17 +924,18 @@ export default function Explore() {
                           />
                           <label
                             for="bordered-radio-1"
-                            className="w-full py-4 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                            className="w-full py-4 ml-2  text-sm pr-1 font-medium text-gray-900 dark:text-gray-300"
                           >
                             Beginner
                           </label>
                         </div>
+
                         <div className="flex items-center pl-4 border border-gray-200 rounded dark:border-gray-700">
                           <input
-                            defaultChecked
+                          defaultChecked
                             id="bordered-radio-2"
                             type="radio"
-                            value="Intermediate"
+                            value="Beginner"
                             name="bordered-radio"
                             className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-400"
                             onChange={updatePhase}
@@ -709,28 +943,31 @@ export default function Explore() {
                           />
                           <label
                             for="bordered-radio-2"
-                            className="w-full py-4 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                            className="w-full py-4 ml-2  text-sm pr-1 font-medium text-gray-900 dark:text-gray-300"
                           >
                             Intermediate
                           </label>
                         </div>
+
                         <div className="flex items-center pl-4 border border-gray-200 rounded dark:border-gray-700">
                           <input
                             id="bordered-radio-3"
                             type="radio"
-                            value="Advanced"
+                            value="Beginner"
                             name="bordered-radio"
                             className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-400"
                             onChange={updatePhase}
-                            // onClick={setPhase("Advanced")}
+                            // onClick={setPhase("Beginner")}
                           />
                           <label
                             for="bordered-radio-3"
-                            className="w-full py-4 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                            className="w-full py-4 ml-2  text-sm pr-1 font-medium text-gray-900 dark:text-gray-300"
                           >
                             Advanced
                           </label>
                         </div>
+
+
                       </div>
                     </div>
 
@@ -821,25 +1058,26 @@ export default function Explore() {
                             Duo
                           </label>
                         </div>
-                        <div className="flex items-center pl-4 border border-gray-200 rounded dark:border-gray-700">
+                        <div className="flex cursor-not-allowed items-center pl-4 border border-gray-200 rounded dark:border-gray-700">
                           <input
                             id="bordered-radio-5"
                             type="radio"
                             value="Group"
+                            disabled
                             name="bordered-radio-1"
-                            className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-400"
-                            onChange={updateGroup_or_duo}
+                            className="w-4 h-4 text-blue-600 cursor-not-allowed bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-400"
+                            // onChange={updateGroup_or_duo}
                             // onClick={setgroup_or_duo("Group")}
                           />
                           <label
                             for="bordered-radio-5"
-                            className="w-full py-4 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                            className="w-full cursor-not-allowed py-4 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
                           >
                             Group
                           </label>
                         </div>
                       </div>
-                      <label className="block my-2 text-xs font-medium text-gray-900 dark:text-white">
+                      <label className="block my-2  text-xs font-medium text-gray-900 dark:text-white">
                         *you can switch from duo to group later if required
                       </label>
                     </div>
@@ -909,7 +1147,7 @@ export default function Explore() {
                 experience
               </h1>
             </div>
-            <span className="font-semibold text-gray-800 my-auto">
+            <span className="font-semibold text-gray-800 my-auto w-full">
               <div className="grid grid-cols-1">
                 <p className="text-sm font-bold text-gray-900 dark:text-gray-300">
                   ✨ Be respectful and professional.
@@ -945,7 +1183,9 @@ export default function Explore() {
                 </p>
                 <p className="text-xs font-medium text-gray-900 dark:text-gray-300 ml-6">
                   Communication is key! Keep your allies informed about any
-                  changes to your schedule or study plans. Take the lead in
+                  changes to your schedule or study plans. 
+                  <br/>
+                  Take the lead in
                   scheduling study sessions.
                 </p>
               </div>
@@ -964,22 +1204,50 @@ export default function Explore() {
                   className="flex justify-between items-start mb-2 bg-gray-50 p-2 rounded-xl hover:bg-gray-100 w-full"
                 >
                   <div className="flex">
-                    <img
-                      className="w-12 h-12 rounded-full mr-4 border border-gray-100 bg-gray-300 shadow-sm"
-                      src={`https://robohash.org/${room?.members[1]?.id}}`}
-                      alt=""
-                    />
-                    <span className="font-semibold text-gray-800 my-auto">
-                      {room?.members[1]?.name}
-                    </span>
+                    {
+                      room?.members[0]?.id === session?.user?.id ? (
+                        <img
+                          className="w-12 h-12 rounded-full mr-4 border border-gray-100 bg-gray-300 shadow-sm"
+                          src={`https://robohash.org/${room?.members[1]?.id}`}
+                          alt=""
+                        />
+                      ) : (
+                        <img
+                          className="w-12 h-12 rounded-full mr-4 border border-gray-100 bg-gray-300 shadow-sm"
+                          src={`https://robohash.org/${room?.members[0]?.id}`}
+                          alt=""
+                        />
+                      )
+                    }
+
+                    {
+                      room?.members[1]?.name === session?.user?.name ? (
+                        <span className="font-semibold mt-1 ml-2 text-gray-800 my-auto">
+                          {room?.members[0]?.name}
+                        </span>
+                      ) : (
+                        <span className="font-semibold mt-1 ml-2 text-gray-800 my-auto">
+                          {room?.members[1]?.name}
+                        </span>
+                      )
+
+                    }
                   </div>
                   <div className="my-auto">
-                    <button
+                    {/* <button
                       onClick={() => handleDeleteRoomConnected(room?._id)}
                       className="text-gray-100 mr-2 bg-gray-600 hover:bg-gray-800 p-2 rounded-lg"
                     >
                       Unmatch
+                    </button> */}
+                    
+                    <button
+                      onClick={() => handleUnmatchReportFormToggle(room?._id)}
+                      className="text-gray-100 mr-2 bg-gray-600 hover:bg-gray-800 p-2 rounded-lg"
+                    >
+                      Unmatch
                     </button>
+
                     <button
                       onClick={handleReportFormToggle}
                       className="text-gray-700 mr-2 bg-gray-200 hover:bg-gray-100 p-2 rounded-lg"
@@ -995,7 +1263,7 @@ export default function Explore() {
             <div
               id="report-modal"
               tabindex="-1"
-              class="z-20 w-screen h-[calc(100%-1rem)] grid justify-center mb-4 p-4 overflow-x-hidden overflow-y-auto"
+              className="z-20 w-screen h-[calc(100%-1rem)] grid justify-center mb-4 p-4 overflow-x-hidden overflow-y-auto"
             >
                     <div className="relative w-full max-w-xl max-h-full">
                       <div className="relative bg-white rounded-lg shadow dark:bg-gray-700">
@@ -1106,14 +1374,14 @@ export default function Explore() {
                             <div>
                             <label
                               for="aboutMe"
-                              class="block mb-2 text-sm font-bold text-gray-900 dark:text-white"
+                              className="block mb-2 text-sm font-bold text-gray-900 dark:text-white"
                             >
                               Relevant Information (Optional)
                             </label>
                             <textarea
                               id="aboutMe"
                               rows="4"
-                              class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                              className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                               placeholder="Anything else you want to add?"
                               onChange={updateReportReasonText}
                             ></textarea>
@@ -1122,9 +1390,9 @@ export default function Explore() {
                             {/* updateReportReasonText */}
 
                             <button
-                              onClick={() => handleSubmitReport(room?.members[1]?.id)}
+                              onClick={() => handleSubmitReport(room)}
                               id="report-btn"
-                              type="submit"
+                              // type="submit"
                               className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                             >
                               Report User
@@ -1176,7 +1444,7 @@ export default function Explore() {
                     </svg>
                     <div className="flex justify-between w-full items-start mb-2">
                       <span className="font-semibold text-gray-800 flex flex-row my-auto">
-                        {room?.goal}
+                        {room?.subtopic}
                       </span>
                       <div>
                         <button

@@ -6,18 +6,19 @@ const userSchema = new Schema({
     login: String,
     image: String,
     about: String,
-    languages: Array,
+    language: String,
     email: String,
     age: Number,
+    personalityTraits: Array,
     gender: Number,
-    notifications: Array,
     goals: String,
     studyHabits: String,
     major: String,
     interests: Array,
+    cocurricularInterests: Array,
     availibility: Array,
-    onlineHours: Number,
     subsciption: String,
+    isPortfolioCreated: String,
 });
 
 const Users = models.user || model('user', userSchema)

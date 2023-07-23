@@ -1,6 +1,7 @@
 import { Modal } from "flowbite";
 import React, { useEffect } from "react";
 import { useState } from "react";
+import { useSession } from "next-auth/react";
 import { toast } from "react-toastify";
 // import DateRangePicker from 'flowbite-datepicker/DateRangePicker';
 import {RiDeleteBin6Line} from "react-icons/ri"
@@ -8,14 +9,12 @@ import {RiDeleteBin6Line} from "react-icons/ri"
 
 import { format, set } from 'date-fns'
 
-export default function HandWritten({roomDetails}) {
-  console.log("Project Details from Taskboard Tab" + roomDetails[0]);
-  
-  const roomIdPut = roomDetails[0]?._id;
-  console.log("Room ID from Taskboard Tab" + roomIdPut);
+export default function Other({userDetails}) {
+  const { data: session } = useSession();
 
+  const userId = session?.user?.id;
 
-  const [handWrittenNotes, setHandWrittenNotes] = useState(roomDetails[0]?.handWrittenNotes || []);
+  const [otherNotes, setOtherNotes] = useState(session?.user?.otherNotes  || []);
 
   // const sortedIdeas = ideas?.sort((a, b) => b.createdAt - a.createdAt);
 
@@ -35,16 +34,16 @@ export default function HandWritten({roomDetails}) {
   const handleSubmit = async (e) => {
     // Once the form has been submitted, this function will post to the backend
     document.getElementById("NotepadForm").reset();
-  const notes = handWrittenNotes; // Create a new array with the existing notes
+  const notes = otherNotes; // Create a new array with the existing notes
 
   notes.push({ id: Date.now(), title: Title, description: Description });
 
-  setHandWrittenNotes(notes);
-  console.log("Notes: " + handWrittenNotes);
+  setOtherNotes(notes);
+  console.log("Notes: " + otherNotes);
 
   setShowModal(!showModal)
 
-    const postURL = `/api/newroom?roomIdPut=${roomIdPut}`; //Our previously set up route in the backend
+    const postURL = `/api/updateuser?userId=${userId}`; //Our previously set up route in the backend
     await fetch(postURL, {
       method: "PUT",
       headers: {
@@ -52,7 +51,7 @@ export default function HandWritten({roomDetails}) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        handWrittenNotes: handWrittenNotes,
+        otherNotes: otherNotes,
       }),
     }).then(() => {
       toast("🥳 Note Added", {
@@ -73,9 +72,9 @@ export default function HandWritten({roomDetails}) {
   const handleDeleteNote = async (noteId) => {
     // Perform the necessary operations to delete the note with the given noteId
     // For example, you can filter the notes array to exclude the note with the specified noteId
-    const updatedNotes = handWrittenNotes.filter((note) => note.id !== noteId);
+    const updatedNotes = otherNotes.filter((note) => note.id !== noteId);
   
-    setHandWrittenNotes(updatedNotes);
+    setOtherNotes(updatedNotes);
 
     toast("Note Deleted", {
       position: "top-right",
@@ -86,7 +85,7 @@ export default function HandWritten({roomDetails}) {
       draggable: true,
       progress: undefined,
     });
-    const postURL = `/api/newroom?roomIdPut=${roomIdPut}`; //Our previously set up route in the backend
+    const postURL = `/api/updateuser?userId=${userId}`; //Our previously set up route in the backend
     await fetch(postURL, {
       method: "PUT",
       headers: {
@@ -94,7 +93,7 @@ export default function HandWritten({roomDetails}) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        handWrittenNotes : updatedNotes,
+        otherNotes : updatedNotes,
       }),
     })
   
@@ -119,38 +118,40 @@ export default function HandWritten({roomDetails}) {
           </div>
         <div className="grid xl:grid-cols-4 md:grid-cols-2 grid-cols-1 gap-4 mt-5">
           
-        {handWrittenNotes?.map((taskboard) => {
-  // MMMM d, yyyy h:mm a
-  const date = format(taskboard.id, "MMMM d, yyyy");
-  return (
-    <div key={taskboard.id} className="flex items-center justify-center">
-      <div className="rounded border border-gray-300 p-3 shadow-md w-full bg-white text-black">
-        <div className="flex w-full items-center justify-between border-b border-gray-400 pb-3">
-          <div className="flex items-center space-x-3">
-            <div className="text-gray-800 flex flex-col text-xl">
-              <h1>{taskboard.title}</h1>
+          {otherNotes?.map((taskboard) => {
+            //MMMM d, yyyy h:mm a
+            const date = format(taskboard.id, "MMMM d, yyyy")
+            return (
+              <>
+              <div key={taskboard.id}  className='flex  items-center justify-center'>  <div className="rounded border border-gray-300 p-3 shadow-md w-full bg-white text-black">
+              <div className="flex w-full items-center justify-between border-b border-gray-400 pb-3">
+                <div className="flex items-center space-x-3 ">
+                <div className="text-gray-800 flex flex-col text-xl ">
+                    <h1>{taskboard.title}</h1>
+                    </div>
+                </div>
+                <div className="flex items-center space-x-8 ">
+                  <div className="flex items-center justify-between text-gray-800 dark:text-gray-100 w-full">
+                      <p className="text-sm mr-1">{date}</p>
+                      <button
+                        className=""
+                        onClick={() => handleDeleteNote(taskboard.id)}
+                      >
+                        <RiDeleteBin6Line className="text-xl mr-4" />
+                      </button>
+                    </div>
+                </div>
+              </div>
+          
+              <div className="mt-4 mb-6 rounded h-32 overflow-auto">
+                <div className="text-sm text-gray-700">{taskboard.description}</div>
+              </div>
+          
             </div>
           </div>
-          <div className="flex items-center space-x-8">
-            <div className="flex items-center justify-between text-gray-800 dark:text-gray-100 w-full">
-              <p className="text-sm mr-1">{date}</p>
-              <button
-                className=""
-                onClick={() => handleDeleteNote(taskboard.id)}
-              >
-                <RiDeleteBin6Line className="text-xl mr-4" />
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <div className="mt-4 mb-6 rounded h-32 overflow-auto">
-          <div className="text-sm text-gray-700">{taskboard.description}</div>
-        </div>
-      </div>
-    </div>
-  );
-})}
+            </>
+            )
+            })}
             </div>
             
             {

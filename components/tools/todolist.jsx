@@ -1,26 +1,27 @@
 import React, { useState, useEffect } from "react";
-
 import styles from "./parts.module.css";
-// import ThemeButton from "../components/ThemeButton";
 import InputArea from "../todo/InputArea";
 import ListOfActivity from "../todo/ListOfActivity";
 
 const data = [];
 
+function TodoList({ roomName }) {
+  const [list, setList] = useState(() => {
+    if (typeof localStorage !== "undefined") {
+      const storedData = localStorage.getItem(`todolist-${roomName}`);
+      return storedData ? JSON.parse(storedData) : data;
+    } else {
+      return data;
+    }
+  });
 
-
-function TodoList({roomName}) {
-
-
-  const [list, setList] = useState(
-    typeof localStorage !== "undefined" && localStorage.getItem(`todolist-${roomName}`)
-      ? JSON.parse(localStorage.getItem(`todolist-${roomName}`)) || data
-      : data
-  );
-  
   const [filter, setFilter] = useState(0);
 
   const [currentId, setCurrent] = useState(1);
+
+  useEffect(() => {
+    localStorage.setItem(`todolist-${roomName}`, JSON.stringify(list));
+  }, [list, roomName]);
 
   const handleSubmit = (e, input) => {
     e.preventDefault();
@@ -29,106 +30,70 @@ function TodoList({roomName}) {
       return;
     }
 
-    setList((prev) => {
-      console.log("prev");
-      console.log(prev);
-      return [
-        ...prev,
-        { text: input, status: "onProgress", id: `${currentId + 1}-${input}` },
-      ];
-    });
-    localStorage.setItem(`todolist-${roomName}`, JSON.stringify(list));
-    console.log(list);
+    setList((prev) => [
+      ...prev,
+      { text: input, status: "onProgress", id: `${currentId + 1}-${input}` },
+    ]);
+    setCurrent((prevId) => prevId + 1);
   };
 
-  // useEffect(() => {
-  //   localStorage.setItem(`todolist-${roomName}`, JSON.stringify(list));
-  //   // setCurrent(currentId + 1);
-  // }, [list, roomName]);
-
-
-  // function when check button pressed
   const checked = (e) => {
-    // let newList = list;
-    let idx = e.currentTarget.dataset.index;
-    let newStatus = "";
-
-    if (list[idx].status === "onProgress") {
-      newStatus = "Completed";
-    } else {
-      newStatus = "onProgress";
-    }
-
-    let newList = [...list];
-    newList[idx].status = newStatus;
-
-    // console.log(newList);
-
+    const idx = e.currentTarget.dataset.index;
+    const newList = [...list];
+    newList[idx].status = newList[idx].status === "onProgress" ? "Completed" : "onProgress";
     setList(newList);
   };
 
-  // function when x button pressed
   const removeOne = (e) => {
-    // let newList = list;
-    let idx = e.currentTarget.dataset.index;
-    let newList = [...list];
+    const idx = e.currentTarget.dataset.index;
+    const newList = [...list];
     newList.splice(idx, 1);
-
-    console.log(newList);
-
     setList(newList);
   };
 
   const removeCompleted = () => {
-    let newList = [];
-
-    // for (let i = 0; i < list.length; i++) {
-    //   if (list[i].status === "onProgress") {
-    //     newList.push(list[i]);
-    //   }
-    // }
-
+    const newList = list.filter((item) => item.status === "onProgress");
     setList(newList);
   };
 
   function handleDrag(result) {
-    // console.log(result);
     if (!result.destination) return;
-
     const items = Array.from(list);
-    const [reordererItem] = items.splice(result.source.index, 1);
-    items.splice(result.destination.index, 0, reordererItem);
-
+    const [reorderedItem] = items.splice(result.source.index, 1);
+    items.splice(result.destination.index, 0, reorderedItem);
     setList(items);
   }
 
+  const completedCount = list.filter((item) => item.status === "Completed").length;
+  const leftCount = list.filter((item) => item.status === "onProgress").length;
+
   return (
-      <div className={`w-full p-2 bg-black rounded-2xl text-left ${styles.noselect}`}>
-        <div className="flex justify-between align-middle">
-          <h1 className=" font-bold text-white">To-Do</h1>
+    <>
+      <div className="md:col-span-3 rounded-2xl p-4">
+        <div className={`p-2 bg-black rounded-2xl text-left`}>
+          <div className="flex justify-between align-middle">
+            <h1 className="font-bold text-white ml-1 mt-1">To-Do</h1>
+          </div>
+          <InputArea handleSubmit={handleSubmit} />
+          <ListOfActivity
+            list={list}
+            filter={filter}
+            checked={checked}
+            removeOne={removeOne}
+            handleDrag={handleDrag}
+          />
         </div>
-        <InputArea handleSubmit={handleSubmit} />
-        {/* Input */}
-        <ListOfActivity
-          list={list}
-          filter={filter}
-          checked={checked}
-          removeOne={removeOne}
-          handleDrag={handleDrag}
-        />
-        {/* {console.log(list)} */}
-        {/* <Filter
-          list={list}
-          options={options}
-          removeCompleted={removeCompleted}
-          filter={filter}
-          setFilter={setFilter}
-        /> */}
       </div>
+      <div className="md:col-span-2 rounded-2xl p-4">
+        <div className="grid justify-start">
+          <h1 className="text-white font-bold pl-2 p-2">Completed</h1>
+          <h1 className="text-green-600 text-6xl font-bold pl-2 p-2">{completedCount}</h1>
+          <h1 className="text-white font-bold pl-2 p-2">Left</h1>
+          <h1 className="text-white text-6xl font-bold pl-2 p-2">{leftCount}</h1>
+        </div>
+      </div>
+    </>
   );
 }
 
 export default TodoList;
-
-
-const options = ["All", "Active", "Completed"];

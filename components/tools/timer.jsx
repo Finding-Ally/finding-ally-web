@@ -58,7 +58,7 @@ const Timer = () => {
   };
 
   return (
-    <div className="w-full flex flex-row items-center justify-center backdrop-blur-md bg-black/80 rounded-2xl p-3">
+    <div className="w-full flex flex-row items-center justify-center backdrop-blur-md bg-black rounded-2xl p-3">
       <div className="relative w-20 h-20">
         <div
           className="absolute w-full h-full rounded "
@@ -69,7 +69,7 @@ const Timer = () => {
           // }}
         ></div>
         <div className="absolute flex items-center justify-center w-full h-full">
-          <h1 className="text-3xl font-bold text-white">{formatTime(currentTime)}</h1>
+          <h1 className="md:text-3xl text-xl font-bold text-white">{formatTime(currentTime)}</h1>
         </div>
       </div>
 
@@ -89,7 +89,7 @@ const Timer = () => {
           </button>
         </div>
         {!isRunning && (
-  <div className="flex items-center justify-center mt-4 text-sm">
+  <div className="flex items-center justify-center mt-4 md:text-sm text-xs">
     <div className="flex space-x-4">
       <div className="flex flex-col">
         <div className="mb-2">

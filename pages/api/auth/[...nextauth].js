@@ -70,34 +70,6 @@ export const authOptions = {
   debug: process.env.NODE_ENV === "development",
 
   callbacks: {
-    // async session({ session, token }) {
-    //   // Extract the login part from the user's email
-    //   const login = session.user.email.split("@")[0];
-
-    //   // Add the login field to the user object in the session
-
-    //   // session = {
-    //   //               ...session,
-    //   //               user: {
-    //   //                   ...session.user,
-    //   //                   id: token?.sub,
-    //   //               },
-    //   //           };
-    //   //           console.log("session.user.id", session.user.id)
-    //   //           return session;
-
-    //   session = {
-    //     ...session,
-    //     user: {
-    //       ...session.user,
-    //       id: token?.sub,
-    //       login: login,
-    //     },
-    //   };
-    //   console.log("session.user.id", session.user.id);
-    //   return session;
-    // },
-
     session: async ({ session, user }) => {
       // if (session?.user) {
       //   (session.user.id) = (user.id);

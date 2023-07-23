@@ -1,116 +1,106 @@
 import clientPromise from "@/database/connectDB";
 // import useSWR from "swr";
 import { Tabs } from "flowbite";
-import { Key } from "react";
+import { Modal } from "flowbite";
+import { ModalOptions, ModalInterface } from "flowbite";
+// import { Key } from "react";
+// import { useSession } from "next-auth/react";
+// import Portfolio from "@/components/profile/portfolio";
+// import Reports from "@/components/profile/reports";
 import { useSession } from "next-auth/react";
-import Portfolio from "@/components/profile/portfolio";
-import Reports from "@/components/profile/reports";
+import { Suspense } from "react";
 
-
-
-import Timer from '@/components/tools/timer';
+import Timer from "@/components/tools/timer";
 import TodoList from "../../../components/tools/todolist";
-import {IoCaretBack} from "react-icons/io5";
-import {BiBookAlt} from "react-icons/bi";
-import {IoVideocamOutline} from "react-icons/io5";
-import {IoEllipsisVerticalOutline} from "react-icons/io5";
+import { IoCaretBack } from "react-icons/io5";
+import { BiBookAlt } from "react-icons/bi";
+import { IoVideocamOutline } from "react-icons/io5";
 
-
-import { FcTemplate } from "react-icons/fc";
-import { GiTrophy } from "react-icons/gi";
-import { FcParallelTasks } from "react-icons/fc";
-import { FcWorkflow } from "react-icons/fc";
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { useReducer } from "react";
 
-import { useQuery, useMutation, useQueryClient } from "react-query";
-
-import { toast } from "react-toastify";
 import LoadingScreen from "@/components/animations/loadingScreen";
 import { getUser, getUsers, updateUser } from "@/lib/helper";
-import Head from "next/head";
 import dynamic from "next/dynamic";
 import AudioComponent from "../../../components/tools/Audio";
 
 // const AblyChatComponent = dynamic(
 //   () => import("@/components/AblyChatComponent"),
-//   { ssr: false,
-//     loading: () => <LoadingScreen />,}
+//   { ssr: false, loading: () => <LoadingScreen /> }
 // );
 
 import AblyChatComponent from "@/components/AblyChatComponent";
 
-
-export default function Profile({ roomDetails }) {
+export default function Rooms({ roomDetails }) {
   console.log(roomDetails);
+  const { data: session } = useSession();
+  // useEffect(() => {
+  //   const $modalElement = document.querySelector("#authentication-modal");
+
+  //   const modalOptions = {
+  //     placement: "bottom-right",
+  //     backdrop: "dynamic",
+  //     backdropClasses:
+  //       "bg-gray-700 bg-opacity-50 dark:bg-opacity-80 fixed inset-0 z-40",
+  //     closable: true,
+  //     onHide: () => {
+  //       console.log("modal is hidden");
+  //     },
+  //     onShow: () => {
+  //       console.log("modal is shown");
+  //     },
+  //     onToggle: () => {
+  //       console.log("modal has been toggled");
+  //     },
+  //   };
+
+  //   const modal = new Modal($modalElement, modalOptions);
+
+  //   // modal.show();
+  // }, []);
+
+  // useEffect(() => {
+  //   const $modalElement = document.querySelector("#authentication-modal");
+
+  //   const modalOptions = {
+  //     placement: "bottom-right",
+  //     backdrop: "dynamic",
+  //     backdropClasses:
+  //       "bg-gray-700 bg-opacity-50 dark:bg-opacity-80 fixed inset-0 z-40",
+  //     closable: true,
+  //     onHide: () => {
+  //       console.log("modal is hidden");
+  //     },
+  //     onShow: () => {
+  //       console.log("modal is shown");
+  //     },
+  //     onToggle: () => {
+  //       console.log("modal has been toggled");
+  //     },
+  //   };
+
+  //   const modal = new Modal($modalElement, modalOptions);
+
+  //   // modal.show();
+  // }, []);
+
+  const [roomName, setRoomName] = useState(roomDetails[0]?.name);
+  const [roomId, setRoomId] = useState(roomDetails[0]?.id);
 
   useEffect(() => {
-    const $modalElement = document.querySelector("#authentication-modal");
 
-    const modalOptions = {
-      placement: "bottom-right",
-      backdrop: "dynamic",
-      backdropClasses:
-        "bg-gray-700 bg-opacity-50 dark:bg-opacity-80 fixed inset-0 z-40",
-      closable: true,
-      onHide: () => {
-        console.log("modal is hidden");
-      },
-      onShow: () => {
-        console.log("modal is shown");
-      },
-      onToggle: () => {
-        console.log("modal has been toggled");
-      },
-    };
+    setRoomId(roomDetails?.[0]?.id);
+  console.log(roomId + "roomid");
 
-    const modal = new Modal($modalElement, modalOptions);
-
-    // modal.show();
-  }, []);
+  }, [roomDetails, roomId]);
 
   useEffect(() => {
-    const $modalElement = document.querySelector("#authentication-modal");
-
-    const modalOptions = {
-      placement: "bottom-right",
-      backdrop: "dynamic",
-      backdropClasses:
-        "bg-gray-700 bg-opacity-50 dark:bg-opacity-80 fixed inset-0 z-40",
-      closable: true,
-      onHide: () => {
-        console.log("modal is hidden");
-      },
-      onShow: () => {
-        console.log("modal is shown");
-      },
-      onToggle: () => {
-        console.log("modal has been toggled");
-      },
-    };
-
-    const modal = new Modal($modalElement, modalOptions);
-
-    // modal.show();
-  }, []);
-
-  const [roomName, setRoomName] = useState("");
-
-  useEffect(() => {
-
-  setRoomName(roomDetails[0]?.name);
-  console.log(roomName + "roomid");
-  
-  }, [roomName, roomDetails]);
-
-  useEffect(() => {
-    const domain = 'meet.jit.si';
+    const domain = "meet.jit.si";
     const options = {
       roomName: `${roomName}`,
-      width: '100%',
-      height: '100%',
-      parentNode: document.querySelector('#meet')
+      width: "100%",
+      height: "100%",
+      parentNode: document.querySelector("#meet"),
     };
     const api = new JitsiMeetExternalAPI(domain, options);
 
@@ -118,7 +108,6 @@ export default function Profile({ roomDetails }) {
       api.dispose();
     };
   }, [roomName]);
-
 
   const [quote, setQuote] = useState([]);
 
@@ -130,13 +119,13 @@ export default function Profile({ roomDetails }) {
           throw new Error("Failed to fetch quotes");
         }
         const jsonData = await response.json();
-        
+
         let randomQuote = null;
         do {
           const randomIndex = Math.floor(Math.random() * jsonData.length);
           randomQuote = jsonData[randomIndex];
-        } while (randomQuote && randomQuote.text.split(' ').length > 12);
-  
+        } while (randomQuote && randomQuote.text.split(" ").length > 12);
+
         if (randomQuote) {
           setQuote(randomQuote);
         } else {
@@ -146,109 +135,100 @@ export default function Profile({ roomDetails }) {
         console.error("An error occurred while fetching quotes:", error);
       }
     };
-  
+
     fetchQuotes();
   }, []);
-  
-  console.log(quote);
 
+  console.log(quote);
 
   return (
     <>
-      <div className="w-full md:pl-[79px] pl-2  ml-0 h-screen overflow-auto text-gray-700  bg-indigo-300 ">
-
+      <div className="w-full md:pl-[79px] pl-2  ml-0 h-screen overflow-auto text-gray-700  bg-indigo-100 ">
         <div className="md:px-4 px-2">
-        <div className="w-full mt-4 rounded-xl backdrop-blur-md bg-white/70">
-          <div className="flex justify-between">
-          <div class="pl-6 py-3 flex flex-row my-auto">
-            <Link href="/">
-            <IoCaretBack className=" text-lg mt-1 text-gray-200 bg-gray-700 mr-2 rounded" />
+          <div className="w-full mt-4 rounded-xl backdrop-blur-md bg-white/70">
+            <div className="flex justify-between">
+              <div class="pl-4 py-2 flex flex-row my-auto">
+                <Link href="/">
+                  <IoCaretBack className=" text-lg mt-1 text-gray-200 bg-gray-700 mr-2 rounded" />
+                </Link>
+                { 
+                      roomDetails[0]?.members[1]?.name === session?.user?.name ? (
+                        <Link href={`/${roomDetails[0]?.members[0]?.email.split("@")[0]}`}>
+                          <h1 class="md:text-lg mt-1 md:mt-0 text-sm font-bold hover:underline uppercase">
+                          {roomDetails[0]?.members[0]?.name}
+                        </h1>
+                        </Link>
+                        
+                      ) : (
+                        <Link href={`/${roomDetails[0]?.members[1]?.email.split("@")[0]}`}>
+                        <h1 class="md:text-lg mt-1 md:mt-0 text-sm font-bold hover:underline uppercase">
+                          {roomDetails[0]?.members[1]?.name}
+                        </h1>
+                        </Link>
+                      )
 
-            </Link>
-            <h1 class="md:text-xl text-lg font-bold">
-              {roomDetails[0]?.members[1]?.name}
-            </h1>
-          </div>
-          <div className="flex justify-end my-auto">
-            <button className="flex flex-row p-3 rounded-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300">
-            <Link href={`/resources/${roomDetails[0]?.name}`}>
-              <BiBookAlt className="text-4xl p-2 mt-1 text-gray-200 bg-gray-700 mr-2 rounded" />
-              </Link>
-              <IoVideocamOutline className="text-4xl p-2 mt-1 text-gray-200 bg-gray-700 mr-2 rounded" />
-              {/* <IoEllipsisVerticalOutline className="text-lg text-gray-200 bg-gray-700 mr-2 rounded" /> */}
-            </button>
+                    }
+              </div>
+              <div className="flex justify-end my-auto">
+                <button className="flex flex-row p-3 rounded-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300">
+                  <Link href={`/resources/${roomDetails[0]?.name}`}>
+                    <BiBookAlt className="text-4xl p-2 mt-1 text-gray-200 bg-gray-700 mr-2 rounded" />
+                  </Link>
+                  {/* <IoVideocamOutline className="text-4xl p-2 mt-1 text-gray-200 bg-gray-700 mr-2 rounded" /> */}
+                  {/* <IoEllipsisVerticalOutline className="text-lg text-gray-200 bg-gray-700 mr-2 rounded" /> */}
+                </button>
+              </div>
             </div>
           </div>
-          
-        </div>
-        <div>
+          <div>
             <div className="grid md:grid-cols-5 md:gap-2">
-              <div className="md:col-span-3 rounded-2xl p-4">
-              <div class="grid relative">
-                <div id="meet" style={{ overflow: 'hidden' }} className="backdrop-blur-md h-screen bg-white/80  rounded-xl mb-4">
+              <div className="md:col-span-3 rounded-2xl p-2 pt-2">
+                <div class="grid relative">
+                  <div
+                    id="meet"
+                    style={{ overflow: "hidden" }}
+                    className="backdrop-blur-md h-screen bg-white/80  rounded-xl mb-3"
+                  ></div>
 
-                  </div>
-
-                  <div class="w-full h-3/4  rounded-lg p-2">
-                  <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-                    <Timer/>
-                    <div className="w-full flex items-center justify-center bg-black rounded-2xl p-2">
-                      <p className="text-center flex flex-wrap text-sm text-white">
-                        &quot;{quote?.text}&quot; - {quote?.author || "Anonymous"}
-                      </p>
+                  <div class="w-full h-3/4 ">
+                    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-2">
+                      <Timer />
+                      <div className="w-full flex items-center justify-center bg-black rounded-2xl p-2">
+                        <p className="text-center flex flex-wrap text-sm text-white">
+                          &quot;{quote?.text}&quot; -{" "}
+                          {quote?.author || "Anonymous"}
+                        </p>
+                      </div>
+                      <div className="w-full flex items-center justify-center bg-black rounded-2xl ">
+                        <AudioComponent />
+                      </div>
                     </div>
-                    <div className="w-full flex items-center justify-center bg-black rounded-2xl ">
-                    <AudioComponent />
-                    </div>
-                      
-                  </div>
-
                   </div>
                 </div>
               </div>
-              <div className="md:col-span-2 w-full mt-4 mx-auto  md:pb-10 pb-0 ">
+              <div className="md:col-span-2 w-full mt-2 mx-auto  md:pb-10 pb-20 ">
                 <div class="grid bg-black rounded-2xl overflow-hidden ">
-                
                   <div class="w-full h-1/6 pb-2 bg-black">
-                  <div className="grid md:grid-cols-5 md:gap-2">
-                 <div className="md:col-span-3 rounded-2xl p-4">
-                  <TodoList roomName={roomName} />
-                  </div>
-                  <div className="md:col-span-2 rounded-2xl p-4">
-
-                    <div className="grid justify-start">
-                  <h1 className="text-white font-bold pl-2  p-2">
-                      Completed
-                    </h1>
-                    <h1 className="text-green-600 text-6xl font-bold pl-2  p-2">
-                      3
-                    </h1>
-
-                    <h1 className="text-white font-bold pl-2  p-2">
-                      Left
-                    </h1>
-
-                    <h1 className="text-white text-6xl font-bold pl-2  p-2">
-                      0
-                    </h1>
-                      
-                      </div>
-                  </div>
-                  </div>
+                    <div className="grid md:grid-cols-5 md:gap-2">
+                        <Suspense fallback={<p>Loading...</p>}>
+                        <TodoList roomName={roomName} />
+                        </Suspense>
+                    </div>
                   </div>
                   <div class="w-full h-fit ">
                     <h1 className="text-white font-bold pl-2 bg-gray-900 p-2">
                       Room Chat
                     </h1>
-                  <AblyChatComponent roomId={roomDetails[0]?.id} />
+                    {/* <Suspense fallback={<p>Loading...</p>}> */}
+                      <AblyChatComponent roomDetails={roomDetails} />
+                    {/* </Suspense> */}
                   </div>
-                  
                 </div>
               </div>
             </div>
           </div>
         </div>
-        
+
         <style jsx global>{`
           [data-author="me"] {
             background: linear-gradient(
@@ -318,5 +298,5 @@ export async function getStaticPaths() {
     params: { roomName: userPath.name },
   }));
 
-  return { paths, fallback: true };
+  return { paths, fallback: false };
 }

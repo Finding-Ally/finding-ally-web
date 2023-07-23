@@ -2,10 +2,10 @@ import clientPromise from "../../database/connectDB";
 // import useSWR from "swr";
 import { Tabs } from "flowbite";
 import { useSession } from "next-auth/react";
-import Portfolio from "../../components/profile/portfolio";
 import Reports from "../../components/profile/reports";
 import MainProfile from "../../components/profile/mainProfile";
 import React from "react";
+import { BiErrorCircle } from "react-icons/bi";
 
 import { CgProfile } from "react-icons/cg";
 import { GrDocumentUser } from "react-icons/gr";
@@ -19,7 +19,7 @@ import { useQuery, useMutation, useQueryClient } from "react-query";
 
 import { toast } from "react-toastify";
 import { getUser, getUsers, updateUser } from "../../lib/helper";
-import TodoList from "../../components/tools/todolist";
+import TodoList from "../../components/tools/todolistProfile";
 
 
 const data = [
@@ -44,29 +44,47 @@ const formReducer = (state, event) => {
 
 export default function Profile({ userDetails }) {
   const { data: session } = useSession();
+  const [userDetailsData, setuserDetailsData] = useState(userDetails[0] || {});
 
+  useEffect(() => {
+    setuserDetailsData(userDetails[0]);
+    console.log(userDetailsData + "userDetailsData");
+  }, [userDetails]);
+  // useEffect(() => {
+  //   console.log(userDetailsData);
+  //   setuserDetailsData(session?.user[0]);
+  // }, [userDetailsData]);
+  
   const [userName, setuserName] = useState();
   const [userImage, setuserImage] = useState();
 
-  const [subjectMajor, setsubjectMajor] = useState();
-  const [studyInterests, setstudyInterests] = useState();
+  const [subjectMajor, setsubjectMajor] = useState(userDetailsData?.major || "");
+  const [studyInterests, setstudyInterests] = useState(userDetailsData?.interests || []);
+
+  const [personalityTraits, setPersonalityTraits] = useState(userDetailsData?.personalityTraits || []);
+  const [cocurricularInterests, setcocurricularInterests] = useState(userDetailsData?.cocurricularInterests || []);
+
+
 
   const [availability, setavailability] = useState();
 
-  const [userAge, setuserAge] = useState();
-  const [userGender, setuserGender] = useState();
+  const [userAge, setuserAge] = useState(userDetailsData?.age || 0);
+  const [userGender, setuserGender] = useState(userDetailsData?.gender || "Male");
 
-  const [userAboutMe, setuserAboutMe] = useState();
-  const [userGoals, setuserGoals] = useState();
-  const [userStudyHabits, setuserStudyHabits] = useState();
+  const [userAboutMe, setuserAboutMe] = useState(userDetailsData?.about || "");
+  const [userGoals, setuserGoals] = useState(userDetailsData?.goals || "");
+  const [userStudyHabits, setuserStudyHabits] = useState(userDetailsData?.studyHabits || "");
 
-  const [language, setLanguage] = useState();
+  const [language, setLanguage] = useState("English");
   const [userLocation, setuserLocation] = useState();
 
   //  from  form file
   const [formData, setFormData] = useReducer(formReducer, {});
 
   const userId = userDetails[0]?._id;
+
+  
+
 
   const queryClient = useQueryClient();
   const { data, error } = useQuery(["users", userId], () => getUser(userId));
@@ -79,11 +97,11 @@ export default function Profile({ userDetails }) {
 
   useEffect(() => {
     const tabElements = [
-      {
-        id: "dashboard",
-        triggerEl: document.querySelector("#dashboard-tab"),
-        targetEl: document.querySelector("#dashboard"),
-      },
+      // {
+      //   id: "dashboard",
+      //   triggerEl: document.querySelector("#dashboard-tab"),
+      //   targetEl: document.querySelector("#dashboard"),
+      // },
       {
         id: "clubs",
         triggerEl: document.querySelector("#clubs-tab"),
@@ -113,7 +131,7 @@ export default function Profile({ userDetails }) {
      * options: optional
      */
     const tabs = new Tabs(tabElements, options);
-    tabs.show("dashboard");
+    tabs.show("clubs");
   }, []);
 
   const [isFormOpen, setIsFormOpen] = useState(false);
@@ -188,7 +206,7 @@ export default function Profile({ userDetails }) {
     await UpdateMutation.mutate(updated);
     document.getElementById("save-btn").disabled = false;
     document.getElementById("save-btn").textContent = "Saved";
-    toast.success("Changes saved", {
+    toast.success("Portfolio updated", {
       position: "top-right",
       autoClose: 5000,
       hideProgressBar: false,
@@ -196,8 +214,9 @@ export default function Profile({ userDetails }) {
       pauseOnHover: true,
       draggable: true,
       progress: undefined,
-      theme: "dark",
+
     });
+    setuserDetailsData(updated);
 
     handleFormView();
   };
@@ -217,6 +236,42 @@ export default function Profile({ userDetails }) {
     formData.studyHabits = e.target.value.trim();
   };
 
+
+  const handleCheckboxChange = (event) => {
+    const { id, checked } = event.target;
+
+    if (checked) {
+      setPersonalityTraits((prevTraits) => [...prevTraits, id]);
+      formData.personalityTraits = [...personalityTraits, id];
+    } else {
+      setPersonalityTraits((prevTraits) =>
+        prevTraits.filter((trait) => trait !== id)
+      );
+      formData.personalityTraits = formData.personalityTraits.filter(
+        (trait) => trait !== id
+      );
+    }
+  };
+
+
+
+  const handleInterestChange = (event) => {
+    const { id, checked } = event.target;
+    if (checked) {
+      setcocurricularInterests((prevInterests) => [...prevInterests, id]);
+      formData.cocurricularInterests = [...cocurricularInterests, id];
+    } else {
+      setcocurricularInterests((prevInterests) =>
+        prevInterests.filter((interest) => interest !== id)
+      );
+      formData.cocurricularInterests = formData.cocurricularInterests.filter(
+        (interest) => interest !== id
+      );
+    }
+  };
+
+
+
   const updateAvailibility = (e) => {
     setuserAvailibility(e.target.value.trim());
     formData.availibility = e.target.value.trim();
@@ -230,7 +285,7 @@ export default function Profile({ userDetails }) {
     separatedArray = originalString.split(", ");
     console.log(separatedArray);
     setstudyInterests(separatedArray);
-    formData.interests = e.target.value;
+    formData.interests = separatedArray;
     console.log(formData.interests);
   };
 
@@ -295,8 +350,8 @@ export default function Profile({ userDetails }) {
     <>
       <div className="w-full md:pl-[79px] pl-2 h-screen overflow-auto overflow-x-hidden text-gray-700  bg-white px-2">
         <div className="w-full backdrop-blur-md bg-white/50">
-          <div class="py-3 ml-5">
-            <h1 class="md:text-xl text-lg font-bold">
+          <div className="py-3 ml-5">
+            <h1 className="md:text-xl text-lg font-bold">
               {getGreeting()}, {userDetails[0]?.name}
             </h1>
           </div>
@@ -378,7 +433,7 @@ export default function Profile({ userDetails }) {
                       data-tabs-toggle="#myTabContent"
                       role="tablist"
                     >
-                      <li className="mr-2" role="presentation">
+                      {/* <li className="mr-2" role="presentation">
                         <button
                           className="flex flex-row p-3 rounded-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
                           id="dashboard-tab"
@@ -391,7 +446,7 @@ export default function Profile({ userDetails }) {
                           <CgProfile className=" text-lg mr-2" />
                           Profile
                         </button>
-                      </li>
+                      </li> */}
                       <li className="mr-2" role="presentation">
                         <button
                           className="flex flex-row p-3 rounded-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
@@ -439,21 +494,213 @@ export default function Profile({ userDetails }) {
                   </div>
 
                   <div id="myTabContent" className="mt-5">
-                    <div
+                    {/* <div
                       className="hidden  "
                       id="dashboard"
                       role="tabpanel"
                       aria-labelledby="dashboard-tab"
                     >
                       <MainProfile userDetails={userDetails} data={data} />
-                    </div>
+                    </div> */}
                     <div
                       className="hidden min-h-[550px]"
                       id="clubs"
                       role="tabpanel"
                       aria-labelledby="clubs-tab"
                     >
-                      <Portfolio userDetails={userDetails} />
+                      <div className="w-full rounded-2xl p-4">
+      {!userDetailsData?.major &&
+        !userDetailsData?.interests &&
+        !userDetailsData?.availibility &&
+        !userDetailsData?.about &&
+        !userDetailsData?.goals &&
+        !userDetailsData?.studyHabits && 
+        (
+          <div className="grid rounded-2xl bg-white ">
+            <div className="flex bg-gray-800 px-4 py-4 rounded-t-2xl h-fit max-h-16 text-start justify-center place-content-center place-items-center">
+              <BiErrorCircle className="w-8 h-8 mr-4 rounded-full text-gray-200" />
+              <h3 className="text-lg font-semibold leading-tight flex-1 text-gray-200">
+                Portfolio not found
+              </h3>
+            </div>
+            <p className="bg-white p-4 h-full rounded-b-2xl py-16 font-semibold text-center place-items-center">
+              Create your Portfolio to get started
+            </p>
+          </div>
+        )}
+
+      <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+        {userDetailsData?.major && (
+          <div className="grid rounded-2xl bg-white ">
+            <div className="flex bg-gray-800 px-4 py-2 rounded-t-2xl h-fit max-h-16 text-start place-content-center place-items-center">
+              <img
+                src="portfolio/1.png"
+                className="w-12 h-12 mr-4 bg-white object-fit p-1 rounded-full"
+                alt=""
+              />
+              <h3 className="text-lg font-semibold leading-tight flex-1 text-gray-200">
+                Major
+              </h3>
+            </div>
+            <p className="bg-white p-4 h-full rounded-b-2xl font-semibold text-center place-items-center">
+              {userDetailsData?.major}
+            </p>
+          </div>
+        )}
+
+        {userDetailsData?.interests.length > 0 && (
+          <div className="grid rounded-2xl bg-white ">
+            <div className="flex bg-gray-800 px-4 py-2 rounded-t-2xl h-fit max-h-16 text-start justify-center place-content-center place-items-center">
+              <img
+                src="portfolio/2.png"
+                className="w-12 h-12 mr-4 bg-white object-fit p-1 rounded-full"
+                alt=""
+              />
+              <h3 className="text-lg font-semibold leading-tight flex-1 text-gray-200">
+                Study Interests
+              </h3>
+            </div>
+            <p className="bg-white p-4 h-full rounded-b-2xl flex flex-wrap gap-y-2  font-semibold text-center place-items-center">
+              {userDetailsData?.interests.map((interest, index) => (
+                <span
+                  key={index}
+                  className="bg-gray-200 rounded px-2 py-1 text-sm font-semibold text-gray-700 mr-2"
+                >
+                  {interest}
+                </span>
+              ))}
+            </p>
+          </div>
+        )}
+
+        {userDetailsData?.age && (
+          <div className="grid rounded-2xl bg-white ">
+            <div className="flex bg-gray-800 px-4 py-2 rounded-t-2xl h-fit max-h-16 text-start justify-center place-content-center place-items-center">
+              <img
+                src="portfolio/3.png"
+                className="w-12 h-12 mr-4 bg-white object-fit p-1 rounded-full"
+                alt=""
+              />
+              <h3 className="text-lg font-semibold leading-tight flex-1 text-gray-200">
+                Personal Information
+              </h3>
+            </div>
+            <p className="bg-white p-4 h-full rounded-b-2xl font-semibold text-center place-items-center">
+              {" "}
+              Age: {userDetailsData?.age} {userDetailsData?.gender || "Male"}
+            </p>
+          </div>
+        )}
+
+        {userDetailsData?.about && (
+          <div className="grid rounded-2xl bg-white ">
+            <div className="flex bg-gray-800 px-4 py-2 rounded-t-2xl h-fit max-h-16 text-start justify-center place-content-center place-items-center">
+              <img
+                src="portfolio/4.png"
+                className="w-12 h-12 mr-4 bg-white object-fit p-1 rounded-full"
+                alt=""
+              />
+              <h3 className="text-lg font-semibold leading-tight flex-1 text-gray-200">
+                About me
+              </h3>
+            </div>
+            <p className="bg-white p-4 h-full rounded-b-2xl font-semibold text-center place-items-center">
+              {userDetailsData?.about}
+            </p>
+          </div>
+        )}
+
+        {userDetailsData?.goals && (
+          <div className="grid rounded-2xl bg-white ">
+            <div className="flex bg-gray-800 px-4 py-2 rounded-t-2xl h-fit max-h-16 text-start justify-center place-content-center place-items-center">
+              <img
+                src="portfolio/5.png"
+                className="w-12 h-12 mr-4 bg-white object-fit p-1 rounded-full"
+                alt=""
+              />
+              <h3 className="text-lg font-semibold leading-tight flex-1 text-gray-200">
+                Goals
+              </h3>
+            </div>
+            <p className="bg-white p-4 h-full rounded-b-2xl font-semibold text-center place-items-center">
+              {userDetailsData?.goals}
+            </p>
+          </div>
+        )}
+
+        {userDetailsData?.studyHabits && (
+          <div className="grid rounded-2xl bg-white ">
+            <div className="flex bg-gray-800 px-4 py-2 rounded-t-2xl h-fit max-h-16 text-start justify-center place-content-center place-items-center">
+              <img
+                src="portfolio/6.png"
+                className="w-12 h-12 mr-4 bg-white object-fit p-1 rounded-full"
+                alt=""
+              />
+              <h3 className="text-lg font-semibold leading-tight flex-1 text-gray-200">
+                Study Habits
+              </h3>
+            </div>
+            <p className="bg-white p-4 h-full rounded-b-2xl font-semibold text-center place-items-center">
+              {userDetailsData?.studyHabits}
+            </p>
+          </div>
+        )}
+
+        {userDetailsData?.personalityTraits.length > 0 && (
+          <div className="grid rounded-2xl bg-white ">
+            <div className="flex bg-gray-800 px-4 py-2 rounded-t-2xl h-fit max-h-16 text-start justify-center place-content-center place-items-center">
+              <img
+                src="portfolio/10.png"
+                className="w-12 h-12 mr-4 bg-white object-fit p-1 rounded-full"
+                alt=""
+              />
+              <h3 className="text-lg font-semibold leading-tight flex-1 text-gray-200">
+                Personality Traits
+              </h3>
+            </div>
+            <p className="bg-white p-4 h-full rounded-b-2xl flex flex-wrap gap-y-2  font-semibold text-center place-items-center">
+              {userDetailsData?.personalityTraits.map(
+                (personalityTraits, index) => (
+                  <span
+                    key={index}
+                    className="bg-gray-200 rounded px-2 py-1 text-sm font-semibold text-gray-700 mr-2"
+                  >
+                    {personalityTraits}
+                  </span>
+                )
+              )}
+            </p>
+          </div>
+        )}
+
+        {userDetailsData?.cocurricularInterests.length > 0 && (
+          <div className="grid rounded-2xl bg-white ">
+            <div className="flex bg-gray-800 px-4 py-2 rounded-t-2xl h-fit max-h-16 text-start justify-center place-content-center place-items-center">
+              <img
+                src="portfolio/8.png"
+                className="w-12 h-12 mr-4 bg-white object-fit p-1 rounded-full"
+                alt=""
+              />
+              <h3 className="text-lg font-semibold leading-tight flex-1 text-gray-200">
+                Co-curricular Interests
+              </h3>
+            </div>
+            <p className="bg-white p-4 h-full flex flex-wrap gap-y-2 rounded-b-2xl font-semibold text-center place-items-center">
+              {userDetailsData?.cocurricularInterests.map(
+                (cocurricularInterests, index) => (
+                  <span
+                    key={index}
+                    className="bg-gray-200 rounded px-2 py-1 text-sm font-semibold text-gray-700 mr-2"
+                  >
+                    {cocurricularInterests}
+                  </span>
+                )
+              )}
+            </p>
+          </div>
+        )}
+      </div>
+    </div>
                     </div>
                     <div
                       className="hidden "
@@ -461,7 +708,7 @@ export default function Profile({ userDetails }) {
                       role="tabpanel"
                       aria-labelledby="repositories-tab"
                     >
-                      <Reports />
+                      <Reports userDetails={userDetails} />
                     </div>
                     {/* <div
                       className="hidden"
@@ -469,16 +716,16 @@ export default function Profile({ userDetails }) {
                       role="tabpanel"
                       aria-labelledby="contacts-tab"
                     >
-                      <ProfileAchievements trophies={userDetails[0].trophies || 0}/>
+                      <ProfileAchievements trophies={userDetailsData.trophies || 0}/>
                     </div> */}
                   </div>
                 </div>
               </div>
-              <div className="md:card h-fit w-full mx-auto md:pb-8 pb-24  grid justify-center place-content-center ">
+              <div className="md:card h-fit w-fit mx-auto md:pb-8 pb-24  grid justify-center place-content-center ">
                 <div className="relative">
                   <img
                     className="md:w-40 lg:w-48 w-20 mx-auto rounded-full mt-8 border-2 border-gray-400 bg-gray-200"
-                    src={`https://robohash.org/${userId}}`}
+                    src={`https://robohash.org/${userId}`}
                     alt=""
                   />
                   {/* <div className="absolute bottom-2 left-44 p-1.5 bg-green-500 hover:border-2 cursor-pointer rounded-full w-fit h-fit"></div> */}
@@ -498,9 +745,9 @@ export default function Profile({ userDetails }) {
                   data-modal-target="authentication-modal"
                   data-modal-toggle="authentication-modal"
                   type="button"
-                  class="inline-flex items-center justify-center ml-20 mb-2 my-4 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group "
+                  className="inline-flex items-center justify-center ml-20 mb-2 my-4 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group "
                 >
-                  <span class="relative px-3 py-2 transition-all duration-300  bg-gradient-to-br from-green-400 to-blue-400 group-hover:from-green-400 group-hover:to-blue-400 hover:from-green-500 hover:to-blue-400  font-bold rounded-md group-hover:bg-opacity-0 text-black hover:text-white">
+                  <span className="relative px-3 py-2 transition-all duration-300  bg-gradient-to-br from-green-400 to-blue-400 group-hover:from-green-400 group-hover:to-blue-400 hover:from-green-500 hover:to-blue-400  font-bold rounded-md group-hover:bg-opacity-0 text-black hover:text-white">
                     Edit Portfolio
                   </span>
                 </button>
@@ -508,17 +755,23 @@ export default function Profile({ userDetails }) {
                 } */}
 
                 {userDetails[0]?.email == session?.user?.email && (
+                  <>
                   <button
                     onClick={handleFormView}
                     type="button"
-                    class="flex items-center justify-center mb-4 my-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group "
+                    className="flex items-center justify-center mb-4 my-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group "
                   >
-                    <span class="relative px-3 py-2 transition-all duration-300 bg-blue-300 hover:bg-blue-400  font-bold rounded-md text-gray-700 hover:text-gray-900">
+                    <span className="relative px-3 py-2 transition-all duration-300 bg-blue-300 hover:bg-blue-400  font-bold rounded-md text-gray-700 hover:text-gray-900">
                       Edit Portfolio
                     </span>
                   </button>
+                  <div className="w-60">
+
+                  <TodoList roomName={"profile"} />
+                  </div>
+                  </>
                 )}
-                <TodoList roomName={roomName} />
+                
               </div>
             </div>
           </div>
@@ -529,23 +782,23 @@ export default function Profile({ userDetails }) {
             <div
               id="defaultModal"
               tabindex="-1"
-              class="z-20 w-screen h-[calc(100%-1rem)] grid justify-center mb-4 p-4 overflow-x-hidden overflow-y-auto"
+              className="z-20 w-screen h-[calc(100%-1rem)] grid justify-center mb-4 p-4 overflow-x-hidden overflow-y-auto"
             >
-              <div class=" w-full w-3xl max-h-full">
-                <div class=" bg-white rounded-lg shadow dark:bg-gray-700">
-                  <div class="px-6 py-6 lg:px-8 ">
+              <div className=" w-full w-3xl max-h-full">
+                <div className=" bg-white rounded-lg shadow dark:bg-gray-700">
+                  <div className="px-6 py-6 lg:px-8 ">
                     <div className="flex mb-4 w-full justify-between">
-                      <h3 class="text-xl w-fit font-medium text-gray-900 dark:text-white">
+                      <h3 className="text-xl w-fit font-medium text-gray-900 dark:text-white">
                         Let&apos;s create your Portfolio
                       </h3>
                       <button
-                        class=" text-gray-400 hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5  dark:hover:bg-gray-800 dark:hover:text-white"
+                        className=" text-gray-400 hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5  dark:hover:bg-gray-800 dark:hover:text-white"
                         onClick={handleFormView}
                         type="button"
                       >
                         <svg
                           aria-hidden="true"
-                          class="w-5 h-5"
+                          className="w-5 h-5"
                           fill="currentColor"
                           viewBox="0 0 20 20"
                           xmlns="http://www.w3.org/2000/svg"
@@ -556,24 +809,25 @@ export default function Profile({ userDetails }) {
                             clip-rule="evenodd"
                           ></path>
                         </svg>
-                        <span class="sr-only">Close modal</span>
+                        <span className="sr-only">Close modal</span>
                       </button>
                     </div>
 
-                    <form class="space-y-6" action="#">
+                    <form className="space-y-6" action="#">
                       <div>
                         <label
                           for="countries"
-                          class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                          className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                         >
                           Your Major
                         </label>
                         <select
                           id="countries"
-                          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                          defaultValue={subjectMajor}
                           onChange={updateMajor}
                         >
-                          <option selected>Choose one field</option>
+                          <option selected value="">Choose one field</option>
                           <option value="Computer-Science">
                             Computer Science
                           </option>
@@ -630,16 +884,16 @@ export default function Profile({ userDetails }) {
                       <div>
                         <label
                           for="numberinput"
-                          class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                          className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                         >
                           Age
                         </label>
                         <input
                           type="number"
                           id="numberinput"
-                          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                          placeholder="add topics here"
-                          // defaultValue={userDetails[0]?.email}
+                          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                          placeholder="add your age"
+                          defaultValue={userAge}
                           onChange={updateAge}
                           required
                         />
@@ -648,40 +902,41 @@ export default function Profile({ userDetails }) {
                       <div>
                         <label
                           for="password"
-                          class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                          className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                         >
                           Gender
                         </label>
                         <div className="grid grid-cols-3 gap-4">
-                          <div class="flex items-center pl-4 border border-gray-200 rounded dark:border-gray-700">
+                          <div className="flex items-center pl-4 border border-gray-200 rounded dark:border-gray-700">
                             <input
-                              defaultChecked
+                              defaultChecked={userGender === "Male"}
                               id="bordered-radio-4"
                               type="radio"
                               name="bordered-radio-1"
                               value="Male"
-                              class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                              className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                               onClick={updateGender}
                             />
                             <label
                               for="bordered-radio-4"
-                              class="w-full py-4 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                              className="w-full py-4 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
                             >
-                              Male
+                              Male 
                             </label>
                           </div>
-                          <div class="flex items-center pl-4 border border-gray-200 rounded dark:border-gray-700">
+                          <div className="flex items-center pl-4 border border-gray-200 rounded dark:border-gray-700">
                             <input
                               id="bordered-radio-5"
+                              defaultChecked={userGender === "Female"}
                               type="radio"
                               value="Female"
                               name="bordered-radio-1"
-                              class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                              className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                               onClick={updateGender}
                             />
                             <label
                               for="bordered-radio-5"
-                              class="w-full py-4 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                              className="w-full py-4 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
                             >
                               Female
                             </label>
@@ -692,56 +947,57 @@ export default function Profile({ userDetails }) {
                       <div>
                         <label
                           for="password"
-                          class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                          className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                         >
                           Preferred Language?
                         </label>
                         <div className="grid grid-cols-3 gap-4">
-                          <div class="flex items-center pl-4 border border-gray-200 rounded dark:border-gray-700">
+                          <div className="flex items-center pl-4 border border-gray-200 rounded dark:border-gray-700">
                             <input
+                            defaultChecked
                               id="bordered-radio-1"
                               type="radio"
                               value="English"
                               name="bordered-radio"
-                              class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                              className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                               onChange={updateLanguage}
                             />
                             <label
                               for="bordered-radio-1"
-                              class="w-full py-4 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                              className="w-full py-4 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
                             >
                               English
                             </label>
                           </div>
-                          <div class="flex items-center pl-4 border border-gray-200 rounded dark:border-gray-700">
+                          <div className="flex items-center pl-4 border border-gray-200 rounded dark:border-gray-700">
                             <input
-                              defaultChecked
+                              
                               id="bordered-radio-2"
                               type="radio"
                               value="Hindi"
                               name="bordered-radio"
-                              class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                              className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                               onChange={updateLanguage}
                             />
                             <label
                               for="bordered-radio-2"
-                              class="w-full py-4 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                              className="w-full py-4 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
                             >
                               Hindi
                             </label>
                           </div>
-                          <div class="flex items-center pl-4 border border-gray-200 rounded dark:border-gray-700">
+                          <div className="flex items-center pl-4 border border-gray-200 rounded dark:border-gray-700">
                             <input
                               id="bordered-radio-3"
                               type="radio"
                               value="other"
                               name="bordered-radio"
-                              class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                              className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                               onChange={updateLanguage}
                             />
                             <label
                               for="bordered-radio-3"
-                              class="w-full py-4 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                              className="w-full py-4 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
                             >
                               Other
                             </label>
@@ -752,16 +1008,16 @@ export default function Profile({ userDetails }) {
                       <div>
                         <label
                           for="aboutMe"
-                          class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                          className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                         >
                           About Me
                         </label>
                         <textarea
                           id="aboutMe"
                           rows="4"
-                          class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                          className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                           placeholder="Write your thoughts here..."
-                          // defaultValue={about}
+                          defaultValue={userAboutMe}
                           onChange={updateAboutMe}
                         ></textarea>
                       </div>
@@ -769,16 +1025,16 @@ export default function Profile({ userDetails }) {
                       <div>
                         <label
                           for="message"
-                          class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                          className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                         >
                           Goals
                         </label>
                         <textarea
                           id="message"
                           rows="4"
-                          class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                          className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                           placeholder="Write your thoughts here..."
-                          // defaultValue={bio}
+                          defaultValue={userGoals}
                           onChange={updateGoals}
                         ></textarea>
                       </div>
@@ -786,46 +1042,41 @@ export default function Profile({ userDetails }) {
                       <div>
                         <label
                           for="message"
-                          class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                          className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                         >
                           Study Habits
                         </label>
                         <textarea
                           id="message"
                           rows="4"
-                          class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                          className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                           placeholder="Write your thoughts here..."
-                          // defaultValue={bio}
+                          defaultValue={userStudyHabits}
                           onChange={updateStudyHabits}
                         ></textarea>
                       </div>
 
                       <div className="sm:col-span-2 mt-4 p-4 text-gray-900 bg-white rounded-lg border border-gray-100 shadow dark:border-gray-600 md:p-4 dark:bg-navbarDark dark:text-white">
                         <div className="">
-                          <div className="grid ">
+                          <div className="grid">
                             <h3 className="text-sm font-medium text-gray-900 dark:text-white">
                               Personality Traits
                             </h3>
-                            {/* <p className="text-xs text-gray-500 dark:text-gray-400">
-                        Manage what non-members can see/edit.
-                      </p> */}
                           </div>
-                          {/* <div className="-mt-14 flex justify-end items-baseline">
-                              <span className="mr-2 md:text-5xl text-2xl font-extrabold">Secured</span>
-                              <span className="text-gray-500 dark:text-gray-400">/private</span>
-                          </div> */}
                         </div>
                         <div className="my-8 grid grid-cols-2 md:grid-cols-4 gap-4 place-content-center">
                           <div className="flex items-center pl-2 border border-gray-200 rounded dark:border-gray-700">
                             <input
                               id="social"
                               type="checkbox"
-                              value=""
+                              value="social"
                               name="bordered-checkbox"
                               className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                              defaultChecked={personalityTraits.includes("social")}
+                              onChange={handleCheckboxChange}
                             />
                             <label
-                              for="social"
+                              htmlFor="social"
                               className="w-full py-2 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
                             >
                               Social
@@ -833,15 +1084,16 @@ export default function Profile({ userDetails }) {
                           </div>
                           <div className="flex items-center pl-2 border border-gray-200 rounded dark:border-gray-700">
                             <input
-                              defaultChecked
                               id="introvert"
                               type="checkbox"
-                              value=""
+                              value="introvert"
                               name="bordered-checkbox"
                               className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                              defaultChecked={personalityTraits.includes("introvert")}
+                              onChange={handleCheckboxChange}
                             />
                             <label
-                              for="introvert"
+                              htmlFor="introvert"
                               className="w-full py-2 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
                             >
                               Introvert
@@ -851,12 +1103,14 @@ export default function Profile({ userDetails }) {
                             <input
                               id="organized"
                               type="checkbox"
-                              value=""
+                              value="organized"
                               name="bordered-checkbox"
                               className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                              defaultChecked={personalityTraits.includes("organized")}
+                              onChange={handleCheckboxChange}
                             />
                             <label
-                              for="organized"
+                              htmlFor="organized"
                               className="w-full py-2 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
                             >
                               Organized
@@ -864,15 +1118,16 @@ export default function Profile({ userDetails }) {
                           </div>
                           <div className="flex items-center pl-2 border border-gray-200 rounded dark:border-gray-700">
                             <input
-                              defaultChecked
                               id="goal-oriented"
                               type="checkbox"
-                              value=""
+                              value="goal-oriented"
                               name="bordered-checkbox"
                               className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                              defaultChecked={personalityTraits.includes("goal-oriented")}
+                              onChange={handleCheckboxChange}
                             />
                             <label
-                              for="goal-oriented"
+                              htmlFor="goal-oriented"
                               className="w-full py-2 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
                             >
                               Goal-Oriented
@@ -882,12 +1137,14 @@ export default function Profile({ userDetails }) {
                             <input
                               id="creative"
                               type="checkbox"
-                              value=""
+                              value="creative"
                               name="bordered-checkbox"
                               className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                              defaultChecked={personalityTraits.includes("creative")}
+                              onChange={handleCheckboxChange}
                             />
                             <label
-                              for="creative"
+                              htmlFor="creative"
                               className="w-full py-2 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
                             >
                               Creative
@@ -897,28 +1154,31 @@ export default function Profile({ userDetails }) {
                             <input
                               id="analytical"
                               type="checkbox"
-                              value=""
+                              value="analytical"
                               name="bordered-checkbox"
                               className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                              defaultChecked={personalityTraits.includes("analytical")}
+                              onChange={handleCheckboxChange}
                             />
                             <label
-                              for="analytical"
+                              htmlFor="analytical"
                               className="w-full py-2 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
                             >
                               Analytical
                             </label>
                           </div>
-
                           <div className="flex items-center pl-2 border border-gray-200 rounded dark:border-gray-700">
                             <input
                               id="punctual"
                               type="checkbox"
-                              value=""
+                              value="punctual"
                               name="bordered-checkbox"
                               className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                              defaultChecked={personalityTraits.includes("punctual")}
+                              onChange={handleCheckboxChange}
                             />
                             <label
-                              for="punctual"
+                              htmlFor="punctual"
                               className="w-full py-2 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
                             >
                               Punctual
@@ -933,39 +1193,35 @@ export default function Profile({ userDetails }) {
                             <h3 className="text-sm font-medium text-gray-900 dark:text-white">
                               Co-curricular Interests
                             </h3>
-                            {/* <p className="text-xs text-gray-500 dark:text-gray-400">
-                        Manage what non-members can see/edit.
-                      </p> */}
                           </div>
-                          {/* <div className="-mt-14 flex justify-end items-baseline">
-                              <span className="mr-2 md:text-5xl text-2xl font-extrabold">Secured</span>
-                              <span className="text-gray-500 dark:text-gray-400">/private</span>
-                          </div> */}
                         </div>
                         <div className="my-8 grid grid-cols-2 md:grid-cols-4 gap-4 place-content-center">
+                        <div className="flex items-center pl-2 border border-gray-200 rounded dark:border-gray-700">
+                        <input
+                          id="sports"
+                          type="checkbox"
+                          value="sports"
+                          name="bordered-checkbox-2"
+                          className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                          defaultChecked={cocurricularInterests.includes("sports")}
+                          onChange={handleInterestChange}
+                        />
+                        <label
+                          htmlFor="sports"
+                          className="w-full py-2 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                        >
+                          Sports
+                        </label>
+                      </div>
                           <div className="flex items-center pl-2 border border-gray-200 rounded dark:border-gray-700">
                             <input
-                              id="sports"
-                              type="checkbox"
-                              value=""
-                              name="bordered-checkbox-2"
-                              className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                            />
-                            <label
-                              for="sports"
-                              className="w-full py-2 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                            >
-                              Sports
-                            </label>
-                          </div>
-                          <div className="flex items-center pl-2 border border-gray-200 rounded dark:border-gray-700">
-                            <input
-                              defaultChecked
                               id="cooking"
                               type="checkbox"
-                              value=""
+                              value="cooking"
                               name="bordered-checkbox-2"
                               className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                              defaultChecked={cocurricularInterests.includes("cooking")}
+                              onChange={handleInterestChange}
                             />
                             <label
                               for="cooking"
@@ -978,9 +1234,11 @@ export default function Profile({ userDetails }) {
                             <input
                               id="reading"
                               type="checkbox"
-                              value=""
+                              value="reading"
                               name="bordered-checkbox-2"
                               className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                              defaultChecked={cocurricularInterests.includes("reading")}
+                              onChange={handleInterestChange}
                             />
                             <label
                               for="reading"
@@ -991,12 +1249,13 @@ export default function Profile({ userDetails }) {
                           </div>
                           <div className="flex items-center pl-2 border border-gray-200 rounded dark:border-gray-700">
                             <input
-                              defaultChecked
                               id="art"
                               type="checkbox"
-                              value=""
+                              value="art"
                               name="bordered-checkbox-2"
                               className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                              defaultChecked={cocurricularInterests.includes("art")}
+                              onChange={handleInterestChange}
                             />
                             <label
                               for="art"
@@ -1009,9 +1268,11 @@ export default function Profile({ userDetails }) {
                             <input
                               id="crafts"
                               type="checkbox"
-                              value=""
+                              value="crafts"
                               name="bordered-checkbox-2"
                               className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                              defaultChecked={cocurricularInterests.includes("crafts")}
+                              onChange={handleInterestChange}
                             />
                             <label
                               for="crafts"
@@ -1024,9 +1285,11 @@ export default function Profile({ userDetails }) {
                             <input
                               id="dance"
                               type="checkbox"
-                              value=""
+                              value="dance"
                               name="bordered-checkbox-2"
                               className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                              defaultChecked={cocurricularInterests.includes("dance")}
+                              onChange={handleInterestChange}
                             />
                             <label
                               for="dance"
@@ -1040,9 +1303,11 @@ export default function Profile({ userDetails }) {
                             <input
                               id="singing"
                               type="checkbox"
-                              value=""
+                              value="singing"
                               name="bordered-checkbox-2"
                               className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                              defaultChecked={cocurricularInterests.includes("singing")}
+                              onChange={handleInterestChange}
                             />
                             <label
                               for="singing"
@@ -1056,9 +1321,11 @@ export default function Profile({ userDetails }) {
                             <input
                               id="travel"
                               type="checkbox"
-                              value=""
+                              value="travel"
                               name="bordered-checkbox-2"
                               className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                              defaultChecked={cocurricularInterests.includes("travel")}
+                              onChange={handleInterestChange}
                             />
                             <label
                               for="travel"
@@ -1072,9 +1339,11 @@ export default function Profile({ userDetails }) {
                             <input
                               id="gardening"
                               type="checkbox"
-                              value=""
+                              value="gardening"
                               name="bordered-checkbox-2"
                               className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                              defaultChecked={cocurricularInterests.includes("gardening")}
+                              onChange={handleInterestChange}
                             />
                             <label
                               for="gardening"
@@ -1088,9 +1357,11 @@ export default function Profile({ userDetails }) {
                             <input
                               id="collecting"
                               type="checkbox"
-                              value=""
+                              value="collecting"
                               name="bordered-checkbox-2"
                               className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                              defaultChecked={cocurricularInterests.includes("collecting")}
+                              onChange={handleInterestChange}
                             />
                             <label
                               for="collecting"
@@ -1104,9 +1375,11 @@ export default function Profile({ userDetails }) {
                             <input
                               id="sleeping"
                               type="checkbox"
-                              value=""
+                              value="sleeping"
                               name="bordered-checkbox-2"
                               className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                              defaultChecked={cocurricularInterests.includes("sleeping")}
+                              onChange={handleInterestChange}
                             />
                             <label
                               for="sleeping"
@@ -1120,9 +1393,11 @@ export default function Profile({ userDetails }) {
                             <input
                               id="debating"
                               type="checkbox"
-                              value=""
+                              value="debating"
                               name="bordered-checkbox-2"
                               className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                              defaultChecked={cocurricularInterests.includes("debating")}
+                              onChange={handleInterestChange}
                             />
                             <label
                               for="debating"
@@ -1138,7 +1413,7 @@ export default function Profile({ userDetails }) {
                         onClick={handleSubmitForm}
                         id="save-btn"
                         type="submit"
-                        class="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                        className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                       >
                         Create My Portfolio
                       </button>
@@ -1193,5 +1468,5 @@ export async function getStaticPaths() {
     };
   });
 
-  return { paths, fallback: "blocking" };
+  return { paths, fallback: false };
 }

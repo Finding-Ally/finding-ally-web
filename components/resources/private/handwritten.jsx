@@ -1,6 +1,7 @@
 import { Modal } from "flowbite";
 import React, { useEffect } from "react";
 import { useState } from "react";
+import { useSession } from "next-auth/react";
 import { toast } from "react-toastify";
 // import DateRangePicker from 'flowbite-datepicker/DateRangePicker';
 import {RiDeleteBin6Line} from "react-icons/ri"
@@ -8,14 +9,13 @@ import {RiDeleteBin6Line} from "react-icons/ri"
 
 import { format, set } from 'date-fns'
 
-export default function HandWritten({roomDetails}) {
-  console.log("Project Details from Taskboard Tab" + roomDetails[0]);
-  
-  const roomIdPut = roomDetails[0]?._id;
-  console.log("Room ID from Taskboard Tab" + roomIdPut);
+export default function HandWritten({userDetails}) {
+  const { data: session } = useSession();
 
+  const userId = session?.user?.id;
+  console.log(session?.user?.handWrittenNotes +" handWrittenNotes")
 
-  const [handWrittenNotes, setHandWrittenNotes] = useState(roomDetails[0]?.handWrittenNotes || []);
+  const [handWrittenNotes, setHandWrittenNotes] = useState(session?.user?.handWrittenNotes || []);
 
   // const sortedIdeas = ideas?.sort((a, b) => b.createdAt - a.createdAt);
 
@@ -44,7 +44,7 @@ export default function HandWritten({roomDetails}) {
 
   setShowModal(!showModal)
 
-    const postURL = `/api/newroom?roomIdPut=${roomIdPut}`; //Our previously set up route in the backend
+    const postURL = `/api/updateuser?userId=${userId}`; //Our previously set up route in the backend
     await fetch(postURL, {
       method: "PUT",
       headers: {
@@ -66,8 +66,6 @@ export default function HandWritten({roomDetails}) {
       });
 
     });
-
-    
   };
 
   const handleDeleteNote = async (noteId) => {
@@ -86,7 +84,7 @@ export default function HandWritten({roomDetails}) {
       draggable: true,
       progress: undefined,
     });
-    const postURL = `/api/newroom?roomIdPut=${roomIdPut}`; //Our previously set up route in the backend
+    const postURL = `/api/updateuser?userId=${userId}`; //Our previously set up route in the backend
     await fetch(postURL, {
       method: "PUT",
       headers: {

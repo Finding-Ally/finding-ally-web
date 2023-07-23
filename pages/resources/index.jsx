@@ -38,7 +38,7 @@ export default function Resources(){
 
     return (
       <div className="pb-6 pt-2 md:ml-[79px] ml-0 md:pl-0 pl-2 pr-2 h-screen bg-white  overflow-auto">
-        <div className="w-full rounded-2xl h-[97%] text-gray-700 bg-purple-100 ">
+        <div className="w-full rounded-2xl min-h-[97%] pb-20 text-gray-700 bg-purple-100 ">
 
 <div className="px-10 mt-4 pt-2">
         <div className="flex items-center flex-shrink-0 h-10">
@@ -84,7 +84,7 @@ export default function Resources(){
             {room?.members?.map((member) => (
                 <img key={member?._id}
                 className="w-8 h-8 ml-auto bg-gray-300 mr-1 rounded-full"
-                src={`https://robohash.org/${member?.id}}`}
+                src={`https://robohash.org/${member?.id}`}
               />
               )) 
               }
@@ -146,7 +146,7 @@ export default function Resources(){
             <div className="flex">
               <img
                 className="w-8 h-8 ml-auto bg-gray-300 rounded-full"
-                src={`https://robohash.org/${session?.user?.id}}`}
+                src={`https://robohash.org/${session?.user?.id}`}
               />
               {/* <img
                 className="w-8 h-8 ml-auto rounded-full"
